@@ -1,0 +1,24 @@
+# Extraction layer runtime dependencies.
+#
+# Not separately installed — composed into the root requirements.txt via
+# `-r extraction_layer/requirements.txt`. Edit this file to add/remove deps
+# belonging specifically to the extraction pipeline (OCR → extraction → tables
+# → validation + FastAPI viewer + dataset loaders).
+#
+# Global dev tooling (pytest, ruff, mypy, etc.) lives in the root requirements.txt.
+
+# --- OCR + imaging --------------------------------------------------------
+rapidocr-onnxruntime>=1.3.0
+numpy>=1.24
+pillow>=10.1
+
+# --- Contracts + parsing --------------------------------------------------
+pydantic>=2.0
+rapidfuzz>=3.0
+
+# --- Datasets -------------------------------------------------------------
+datasets>=2.14
+
+# --- API / viewer ---------------------------------------------------------
+fastapi>=0.110
+uvicorn[standard]>=0.27
