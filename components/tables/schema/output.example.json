@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "item_desc": "Widget",
+      "item_qty": "2,00",
+      "item_net_price": "50,00",
+      "item_net_worth": "100,00",
+      "item_vat": "10%",
+      "item_gross_worth": "110,00"
+    }
+  ],
+  "extractor": "spatial",
+  "duration_ms": 0.5,
+  "diagnostics": {
+    "anchor_count": 1
+  }
+}

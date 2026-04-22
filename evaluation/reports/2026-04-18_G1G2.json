@@ -1,0 +1,1192 @@
+{
+  "date": "2026-04-18",
+  "dataset": "katanaml-invoices-donut-v1",
+  "split": "test",
+  "sample_count": 26,
+  "wall_clock_s": 147.06621289998293,
+  "gate_threshold": 0.9,
+  "gate_passed": false,
+  "average_f1": 0.8323637147166558,
+  "per_field_stats": {
+    "invoice_no": {
+      "correct": 26,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "invoice_date": {
+      "correct": 26,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "seller": {
+      "correct": 14,
+      "wrong": 12,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "client": {
+      "correct": 15,
+      "wrong": 11,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "seller_tax_id": {
+      "correct": 25,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 1,
+      "both_none": 0
+    },
+    "client_tax_id": {
+      "correct": 26,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "iban": {
+      "correct": 19,
+      "wrong": 7,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    }
+  },
+  "per_field_f1": {
+    "invoice_no": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "invoice_date": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "seller": {
+      "precision": 0.5384615384615384,
+      "recall": 0.5384615384615384,
+      "f1": 0.5384615384615384
+    },
+    "client": {
+      "precision": 0.5769230769230769,
+      "recall": 0.5769230769230769,
+      "f1": 0.5769230769230769
+    },
+    "seller_tax_id": {
+      "precision": 0.9615384615384616,
+      "recall": 1.0,
+      "f1": 0.9803921568627451
+    },
+    "client_tax_id": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "iban": {
+      "precision": 0.7307692307692307,
+      "recall": 0.7307692307692307,
+      "f1": 0.7307692307692306
+    }
+  },
+  "samples": [
+    {
+      "id": "katanaml-test-00000",
+      "fields": {
+        "invoice_no": {
+          "predicted": "97159829",
+          "ground_truth": "97159829",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "09/18/2015",
+          "ground_truth": "09/18/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Bradley-Andrade 9879 Elizabeth Common Lake Jonathan, Rl 12335",
+          "ground_truth": "Bradley-Andrade 9879 Elizabeth Common Lake Jonathan, RI 12335",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Castro PLC Unit 9678 Box 9664 DPOAP69387",
+          "ground_truth": "Castro PLC Unit 9678 Box 9664 DPO AP 69387",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "985-73-8194",
+          "ground_truth": "985-73-8194",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "994-72-1270",
+          "ground_truth": "994-72-1270",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB81LZWO32519172531418",
+          "ground_truth": "GB81LZWO32519172531418",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 4878.343599993968,
+      "extract_ms": 0.31370000215247273
+    },
+    {
+      "id": "katanaml-test-00001",
+      "fields": {
+        "invoice_no": {
+          "predicted": "13194726",
+          "ground_truth": "13194726",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "05/29/2021",
+          "ground_truth": "05/29/2021",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Hopkins and Sons 62283 Flores Tunnel North Luis, IA 69983",
+          "ground_truth": "Hopkins and Sons 62283 Flores Tunnel North Luis, IA 69983",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Sims PLC USS Kramer FPOAA81651",
+          "ground_truth": "Sims PLC USS Kramer FPO AA 81651",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "952-73-7223",
+          "ground_truth": "952-73-7223",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "995-88-9495",
+          "ground_truth": "995-88-9495",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB31LZXS20242755934691",
+          "ground_truth": "GB31LZX520242755934691",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 5531.9507000094745,
+      "extract_ms": 0.308899994706735
+    },
+    {
+      "id": "katanaml-test-00002",
+      "fields": {
+        "invoice_no": {
+          "predicted": "62517865",
+          "ground_truth": "62517865",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "06/02/2015",
+          "ground_truth": "06/02/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Trujillo-Hunt 430 Mark Ferry Suite 495 Maxside, DC 65686",
+          "ground_truth": "Trujillo-Hunt 430 Mark Ferry Suite 495 Maxside, DC 65686",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Lee and Sons 8552 Karen Islands East Roger, ID 40416",
+          "ground_truth": "Lee and Sons 8552 Karen Islands East Roger, ID 40416",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "992-71-8540",
+          "ground_truth": "992-71-8540",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "929-86-0601",
+          "ground_truth": "929-86-0601",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB73HCPH34959888432899",
+          "ground_truth": "GB73HCPH34959888432899",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 3758.9592000003904,
+      "extract_ms": 0.525100011145696
+    },
+    {
+      "id": "katanaml-test-00003",
+      "fields": {
+        "invoice_no": {
+          "predicted": "56014042",
+          "ground_truth": "56014042",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "10/01/2014",
+          "ground_truth": "10/01/2014",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Nichols-Barajas 3882 Stacy Ville Apt. 488 Lake Kristinatown, ND 48049",
+          "ground_truth": "Nichols-Barajas 3882 Stacy Ville Apt. 488 Lake Kristinatown, ND 48049",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Mckay PLC 5542 Danielle Drive Suite 381 West Mason, ME 76671",
+          "ground_truth": "Mckay PLC 5542 Danielle Drive Suite 381 West Mason, ME 76671",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "953-87-6813",
+          "ground_truth": "953-87-6813",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "965-90-8517",
+          "ground_truth": "965-90-8517",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB08KXQT19711661357354",
+          "ground_truth": "GB08KXQT197119711661357354",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 4522.940499999095,
+      "extract_ms": 0.5424999981187284
+    },
+    {
+      "id": "katanaml-test-00004",
+      "fields": {
+        "invoice_no": {
+          "predicted": "16662010",
+          "ground_truth": "16662010",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "08/28/2016",
+          "ground_truth": "08/28/2016",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Smith-Cook 174 Justin Causeway West Michaelmouth, ME69894",
+          "ground_truth": "Smith-Cook 174 Justin Causeway West Michaelmouth, ME 69894",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Snyder-Johnson 05173 Heather Mill Jenniferfort, WV79662",
+          "ground_truth": "Snyder-Johnson 05173 Heather Mill Jenniferfort, WV79662",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "959-84-2124",
+          "ground_truth": "959-84-2124",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "938-85-4960",
+          "ground_truth": "938-85-4960",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB20BAKH22085364527355",
+          "ground_truth": "GB20BAKH22085364527355",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 7654.219399992144,
+      "extract_ms": 0.7480999920517206
+    },
+    {
+      "id": "katanaml-test-00005",
+      "fields": {
+        "invoice_no": {
+          "predicted": "27543706",
+          "ground_truth": "27543706",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "07/20/2020",
+          "ground_truth": "07/20/2020",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Kaiser, Hays and Cook 460 Richard Forge Lake Maria, CA 86826",
+          "ground_truth": "Kaiser, Hays and Cook 460 Richard Forge Lake Maria, CA 86826",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Holland PLC 10833 Hill Courts Suite 606 Collinsland, CA60385",
+          "ground_truth": "Holland PLC 10833 Hill Courts Suite 606 Collinsland, CA 60385",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "980-78-9083",
+          "ground_truth": "980-78-9083",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "998-85-0115",
+          "ground_truth": "998-85-0115",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB82GOCR29918894344551",
+          "ground_truth": "GB82GOCR29918894344551",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6418.218600010732,
+      "extract_ms": 0.8227999787777662
+    },
+    {
+      "id": "katanaml-test-00006",
+      "fields": {
+        "invoice_no": {
+          "predicted": "26343874",
+          "ground_truth": "26343874",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "07/17/2013",
+          "ground_truth": "07/17/2013",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Smith Ltd 290 Jodi Gardens Charlesview, TN 10958",
+          "ground_truth": "Smith Ltd 290 Jodi Gardens Charlesview, TN 10958",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Herring-Floyd 8113 Hansen Cliff Apt. 826 Port Alice, ID 99663",
+          "ground_truth": "Herring-Floyd 8113 Hansen Cliff Apt. 826 Port Alice, ID 99663",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "916-97-6743",
+          "ground_truth": "916-97-6743",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "913-80-4636",
+          "ground_truth": "913-80-4636",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB78TZMX55978564099007",
+          "ground_truth": "GB78TZMX55978564099007",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6276.141000009375,
+      "extract_ms": 0.4881999921053648
+    },
+    {
+      "id": "katanaml-test-00007",
+      "fields": {
+        "invoice_no": {
+          "predicted": "12222347",
+          "ground_truth": "12222347",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "03/18/2017",
+          "ground_truth": "03/18/2017",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Gregory, Patterson and Fischer 439 Hunter Land South Jameschester, MT 09091",
+          "ground_truth": "Gregory, Patterson and Fischer 439 Hunter Land South Jameschester, MT 09091",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Wilson PLC 667 Wu Ports Marshallmouth, AK 03373",
+          "ground_truth": "Wilson PLC 667 Wu Ports Marshallmouth, AK 03373",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "958-94-6606",
+          "ground_truth": "958-94-6606",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "928-91-2431",
+          "ground_truth": "928-91-2431",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB10YCPS61791374226282",
+          "ground_truth": "GB10YCPS61791791374226282",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 3436.662799998885,
+      "extract_ms": 0.5071999912615865
+    },
+    {
+      "id": "katanaml-test-00008",
+      "fields": {
+        "invoice_no": {
+          "predicted": "25698672",
+          "ground_truth": "25698672",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "08/01/2015",
+          "ground_truth": "08/01/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Gordon, Alvarado and Jones 943 Sean Park Suite 284 North Derrick, OR 67536",
+          "ground_truth": "Gordon, Alvarado and Jones 943 Sean Park Suite 284 North Derrick, OR 67536",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Manning-Ho 92026 Michael Terrace Apt. 138 West Michael, IL 42693",
+          "ground_truth": "Manning-Ho 92026 Michael Terrace Apt. 138 West Michael, IL 42693",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "936-79-2794",
+          "ground_truth": "936-79-2794",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "960-85-1578",
+          "ground_truth": "960-85-1578",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB47JKAT88391563723291",
+          "ground_truth": "GB47JKAT88391563723291",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 4625.972300011199,
+      "extract_ms": 0.5237000004854053
+    },
+    {
+      "id": "katanaml-test-00009",
+      "fields": {
+        "invoice_no": {
+          "predicted": "24048799",
+          "ground_truth": "24048799",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "05/21/2014",
+          "ground_truth": "05/21/2014",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Rodriguez-Jackson 4804 Riley Row Suite 059 East Edwardtown, MN91106",
+          "ground_truth": "Rodriguez-jackson 4804 Riley Row Suite 059 East Edwardtown, MN 91106",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Williams, Fletcherand Taylor 9371 Harvey Port Suite 901 South Tabitha, ID50921",
+          "ground_truth": "Williams, Fletcher and Taylor 9371 Harvey Port Suite 901 South Tabitha, ID 50921",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "983-85-8151",
+          "ground_truth": "983-85-8151",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "932-73-0724",
+          "ground_truth": "932-73-0724",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB55GZIH60469560297692",
+          "ground_truth": "GB55GZIH60469560297692",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 4651.525100023719,
+      "extract_ms": 0.4783999756909907
+    },
+    {
+      "id": "katanaml-test-00010",
+      "fields": {
+        "invoice_no": {
+          "predicted": "72455228",
+          "ground_truth": "72455228",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "05/11/2021",
+          "ground_truth": "05/11/2021",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Potts, Reed and Miller USCGCWeeks FPOAA06868",
+          "ground_truth": "Potts, Reed and Miller USCGC Weeks FPO AA 06868",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Brady LLC 26039 Anita Stravenue North Peter, WA 22187",
+          "ground_truth": "Brady LLC 26039 Anita Stravenue North Peter, WA 22187",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "913-82-5781",
+          "ground_truth": "913-82-5781",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "953-75-0545",
+          "ground_truth": "953-75-0545",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB54RDGK95400103726634",
+          "ground_truth": "GB54RDGK95400103726634",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6604.682200006209,
+      "extract_ms": 0.694399990607053
+    },
+    {
+      "id": "katanaml-test-00011",
+      "fields": {
+        "invoice_no": {
+          "predicted": "58478169",
+          "ground_truth": "58478169",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "07/04/2016",
+          "ground_truth": "07/04/2016",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Conley Ltd 262 Jeffrey Underpass Jamesview, WA14945",
+          "ground_truth": "Conley Ltd 262 Jeffrey Underpass Jamesview, WA 14945",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Wells-Avery 7065 Alejandro Forks Lake Jeffrey, ME 59849",
+          "ground_truth": "Wells-Avery 7065 Alejandro Forks Lake Jeffrey, ME 59849",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "919-79-8417",
+          "ground_truth": "919-79-8417",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "965-90-7208",
+          "ground_truth": "965-90-7208",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB23MPY118052629547218",
+          "ground_truth": "GB23MPY118052629547218",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 4553.783899988048,
+      "extract_ms": 0.49360000411979854
+    },
+    {
+      "id": "katanaml-test-00012",
+      "fields": {
+        "invoice_no": {
+          "predicted": "90508672",
+          "ground_truth": "90508672",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "04/16/2020",
+          "ground_truth": "04/16/2020",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Stone-Waller 53428 Peter Dale Apt. 293 Amberchester, IA 57427",
+          "ground_truth": "Stone-Waller 53428 Peter Dale Apt. 293 Amberchester, IA 57427",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Shaw Group 58420 John Turnpike Suite 767 North Ricardo, NV 32611",
+          "ground_truth": "Shaw Group 58420 John Turnpike Suite 767 North Ricardo, NV 32611",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "994-99-6683",
+          "ground_truth": "994-99-6683",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "914-79-8228",
+          "ground_truth": "914-79-8228",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB61GZVZ46496690777484",
+          "ground_truth": "GB61GZVZ46496690777484",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 5815.702299994882,
+      "extract_ms": 0.5575999966822565
+    },
+    {
+      "id": "katanaml-test-00013",
+      "fields": {
+        "invoice_no": {
+          "predicted": "96051364",
+          "ground_truth": "96051364",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "04/28/2020",
+          "ground_truth": "04/28/2020",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Jackson Ltd 134 Catherine Valley Apt. 756 Lake Jennifer, NE 09531",
+          "ground_truth": "Jackson Ltd 134 Catherine Valley Apt. 756 Lake Jennifer, NE 09531",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Williams, Fowler and Phillips 115 Mccormick Knolls North Kevin, TN 27580",
+          "ground_truth": "Williams, Fowler and Phillips 115 Mccormick Knolls North Kevin, TN 27580",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "914-85-0938",
+          "ground_truth": "914-85-0938",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "963-87-9620",
+          "ground_truth": "963-87-9620",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB61XXNT90578783067262",
+          "ground_truth": "GB61XXNT90578783067262",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 7132.704900024692,
+      "extract_ms": 0.5819000070914626
+    },
+    {
+      "id": "katanaml-test-00014",
+      "fields": {
+        "invoice_no": {
+          "predicted": "67856369",
+          "ground_truth": "67856369",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "05/27/2020",
+          "ground_truth": "05/27/2020",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Pierce PLC 3454 Mcbride Ramp Apt. 312 New Judy, Wl 36022",
+          "ground_truth": "Pierce PLC 3454 Mcbride Ramp Apt. 312 New Judy, WI 36022",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Cochran-Alvarez 488 Kenneth Mission Port Caroltown, NY 43776",
+          "ground_truth": "Cochran-Alvarez 488 Kenneth Mission Port Caroltown, NY 43776",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "959-99-4796",
+          "ground_truth": "959-99-4796",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "961-72-7276",
+          "ground_truth": "961-72-7276",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB68KEDC47196257123820",
+          "ground_truth": "GB68KEDC47196257123820",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 5326.765699981479,
+      "extract_ms": 0.5066999874543399
+    },
+    {
+      "id": "katanaml-test-00015",
+      "fields": {
+        "invoice_no": {
+          "predicted": "69934544",
+          "ground_truth": "69934544",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "04/17/2014",
+          "ground_truth": "04/17/2014",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Spence-Castro 547 Reynolds Trafficway Suite 938 Joshuabury, Rl 79742",
+          "ground_truth": "Spence-Castro 547 Reynolds Trafficway Suite 938 Joshuabury, RI 79742",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Wolfeand Sons 45940 Larson Stravenue Suite 451 Port Michelle, Wl 66283",
+          "ground_truth": "Wolfe and Sons 45940 Larson Stravenue Suite 451 Port Michelle, WI 66283",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "965-84-3671",
+          "ground_truth": "965-84-3671",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "937-77-3183",
+          "ground_truth": "937-77-3183",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB22MTVU06245364076494",
+          "ground_truth": "GB22MTVU06245364076494",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 3728.2520000007935,
+      "extract_ms": 0.4872000135947019
+    },
+    {
+      "id": "katanaml-test-00016",
+      "fields": {
+        "invoice_no": {
+          "predicted": "23152691",
+          "ground_truth": "23152691",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "08/01/2015",
+          "ground_truth": "08/01/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Whitaker Ltd 57724 Hall Flats Apt. 570 Robertsonstad, KS 16218",
+          "ground_truth": "Whitaker Ltd 57724 Hall Flats Apt. 570 Robertsonstad, KS 16218",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Stout-Miller 80207 Samantha Streets Suite 926 Thomaschester, DE 30356",
+          "ground_truth": "Stout-Miller 80207 Samantha Streets Suite 926 Thomaschester, DE 30356",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "931-73-0965",
+          "ground_truth": "931-73-0965",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "938-72-5881",
+          "ground_truth": "938-72-5881",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB71ALPL38952311779111",
+          "ground_truth": "GB71ALPL38952311779111",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6546.257000009064,
+      "extract_ms": 0.9513999975752085
+    },
+    {
+      "id": "katanaml-test-00017",
+      "fields": {
+        "invoice_no": {
+          "predicted": "14878236",
+          "ground_truth": "14878236",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "04/26/2015",
+          "ground_truth": "04/26/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Hernandez, Colemanand Alvarado 6080 Justin Fort Suite 152 Brownburgh, NC 87582",
+          "ground_truth": "Hernandez, Coleman and Alvarado 6080 Justin Fort Suite 152 Brownburgh, NC 87582",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Turner-Green 7245 Stephens Orchard Lake Mitchellview, Ml 50388",
+          "ground_truth": "Turner-Green 7245 Stephens Orchard Lake Mitchellview, MI 50388",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "988-79-4495",
+          "ground_truth": "988-79-4495",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "950-70-5065",
+          "ground_truth": "950-70-5065",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB17VARZ09653710676977",
+          "ground_truth": "GB17VARZ09653710676977",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6123.1093000096735,
+      "extract_ms": 0.5866999854333699
+    },
+    {
+      "id": "katanaml-test-00018",
+      "fields": {
+        "invoice_no": {
+          "predicted": "84777898",
+          "ground_truth": "84777898",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "06/02/2017",
+          "ground_truth": "06/02/2017",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Byrd PLC 5954 Stewart Isle Suite 748 South Sarahshire, DC77638",
+          "ground_truth": "Byrd PLC 5954 Stewart Isle Suite 748 South Sarahshire, DC 77638",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Palmer LLC 321 Sarah Forge North Elizabeth, KY13557",
+          "ground_truth": "Palmer LLC 321 Sarah Forge North Elizabeth, KY 13557",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "991-72-8541",
+          "ground_truth": "991-72-8541",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "947-73-4805",
+          "ground_truth": "947-73-4805",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB55NFWY80188862802477",
+          "ground_truth": "GB55NFWY80188862802477",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 5266.843399993377,
+      "extract_ms": 0.5247000080998987
+    },
+    {
+      "id": "katanaml-test-00019",
+      "fields": {
+        "invoice_no": {
+          "predicted": "57338979",
+          "ground_truth": "57338979",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "05/10/2021",
+          "ground_truth": "05/10/2021",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Estradaand Sons 70379 Brooks Heights Apt. 110 Lake Megan, Wl 84417",
+          "ground_truth": "Estrada and Sons 70379 Brooks Heights Apt. 110 Lake Megan, WI 84417",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Santana-Sherman 4195 Sutton Plaza Suite 750 Christopherfort, MS 70499",
+          "ground_truth": "Santana-Sherman 4195 Sutton Plaza Suite 750 Christopherfort, MS 70499",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "926-74-0874",
+          "ground_truth": "926-74-0874",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "939-81-4695",
+          "ground_truth": "939-81-4695",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB90ALYU92362601688809",
+          "ground_truth": "GB90ALYU92362362601688809",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 5392.4726999830455,
+      "extract_ms": 0.6711999885737896
+    },
+    {
+      "id": "katanaml-test-00020",
+      "fields": {
+        "invoice_no": {
+          "predicted": "54394190",
+          "ground_truth": "54394190",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "02/23/2021",
+          "ground_truth": "02/23/2021",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Nelson, Bird and Mendoza 48426 John Village Suite 517 Boydstad, ID 55416",
+          "ground_truth": "Nelson, Bird and Mendoza 48426 John Village Suite 517 Boydstad, ID 55416",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Allen Inc USS Smith FPOAP40020",
+          "ground_truth": "Allen Inc USS Smith FPO AP 40020",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "976-76-5964",
+          "ground_truth": "976-76-5964",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "925-90-1124",
+          "ground_truth": "925-90-1124",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB63GDHN20059173458044",
+          "ground_truth": "GB63GDHN20059173458044",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 5363.999799999874,
+      "extract_ms": 0.6186000246088952
+    },
+    {
+      "id": "katanaml-test-00021",
+      "fields": {
+        "invoice_no": {
+          "predicted": "77404624",
+          "ground_truth": "77404624",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "10/20/2014",
+          "ground_truth": "10/20/2014",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Hayes-Mcdonald 6220 Hughes Isle East Charlesmouth, NM82727",
+          "ground_truth": "Hayes-Mcdonald 6220 Hughes Isle East Charlesmouth, NM 82727",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Sheppard, Guerrero and Castillo 8846 Bryan Turnpike Wallaceborough, Wl 93615",
+          "ground_truth": "Sheppard, Guerrero and Castillo 8846 Bryan Turnpike Wallaceborough, WI 93615",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "906-99-8086",
+          "ground_truth": "906-99-8086",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "960-84-4731",
+          "ground_truth": "960-84-4731",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB91DID006197597108680",
+          "ground_truth": "GB91DIDO06197597108680",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 6250.379800010705,
+      "extract_ms": 0.7724000024609268
+    },
+    {
+      "id": "katanaml-test-00022",
+      "fields": {
+        "invoice_no": {
+          "predicted": "32830026",
+          "ground_truth": "32830026",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "12/20/2014",
+          "ground_truth": "12/20/2014",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "George, Casey and Harris 0943 Justin Branch Apt. 233 Ingramberg, DE 59102",
+          "ground_truth": "907-77-8965",
+          "outcome": "wrong"
+        },
+        "client": {
+          "predicted": "Stewart, Fields and Scott 07095 Robert Cape Marquezburgh, DC 81706",
+          "ground_truth": "Stewart, Fields and Scott 07095 Robert Cape Marquezburgh, DC 81706",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "907-77-8965",
+          "ground_truth": null,
+          "outcome": "spurious"
+        },
+        "client_tax_id": {
+          "predicted": "995-83-6792",
+          "ground_truth": "995-83-6792",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB81OUZN44807763808287",
+          "ground_truth": "GB810UZN44807763808287",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 5903.960299998289,
+      "extract_ms": 0.5770999996457249
+    },
+    {
+      "id": "katanaml-test-00023",
+      "fields": {
+        "invoice_no": {
+          "predicted": "71748307",
+          "ground_truth": "71748307",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "12/24/2011",
+          "ground_truth": "12/24/2011",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Velasquez, Ward and Ballard 87336 Payne Way Suite 716 Parkerton, FL 76330",
+          "ground_truth": "Velasquez, Ward and Ballard 87336 Payne Way Suite 716 Parkerton, FL 76330",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Lewis Group 537wilson Parkways North Mary, AL 69775",
+          "ground_truth": "Lewis Group 537 Wilson Parkways North Mary, AL 69775",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "950-74-4484",
+          "ground_truth": "950-74-4484",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "996-86-8087",
+          "ground_truth": "996-86-8087",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB48EAPQ46997886926034",
+          "ground_truth": "GB48EAPQ46997886926034",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 6574.922600004356,
+      "extract_ms": 0.735500012524426
+    },
+    {
+      "id": "katanaml-test-00024",
+      "fields": {
+        "invoice_no": {
+          "predicted": "17619666",
+          "ground_truth": "17619666",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "03/09/2020",
+          "ground_truth": "03/09/2020",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Wilkerson Ltd 49006 Saunders Villages Suite 098 North Jennifer, TN 83320",
+          "ground_truth": "Wilkerson Ltd 49006 Saunders Villages Suite 098 North Jennifer, TN 83320",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "English-Brown 56684 Tracey Ranch North Gabrielle, SC 15965",
+          "ground_truth": "English-Brown 56684 Tracey Ranch North Gabrielle, SC 15965",
+          "outcome": "correct"
+        },
+        "seller_tax_id": {
+          "predicted": "941-97-9699",
+          "ground_truth": "941-97-9699",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "937-79-7558",
+          "ground_truth": "937-79-7558",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB40JKGK45011938135603",
+          "ground_truth": "GB40JKGK45011938135603",
+          "outcome": "correct"
+        }
+      },
+      "ocr_ms": 7291.831699985778,
+      "extract_ms": 0.5777000042144209
+    },
+    {
+      "id": "katanaml-test-00025",
+      "fields": {
+        "invoice_no": {
+          "predicted": "12681565",
+          "ground_truth": "12681565",
+          "outcome": "correct"
+        },
+        "invoice_date": {
+          "predicted": "09/07/2015",
+          "ground_truth": "09/07/2015",
+          "outcome": "correct"
+        },
+        "seller": {
+          "predicted": "Clay-Koch 2467 John Knolls Apt. 099 Markside, MT 79068",
+          "ground_truth": "Clay-Koch 2467 John Knolls Apt. 099 Markside, MT 79068",
+          "outcome": "correct"
+        },
+        "client": {
+          "predicted": "Thompson-Baker USNVKennedy FPOAA01185",
+          "ground_truth": "Thompson-Baker USNV Kennedy FPO AA 01185",
+          "outcome": "wrong"
+        },
+        "seller_tax_id": {
+          "predicted": "915-72-3800",
+          "ground_truth": "915-72-3800",
+          "outcome": "correct"
+        },
+        "client_tax_id": {
+          "predicted": "971-96-6933",
+          "ground_truth": "971-96-6933",
+          "outcome": "correct"
+        },
+        "iban": {
+          "predicted": "GB20IFBT89821062114124",
+          "ground_truth": "GB201FBT89821062114124",
+          "outcome": "wrong"
+        }
+      },
+      "ocr_ms": 5141.351800004486,
+      "extract_ms": 0.4994999908376485
+    }
+  ]
+}

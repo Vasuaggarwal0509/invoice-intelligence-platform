@@ -1,0 +1,2997 @@
+{
+  "date": "2026-04-19",
+  "dataset": "katanaml-invoices-donut-v1",
+  "split": "test",
+  "sample_count": 26,
+  "wall_clock_s": 158.30674030000228,
+  "gate_threshold": 0.85,
+  "gate_passed": true,
+  "average_f1": 0.881270607739355,
+  "item_count_accuracy": 1.0,
+  "per_field_stats": {
+    "item_desc": {
+      "correct": 32,
+      "wrong": 74,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "item_qty": {
+      "correct": 106,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "item_net_price": {
+      "correct": 106,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    },
+    "item_net_worth": {
+      "correct": 105,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 1,
+      "both_none": 0
+    },
+    "item_vat": {
+      "correct": 104,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 2,
+      "both_none": 0
+    },
+    "item_gross_worth": {
+      "correct": 106,
+      "wrong": 0,
+      "missed": 0,
+      "spurious": 0,
+      "both_none": 0
+    }
+  },
+  "per_field_f1": {
+    "item_desc": {
+      "precision": 0.3018867924528302,
+      "recall": 0.3018867924528302,
+      "f1": 0.3018867924528302
+    },
+    "item_qty": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "item_net_price": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "item_net_worth": {
+      "precision": 0.9905660377358491,
+      "recall": 1.0,
+      "f1": 0.9952606635071091
+    },
+    "item_vat": {
+      "precision": 0.9811320754716981,
+      "recall": 1.0,
+      "f1": 0.9904761904761905
+    },
+    "item_gross_worth": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "samples": [
+    {
+      "id": "katanaml-test-00000",
+      "gt_item_count": 1,
+      "pred_item_count": 1,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "12\"Marble Lapis Inlay Chess Table Top With 2\"Pieces&15\" Wooden Standw 537",
+          "item_qty": "2,00",
+          "item_net_price": "444,60",
+          "item_net_worth": "889,20",
+          "item_vat": "10%",
+          "item_gross_worth": "978,12"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "12\" Marble Lapis Inlay Chess Table Top With 2\" Pieces & 15\" Wooden Stand W537",
+          "item_qty": "2,00",
+          "item_net_price": "444,60",
+          "item_net_worth": "889,20",
+          "item_vat": "10%",
+          "item_gross_worth": "978,12"
+        }
+      ],
+      "ocr_ms": 4748.0076999927405,
+      "extract_ms": 0.1871999993454665
+    },
+    {
+      "id": "katanaml-test-00001",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Beach Lunch Lounge Striped Shirt Dress Large Navy Blue White Long Sleeve Causal",
+          "item_qty": "1,00",
+          "item_net_price": "16,99",
+          "item_net_worth": "16,99",
+          "item_vat": "10%",
+          "item_gross_worth": "18,69"
+        },
+        {
+          "item_desc": "Jams World Hawaiian Dress Rayon sz. L",
+          "item_qty": "5,00",
+          "item_net_price": "65,00",
+          "item_net_worth": "325,00",
+          "item_vat": "10%",
+          "item_gross_worth": "357,50"
+        },
+        {
+          "item_desc": "Lu La Roe Nicole Dress Size Large 26",
+          "item_qty": "2,00",
+          "item_net_price": "1,99",
+          "item_net_worth": "3,98",
+          "item_vat": "10%",
+          "item_gross_worth": "4,38"
+        },
+        {
+          "item_desc": "Johnny Was Medium Linen Wrap Dress Dessert Rose Embroiderd Bohemian",
+          "item_qty": "2,00",
+          "item_net_price": "89,99",
+          "item_net_worth": "179,98",
+          "item_vat": "10%",
+          "item_gross_worth": "197,98"
+        },
+        {
+          "item_desc": "Eileen Fisher Women's Long Sleeve Fleece Lined Front Pockets Dress XS Gray",
+          "item_qty": "2,00",
+          "item_net_price": "15,99",
+          "item_net_worth": "31,98",
+          "item_vat": "10%",
+          "item_gross_worth": "35,18"
+        },
+        {
+          "item_desc": "Hanna Anderson Women's L Large Coral Short Sleeve Casual Fall Tee Shirt Dress",
+          "item_qty": "1,00",
+          "item_net_price": "24,00",
+          "item_net_worth": "24,00",
+          "item_vat": "10%",
+          "item_gross_worth": "26,40"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Beach Lunch Lounge Striped Shirt Dress Large Navy Blue White Long Sleeve Causal",
+          "item_qty": "1,00",
+          "item_net_price": "16,99",
+          "item_net_worth": "16,99",
+          "item_vat": "10%",
+          "item_gross_worth": "18,69"
+        },
+        {
+          "item_desc": "Jams World Hawaiian 0 Dress Rayon SZ.L",
+          "item_qty": "5,00",
+          "item_net_price": "65,00",
+          "item_net_worth": "325,00",
+          "item_vat": "10%",
+          "item_gross_worth": "357,50"
+        },
+        {
+          "item_desc": "LuLaRoe Nicole Dress Size Large 26",
+          "item_qty": "2,00",
+          "item_net_price": "1,99",
+          "item_net_worth": "3,98",
+          "item_vat": "10%",
+          "item_gross_worth": "4,38"
+        },
+        {
+          "item_desc": "Johnny Was Medium Linen Wrap Dress Dessert Rose Embroiderd Bohemian",
+          "item_qty": "2,00",
+          "item_net_price": "89,99",
+          "item_net_worth": "179,98",
+          "item_vat": "10%",
+          "item_gross_worth": "197,98"
+        },
+        {
+          "item_desc": "Eileen Fisher Women's Long Sleeve Fleece Lined Front Pockets Dress XS Gray",
+          "item_qty": "2,00",
+          "item_net_price": "15,99",
+          "item_net_worth": "31,98",
+          "item_vat": "10%",
+          "item_gross_worth": "35,18"
+        },
+        {
+          "item_desc": "Hanna Anderson Women's L Large Coral Short Sleeve Casual Fall Tee Shirt Dress",
+          "item_qty": "1,00",
+          "item_net_price": "24,00",
+          "item_net_worth": "24,00",
+          "item_vat": "10%",
+          "item_gross_worth": "26,40"
+        }
+      ],
+      "ocr_ms": 5500.650699977996,
+      "extract_ms": 0.5359000060707331
+    },
+    {
+      "id": "katanaml-test-00002",
+      "gt_item_count": 1,
+      "pred_item_count": 1,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Care&Repair of Furniture",
+          "item_qty": "2,00",
+          "item_net_price": "4,25",
+          "item_net_worth": "8,50",
+          "item_vat": "10%",
+          "item_gross_worth": "9,35"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Care & Repair of Furniture",
+          "item_qty": "2,00",
+          "item_net_price": "4,25",
+          "item_net_worth": "8,50",
+          "item_vat": "10%",
+          "item_gross_worth": "9,35"
+        }
+      ],
+      "ocr_ms": 3954.2766000085976,
+      "extract_ms": 0.21410000044852495
+    },
+    {
+      "id": "katanaml-test-00003",
+      "gt_item_count": 2,
+      "pred_item_count": 2,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Jordan Hydro 2(TD)-Child Size 10c",
+          "item_qty": "2,00",
+          "item_net_price": "5,75",
+          "item_net_worth": "11,50",
+          "item_vat": "10%",
+          "item_gross_worth": "12,65"
+        },
+        {
+          "item_desc": "Sketchers Energy Lights Boys Black Canvas Size 4 With Charging Cable",
+          "item_qty": "4,00",
+          "item_net_price": "12,00",
+          "item_net_worth": "48,00",
+          "item_vat": "10%",
+          "item_gross_worth": "52,80"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Jordan Hydro 2 (TD)-Child Size",
+          "item_qty": "2,00",
+          "item_net_price": "5,75",
+          "item_net_worth": "11,50",
+          "item_vat": "10%",
+          "item_gross_worth": "12,65"
+        },
+        {
+          "item_desc": "Sketchers Energy Lights Boys Black Canvas Size 4 With Charging Cable",
+          "item_qty": "4,00",
+          "item_net_price": "12,00",
+          "item_net_worth": "48,00",
+          "item_vat": "10%",
+          "item_gross_worth": "52,80"
+        }
+      ],
+      "ocr_ms": 4702.515499986475,
+      "extract_ms": 0.31389997457154095
+    },
+    {
+      "id": "katanaml-test-00004",
+      "gt_item_count": 7,
+      "pred_item_count": 7,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Greenwith Box MGB-001 Japan Tested Working 59",
+          "item_qty": "1,00",
+          "item_net_price": "65,00",
+          "item_net_worth": "65,00",
+          "item_vat": "10%",
+          "item_gross_worth": "71,50"
+        },
+        {
+          "item_desc": "New Sony Playstation 4 Slim 1 TB3 Game Bundle Console. Sealed!!!",
+          "item_qty": "3,00",
+          "item_net_price": "399,99",
+          "item_net_worth": "1199,97",
+          "item_vat": "10%",
+          "item_gross_worth": "1 319,97"
+        },
+        {
+          "item_desc": "Atari Flashback 4 Classic Game Console 75built ingames Space Invaders Asteroid",
+          "item_qty": "4,00",
+          "item_net_price": "8,50",
+          "item_net_worth": "34,00",
+          "item_vat": "10%",
+          "item_gross_worth": "37,40"
+        },
+        {
+          "item_desc": "Sony Play Station 1 PS1 Console modelscph-7501",
+          "item_qty": "4,00",
+          "item_net_price": "14,99",
+          "item_net_worth": "59,96",
+          "item_vat": "10%",
+          "item_gross_worth": "65,96"
+        },
+        {
+          "item_desc": "Nintendo Wii Console-2 Remotes w/ Covers, Nunchucks, Sensor Sega Game Bundle",
+          "item_qty": "1,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "85,00",
+          "item_vat": "10%",
+          "item_gross_worth": "93,50"
+        },
+        {
+          "item_desc": "Sony Play Station 3 PS3 Super Slim Black Console 20 GB *Tested*Console&Cables",
+          "item_qty": "4,00",
+          "item_net_price": "99,95",
+          "item_net_worth": "399,80",
+          "item_vat": "10%",
+          "item_gross_worth": "439,78"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Greenwith Box MGB-001 Japan Tested Working 55",
+          "item_qty": "3,00",
+          "item_net_price": "70,00",
+          "item_net_worth": "210,00",
+          "item_vat": "10%",
+          "item_gross_worth": "231,00"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Green with Box MGB-001 Japan Tested Working 59",
+          "item_qty": "1,00",
+          "item_net_price": "65,00",
+          "item_net_worth": "65,00",
+          "item_vat": "10%",
+          "item_gross_worth": "71,50"
+        },
+        {
+          "item_desc": "New Sony Playstation 4 Slim 1TB 3 Game Bundle Console. Sealed!!!",
+          "item_qty": "3,00",
+          "item_net_price": "399,99",
+          "item_net_worth": "1199,97",
+          "item_vat": "10%",
+          "item_gross_worth": "1319,97"
+        },
+        {
+          "item_desc": "Atari Flashback 4 Classic Game Console 75 built in games Space Invaders Asteroid",
+          "item_qty": "4,00",
+          "item_net_price": "8,50",
+          "item_net_worth": "34,00",
+          "item_vat": "10%",
+          "item_gross_worth": "37,40"
+        },
+        {
+          "item_desc": "Sony PlayStation 1 PS1 Console model scph-7501",
+          "item_qty": "4,00",
+          "item_net_price": "14,99",
+          "item_net_worth": "59,96",
+          "item_vat": "10%",
+          "item_gross_worth": "65,96"
+        },
+        {
+          "item_desc": "Nintendo Wii Console 2 Remotes w/ Covers, Nunchucks, Sensor Sega Game Bundle",
+          "item_qty": "1,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "85,00",
+          "item_vat": "10%",
+          "item_gross_worth": "93,50"
+        },
+        {
+          "item_desc": "Sony PlayStation 3 PS3 Super Slim Black Console 20GB *Tested* Console & Cables",
+          "item_qty": "4,00",
+          "item_net_price": "99,95",
+          "item_net_worth": "399,80",
+          "item_vat": "10%",
+          "item_gross_worth": "439,78"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Green with Box MGB-001 Japan Tested Working",
+          "item_qty": "3,00",
+          "item_net_price": "70,00",
+          "item_net_worth": "210,00",
+          "item_vat": "10%",
+          "item_gross_worth": "231,00"
+        }
+      ],
+      "ocr_ms": 7590.386800002307,
+      "extract_ms": 1.1769999982789159
+    },
+    {
+      "id": "katanaml-test-00005",
+      "gt_item_count": 5,
+      "pred_item_count": 5,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Marble Beautiful White Coffee Table Top Malachite Inlay Art Home Decor H5372",
+          "item_qty": "5,00",
+          "item_net_price": "271,01",
+          "item_net_worth": "1 355,05",
+          "item_vat": "10%",
+          "item_gross_worth": "1 490,55"
+        },
+        {
+          "item_desc": "15\"x 15\"White Decorative Coffee Table Top Lapis Lazuli Marquetery Patio Décor",
+          "item_qty": "4,00",
+          "item_net_price": "645,77",
+          "item_net_worth": "2583,08",
+          "item_vat": "10%",
+          "item_gross_worth": "2841,39"
+        },
+        {
+          "item_desc": "16 Inches Marble Coffee Table Top Inlay with Multi Stone at Border Game Table",
+          "item_qty": "1,00",
+          "item_net_price": "280,50",
+          "item_net_worth": "280,50",
+          "item_vat": "10%",
+          "item_gross_worth": "308,55"
+        },
+        {
+          "item_desc": "18\"Black Marble Coffee Table Top Mother of Pearl Inlay Furniture Decors H1883 B",
+          "item_qty": "3,00",
+          "item_net_price": "377,65",
+          "item_net_worth": "1 132,95",
+          "item_vat": "10%",
+          "item_gross_worth": "1 246,24"
+        },
+        {
+          "item_desc": "7'x 4' Pietra Dura Marble Dining Hallway Table Top Inlay Design Patio Decor E977 A",
+          "item_qty": "2,00",
+          "item_net_price": "19 506,53",
+          "item_net_worth": "39 013,06",
+          "item_vat": "10%",
+          "item_gross_worth": "42 914,37"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Marble Beautiful White Coffee Table Top Malachite Inlay Art Home Decor H5372",
+          "item_qty": "5,00",
+          "item_net_price": "271,01",
+          "item_net_worth": "1355,05",
+          "item_vat": "10%",
+          "item_gross_worth": "1 490,55"
+        },
+        {
+          "item_desc": "15\"x15\" White Decorative Coffee Table Top Lapis Lazuli Marquetery Patio Décor",
+          "item_qty": "4,00",
+          "item_net_price": "645,77",
+          "item_net_worth": "2583,08",
+          "item_vat": "10%",
+          "item_gross_worth": "2 841,39"
+        },
+        {
+          "item_desc": "16 Inches Marble Coffee Table Top Inlay with Multi Stone at Border Game Table",
+          "item_qty": "1,00",
+          "item_net_price": "280,50",
+          "item_net_worth": "280,50",
+          "item_vat": "10%",
+          "item_gross_worth": "308,55"
+        },
+        {
+          "item_desc": "18\" Black Marble Coffee Table Top Mother of Pearl Inlay Furniture Decors H1883B",
+          "item_qty": "3,00",
+          "item_net_price": "377,65",
+          "item_net_worth": "1132,95",
+          "item_vat": "10%",
+          "item_gross_worth": "1246,24"
+        },
+        {
+          "item_desc": "7'x4' Pietra Dura Marble Dining Hallway Table Top Inlay Design Patio Decor E977A",
+          "item_qty": "2,00",
+          "item_net_price": "19 506,53",
+          "item_net_worth": "39 013,06",
+          "item_vat": "10%",
+          "item_gross_worth": "42 914,37"
+        }
+      ],
+      "ocr_ms": 6528.221899992786,
+      "extract_ms": 0.8607000054325908
+    },
+    {
+      "id": "katanaml-test-00006",
+      "gt_item_count": 5,
+      "pred_item_count": 5,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Microsoft Xbox One X1 TB4k Ultra HD Console black controllerworksgreat 1787",
+          "item_qty": "5,00",
+          "item_net_price": "249,00",
+          "item_net_worth": "1 245,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1 369,50"
+        },
+        {
+          "item_desc": "Cables 500gb, Sony Play Station 4 PS4 CUH 1215 AJet Black Consolew/ Controller",
+          "item_qty": "5,00",
+          "item_net_price": "100,00",
+          "item_net_worth": "500,00",
+          "item_vat": "10%",
+          "item_gross_worth": "550,00"
+        },
+        {
+          "item_desc": "PS2 Slim Console System SCPH-77000 PINKPlaystation 2 Tested",
+          "item_qty": "4,00",
+          "item_net_price": "252,00",
+          "item_net_worth": "1008,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1108,80"
+        },
+        {
+          "item_desc": "Nintendo Game Boy Micro Console-Black(Ox YSFBB)",
+          "item_qty": "2,00",
+          "item_net_price": "130,00",
+          "item_net_worth": "260,00",
+          "item_vat": "10%",
+          "item_gross_worth": "286,00"
+        },
+        {
+          "item_desc": "Nintendo Game Cube System Console Bundle Mario Sunshine +Genuine controller LOT",
+          "item_qty": "1,00",
+          "item_net_price": "159,99",
+          "item_net_worth": "159,99",
+          "item_vat": "10%",
+          "item_gross_worth": "175,99"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Microsoft Xbox One X 1TB 4k Ultra HD Console black controller works great 1787",
+          "item_qty": "5,00",
+          "item_net_price": "249,00",
+          "item_net_worth": "1245,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1369,50"
+        },
+        {
+          "item_desc": "Cables 500gb,Sony PlayStation 4 PS4 CUH 1215A Jet Black Console w/ Controller",
+          "item_qty": "5,00",
+          "item_net_price": "100,00",
+          "item_net_worth": "500,00",
+          "item_vat": "10%",
+          "item_gross_worth": "550,00"
+        },
+        {
+          "item_desc": "PS2 Slim Console System SCPH-77000 PINK Playstation 2 Tested",
+          "item_qty": "4,00",
+          "item_net_price": "252,00",
+          "item_net_worth": "1008,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1 108,80"
+        },
+        {
+          "item_desc": "Nintendo Game Boy Micro Console - Black (OXYSFBB)",
+          "item_qty": "2,00",
+          "item_net_price": "130,00",
+          "item_net_worth": "260,00",
+          "item_vat": "10%",
+          "item_gross_worth": "286,00"
+        },
+        {
+          "item_desc": "Nintendo GameCube System Console Bundle Mario Sunshine + Genuine controller LOT",
+          "item_qty": "1,00",
+          "item_net_price": "159,99",
+          "item_net_worth": "159,99",
+          "item_vat": "10%",
+          "item_gross_worth": "175,99"
+        }
+      ],
+      "ocr_ms": 6333.7330000067595,
+      "extract_ms": 0.7821999897714704
+    },
+    {
+      "id": "katanaml-test-00007",
+      "gt_item_count": 1,
+      "pred_item_count": 1,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Zara Yellow Shift Dress XS",
+          "item_qty": "5,00",
+          "item_net_price": "24,75",
+          "item_net_worth": "123,75",
+          "item_vat": "10%",
+          "item_gross_worth": "136,13"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Zara Yellow Shift Dress XS",
+          "item_qty": "5,00",
+          "item_net_price": "24,75",
+          "item_net_worth": "123,75",
+          "item_vat": "10%",
+          "item_gross_worth": "136,13"
+        }
+      ],
+      "ocr_ms": 3737.2209999884944,
+      "extract_ms": 0.3043000178877264
+    },
+    {
+      "id": "katanaml-test-00008",
+      "gt_item_count": 3,
+      "pred_item_count": 3,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "CCNA200-30150 GBAUG2020 Cisco Video/Official Books/Exam Dumps/Licences",
+          "item_qty": "5,00",
+          "item_net_price": "1,99",
+          "item_net_worth": "9,95",
+          "item_vat": "10%",
+          "item_gross_worth": "10,94"
+        },
+        {
+          "item_desc": "Talesfrom the Buffalo Bills",
+          "item_qty": "5,00",
+          "item_net_price": "5,50",
+          "item_net_worth": "27,50",
+          "item_vat": "10%",
+          "item_gross_worth": "30,25"
+        },
+        {
+          "item_desc": "A boy who grew up eating nightmare It's Okay to Not Be Okay Picturebook",
+          "item_qty": "4,00",
+          "item_net_price": "19,50",
+          "item_net_worth": "78,00",
+          "item_vat": "10%",
+          "item_gross_worth": "85,80"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "CCNA 200-301 50 GB AUG 2020 Cisco Video/Official Books/Exam Dumps/Licences",
+          "item_qty": "5,00",
+          "item_net_price": "1,99",
+          "item_net_worth": "9,95",
+          "item_vat": "10%",
+          "item_gross_worth": "10,94"
+        },
+        {
+          "item_desc": "Tales from the Buffalo Bills",
+          "item_qty": "5,00",
+          "item_net_price": "5,50",
+          "item_net_worth": "27,50",
+          "item_vat": "10%",
+          "item_gross_worth": "30,25"
+        },
+        {
+          "item_desc": "A boy who grew up eating nightmare It's Okay to Not Be Okay Picturebook 00000000",
+          "item_qty": "4,00",
+          "item_net_price": "19,50",
+          "item_net_worth": "78,00",
+          "item_vat": "10%",
+          "item_gross_worth": "85,80"
+        }
+      ],
+      "ocr_ms": 4601.432699972065,
+      "extract_ms": 0.3856999974232167
+    },
+    {
+      "id": "katanaml-test-00009",
+      "gt_item_count": 1,
+      "pred_item_count": 1,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Large Blue Long Sleeve Fit & Flare Dress Elastic Waist Crochet Detail Bohemian",
+          "item_qty": "5,00",
+          "item_net_price": "0,99",
+          "item_net_worth": "4,95",
+          "item_vat": "10%",
+          "item_gross_worth": "5,45"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Large Blue Long Sleeve Fit & Flare Dress Elastic Waist Crochet Detail Bohemian",
+          "item_qty": "5,00",
+          "item_net_price": "0,99",
+          "item_net_worth": "4,95",
+          "item_vat": "10%",
+          "item_gross_worth": "5,45"
+        }
+      ],
+      "ocr_ms": 4770.697400002973,
+      "extract_ms": 0.22570000146515667
+    },
+    {
+      "id": "katanaml-test-00010",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Play Station 5 Console Disc Version **PREORDER**",
+          "item_qty": "1,00",
+          "item_net_price": "899,99",
+          "item_net_worth": "899,99",
+          "item_vat": "10%",
+          "item_gross_worth": "989,99"
+        },
+        {
+          "item_desc": "Sony Play Station 4 Slim 1 TB (Upgraded to SSD) Black Game Console",
+          "item_qty": "2,00",
+          "item_net_price": "150,00",
+          "item_net_worth": "300,00",
+          "item_vat": "10%",
+          "item_gross_worth": "330,00"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Clear Purplewith Box MGB-001 Japan Tested 53",
+          "item_qty": "1,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "85,00",
+          "item_vat": "10%",
+          "item_gross_worth": "93,50"
+        },
+        {
+          "item_desc": "NEC PC Engine INTERFACE UNIT IFU-30 CDROMConsole PI-TG001 Tested Japan",
+          "item_qty": "1,00",
+          "item_net_price": "159,99",
+          "item_net_worth": "159,99",
+          "item_vat": "10%",
+          "item_gross_worth": "175,99"
+        },
+        {
+          "item_desc": "SONYPlaystation 2 Slim Console u /00006-Hd OS . 49 TESTED Working 11194",
+          "item_qty": "4,00",
+          "item_net_price": "90,00",
+          "item_net_worth": "360,00",
+          "item_vat": "10%",
+          "item_gross_worth": "396,00"
+        },
+        {
+          "item_desc": "Magnavox Odyssey 2 Microprocessor Console System w Joy Sticks&15 Games-1978",
+          "item_qty": "1,00",
+          "item_net_price": "155,00",
+          "item_net_worth": "155,00",
+          "item_vat": "10%",
+          "item_gross_worth": "170,50"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "PlayStation 5 Console Disc Version PREORDER\"00OO",
+          "item_qty": "1,00",
+          "item_net_price": "899,99",
+          "item_net_worth": "899,99",
+          "item_vat": "10%",
+          "item_gross_worth": "989,99"
+        },
+        {
+          "item_desc": "Sony PlayStation 4 Slim 1TB (Upgraded to SSD) Black Game Console",
+          "item_qty": "2,00",
+          "item_net_price": "150,00",
+          "item_net_worth": "300,00",
+          "item_vat": "10%",
+          "item_gross_worth": "330,00"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Clear Purple with Box MGB-001 Japan Tested 53",
+          "item_qty": "1,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "85,00",
+          "item_vat": "10%",
+          "item_gross_worth": "93,50"
+        },
+        {
+          "item_desc": "NEC PC Engine INTERFACE UNIT IFU-30 CD ROM Console PI-TG001 Tested Japan",
+          "item_qty": "1,00",
+          "item_net_price": "159,99",
+          "item_net_worth": "159,99",
+          "item_vat": "10%",
+          "item_gross_worth": "175,99"
+        },
+        {
+          "item_desc": "SONY Playstation2 Slim Console set \" SCPH-90000 / White \"I TESTED Working 11194",
+          "item_qty": "4,00",
+          "item_net_price": "90,00",
+          "item_net_worth": "360,00",
+          "item_vat": "10%",
+          "item_gross_worth": "396,00"
+        },
+        {
+          "item_desc": "Magnavox Odyssey 2 Microprocessor Console System w Joy Sticks & 15 Games - 1978",
+          "item_qty": "1,00",
+          "item_net_price": "155,00",
+          "item_net_worth": "155,00",
+          "item_vat": "10%",
+          "item_gross_worth": "170,50"
+        }
+      ],
+      "ocr_ms": 6482.491900009336,
+      "extract_ms": 0.7252000214066356
+    },
+    {
+      "id": "katanaml-test-00011",
+      "gt_item_count": 2,
+      "pred_item_count": 2,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "30 Inches Marble Patio Table Top Malachite Stone Inlaid Coffee Table Home Decor",
+          "item_qty": "3,00",
+          "item_net_price": "1 023,75",
+          "item_net_worth": "3071,25",
+          "item_vat": "10%",
+          "item_gross_worth": "3378,37"
+        },
+        {
+          "item_desc": "48 Inch Marble Restaurant Table Inlay with Lapis Lazuli Stone Dinning Table Top",
+          "item_qty": "3,00",
+          "item_net_price": "2 692,00",
+          "item_net_worth": "8 076,00",
+          "item_vat": "10%",
+          "item_gross_worth": "8 883,60"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "30 Inches Marble Patio Table Top Malachite Stone Inlaid Coffee Table Home Decor",
+          "item_qty": "3,00",
+          "item_net_price": "1023,75",
+          "item_net_worth": "3071,25",
+          "item_vat": "10%",
+          "item_gross_worth": "3378,37"
+        },
+        {
+          "item_desc": "48 Inch Marble Restaurant Table Inlay with Lapis Lazuli Stone Dinning Table Top",
+          "item_qty": "3,00",
+          "item_net_price": "2692,00",
+          "item_net_worth": "8076,00",
+          "item_vat": "10%",
+          "item_gross_worth": "8883,60"
+        }
+      ],
+      "ocr_ms": 4464.655699994182,
+      "extract_ms": 0.32900000223889947
+    },
+    {
+      "id": "katanaml-test-00012",
+      "gt_item_count": 5,
+      "pred_item_count": 5,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "SOFA SET",
+          "item_qty": "2,00",
+          "item_net_price": "250,00",
+          "item_net_worth": "500,00",
+          "item_vat": "10%",
+          "item_gross_worth": "550,00"
+        },
+        {
+          "item_desc": "Real Madrid Inflatable Chair (SG16136)",
+          "item_qty": "3,00",
+          "item_net_price": "43,95",
+          "item_net_worth": "131,85",
+          "item_vat": "10%",
+          "item_gross_worth": "145,04"
+        },
+        {
+          "item_desc": "13 Inch Marble Coffee Table Stone Game Table Motherof Pearl with Check Pattern",
+          "item_qty": "4,00",
+          "item_net_price": "301,75",
+          "item_net_worth": "1207,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1 327,70"
+        },
+        {
+          "item_desc": "Carnelian Stone Floral Pattern Dinette Table Top Marble Coffee Table 30 Inches",
+          "item_qty": "2,00",
+          "item_net_price": "993,75",
+          "item_net_worth": "1987,50",
+          "item_vat": "10%",
+          "item_gross_worth": "2186,25"
+        },
+        {
+          "item_desc": "3'x 2'Black Marvels Top Dining Table Italian Handmade Floral Art Christmas Gift",
+          "item_qty": "1,00",
+          "item_net_price": "2 585,00",
+          "item_net_worth": "2 585,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 843,50"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "SOFA SET",
+          "item_qty": "2,00",
+          "item_net_price": "250,00",
+          "item_net_worth": "500,00",
+          "item_vat": "10%",
+          "item_gross_worth": "550,00"
+        },
+        {
+          "item_desc": "Real Madrid Inflatable Chair (SG16136)",
+          "item_qty": "3,00",
+          "item_net_price": "43,95",
+          "item_net_worth": "131,85",
+          "item_vat": "10%",
+          "item_gross_worth": "145,04"
+        },
+        {
+          "item_desc": "13 Inch Marble Coffee Table Stone Game Table Mother of Pearl with Check Pattern",
+          "item_qty": "4,00",
+          "item_net_price": "301,75",
+          "item_net_worth": "1207,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1327,70"
+        },
+        {
+          "item_desc": "Carnelian Stone Floral Pattern Dinette Table Top Marble Coffee Table 30 Inches",
+          "item_qty": "2,00",
+          "item_net_price": "993,75",
+          "item_net_worth": "1987,50",
+          "item_vat": "10%",
+          "item_gross_worth": "2 186,25"
+        },
+        {
+          "item_desc": "3'x2' Black Marvels Top Dining Table Italian Handmade Floral Art Christmas Gift",
+          "item_qty": "1,00",
+          "item_net_price": "2585,00",
+          "item_net_worth": "2585,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2843,50"
+        }
+      ],
+      "ocr_ms": 5833.244100009324,
+      "extract_ms": 0.602399988565594
+    },
+    {
+      "id": "katanaml-test-00013",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "spurious",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "49\"x 22\"Marble Top Center Table Carnelian Mosaic Italian Art Christmas Gift Arts",
+          "item_qty": "4,00",
+          "item_net_price": "2 400,00",
+          "item_net_worth": "9600,00",
+          "item_vat": "10%",
+          "item_gross_worth": "10 560,00"
+        },
+        {
+          "item_desc": "6'x 3'Marble Dining Center Table With Black Top Floral Collectible Inlaid E963",
+          "item_qty": "3,00",
+          "item_net_price": "6 040,40",
+          "item_net_worth": "18 121,20",
+          "item_vat": "10%",
+          "item_gross_worth": "19 933,32"
+        },
+        {
+          "item_desc": "7'x 4'Blue Random Marble Dining Hallway Table Top Lapis Lazuli Inlay Decor E947 A",
+          "item_qty": "5,00",
+          "item_net_price": "8 194,09",
+          "item_net_worth": "40 970,45",
+          "item_vat": "10%",
+          "item_gross_worth": "45 067,50"
+        },
+        {
+          "item_desc": "36\"Marble White Top Counter Table Lapis Inlaid Pietradura Art Christmas Gifts",
+          "item_qty": "3,00",
+          "item_net_price": "3200,00",
+          "item_net_worth": "9 600,00",
+          "item_vat": "10%",
+          "item_gross_worth": "10560,00"
+        },
+        {
+          "item_desc": "6'x 3'White Marble Dining Table Top Multi Inlay Floral Elephant Art Decor H4952",
+          "item_qty": "5,00",
+          "item_net_price": "6 408,49",
+          "item_net_worth": "32 042,45",
+          "item_vat": "10%",
+          "item_gross_worth": "35 246,69"
+        },
+        {
+          "item_desc": "6'x 3'Marble Dining Center Table Marquetry Inlay Italian Mosaic Patio Arts H3112",
+          "item_qty": "5,00",
+          "item_net_price": "6 647,61",
+          "item_net_worth": "33 238,05",
+          "item_vat": "10%",
+          "item_gross_worth": "36 561,85"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "49\"x22\" Marble Top Center Table Carnelian Mosaic Italian Art Christmas Gift Arts",
+          "item_qty": "4,00",
+          "item_net_price": "2400,00",
+          "item_net_worth": "9600,00",
+          "item_vat": "10%",
+          "item_gross_worth": "10 560,00"
+        },
+        {
+          "item_desc": "6'x3' Marble Dining Center Table With Black Top Floral Collectible Inlaid E963",
+          "item_qty": "3,00",
+          "item_net_price": "6040,40",
+          "item_net_worth": "18 121,20",
+          "item_vat": "10%",
+          "item_gross_worth": "19 933,32"
+        },
+        {
+          "item_desc": "7'x4' Blue Random Marble Dining Hallway Table Top Lapis Lazuli Inlay Decor E947A",
+          "item_qty": "5,00",
+          "item_net_price": "8194,09",
+          "item_net_worth": "40970,45",
+          "item_vat": "10%",
+          "item_gross_worth": "45 067,50"
+        },
+        {
+          "item_desc": "36\" Marble White Top Counter Table Lapis Inlaid Pietradura Art Christmas Gifts",
+          "item_qty": "3,00",
+          "item_net_price": "3 200,00",
+          "item_net_worth": "9 600,00",
+          "item_vat": "10%",
+          "item_gross_worth": "10 560,00"
+        },
+        {
+          "item_desc": "6'x3' White Marble Dining Table Top Multi Inlay Floral Elephant Art Decor H4952",
+          "item_qty": "5,00",
+          "item_net_price": "6408,49",
+          "item_net_worth": "32042,45",
+          "item_vat": "10%",
+          "item_gross_worth": "35 246,69"
+        },
+        {
+          "item_desc": "6'x3' Marble Dining Center Table Marquetry Inlay Italian Mosaic Patio Arts H3112",
+          "item_qty": "5,00",
+          "item_net_price": "6647,61",
+          "item_net_worth": null,
+          "item_vat": "10%",
+          "item_gross_worth": "36 561,85"
+        }
+      ],
+      "ocr_ms": 7660.625399992568,
+      "extract_ms": 1.0155999916605651
+    },
+    {
+      "id": "katanaml-test-00014",
+      "gt_item_count": 3,
+      "pred_item_count": 3,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "24 Inches Round Marble Coffee Table Top Inlay Sofa Tablewith Geometrical Design",
+          "item_qty": "4,00",
+          "item_net_price": "446,25",
+          "item_net_worth": "1785,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1 963,50"
+        },
+        {
+          "item_desc": "30\"x 30\"Marble Black Top Table Semi Precious Bird Art Black Friday Gift Décor",
+          "item_qty": "1,00",
+          "item_net_price": "2399,00",
+          "item_net_worth": "2399,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 638,90"
+        },
+        {
+          "item_desc": "2 Industrial Live edge Legs 16\" Tall Cast Aluminum Cast Iron Coffee Table Bench",
+          "item_qty": "2,00",
+          "item_net_price": "159,28",
+          "item_net_worth": "318,56",
+          "item_vat": "10%",
+          "item_gross_worth": "350,42"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "24 Inches Round Marble Coffee Table Top Inlay Sofa Table with Geometrical Design",
+          "item_qty": "4,00",
+          "item_net_price": "446,25",
+          "item_net_worth": "1785,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1963,50"
+        },
+        {
+          "item_desc": "30\"x30\" Marble Black Top Table Semi Precious Bird Art Black Friday Gift Décor",
+          "item_qty": "1,00",
+          "item_net_price": "2399,00",
+          "item_net_worth": "2399,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 638,90"
+        },
+        {
+          "item_desc": "2 Industrial Live edge Legs 16\" Tall Cast Aluminum Cast Iron Coffee Table Bench",
+          "item_qty": "2,00",
+          "item_net_price": "159,28",
+          "item_net_worth": "318,56",
+          "item_vat": "10%",
+          "item_gross_worth": "350,42"
+        }
+      ],
+      "ocr_ms": 5448.286099999677,
+      "extract_ms": 0.4149000160396099
+    },
+    {
+      "id": "katanaml-test-00015",
+      "gt_item_count": 1,
+      "pred_item_count": 1,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Hammered Brass Over Stainless steel Stemless Wine Glasses/ Candle Holders",
+          "item_qty": "4,00",
+          "item_net_price": "9,99",
+          "item_net_worth": "39,96",
+          "item_vat": "10%",
+          "item_gross_worth": "43,96"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Hammered Brass Over Stainless steel Stemless Wine Glasses/ Candle Holders",
+          "item_qty": "4,00",
+          "item_net_price": "9,99",
+          "item_net_worth": "39,96",
+          "item_vat": "10%",
+          "item_gross_worth": "43,96"
+        }
+      ],
+      "ocr_ms": 4128.025599988177,
+      "extract_ms": 0.22620000527240336
+    },
+    {
+      "id": "katanaml-test-00016",
+      "gt_item_count": 7,
+      "pred_item_count": 7,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "personal computer",
+          "item_qty": "4,00",
+          "item_net_price": "59,00",
+          "item_net_worth": "236,00",
+          "item_vat": "10%",
+          "item_gross_worth": "259,60"
+        },
+        {
+          "item_desc": "HP All-in-One Computer 22\" Full-HD Display Intel 2. 90 GHz 4 GB1 TBHDWin 10-TEAL",
+          "item_qty": "1,00",
+          "item_net_price": "449,99",
+          "item_net_worth": "449,99",
+          "item_vat": "10%",
+          "item_gross_worth": "494,99"
+        },
+        {
+          "item_desc": "Dell Optiplex SFF Desktop Computer Windows 10 4 GB 160 GB",
+          "item_qty": "4,00",
+          "item_net_price": "89,99",
+          "item_net_worth": "359,96",
+          "item_vat": "10%",
+          "item_gross_worth": "395,96"
+        },
+        {
+          "item_desc": "HPElite 8300 Business USFF Desktop Computeri 3 4 GB 250 GBWindows 10",
+          "item_qty": "2,00",
+          "item_net_price": "84,99",
+          "item_net_worth": "169,98",
+          "item_vat": "10%",
+          "item_gross_worth": "186,98"
+        },
+        {
+          "item_desc": "SAMARGBGaming PCDesktop Computeri 53. 7 GHz Nvidia GTX 1060 16 GB Windows 10",
+          "item_qty": "5,00",
+          "item_net_price": "400,00",
+          "item_net_worth": "2 000,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2200,00"
+        },
+        {
+          "item_desc": "Lenovo C20-00. . . all in one desktopcomputer. . . with Wireless Mouse. . . .",
+          "item_qty": "3,00",
+          "item_net_price": "277,64",
+          "item_net_worth": "832,92",
+          "item_vat": "10%",
+          "item_gross_worth": "916,21"
+        },
+        {
+          "item_desc": "Dell Optiplex 7040 SFF PC Computer Intel Corei 5-6500 3. 2 GHz 4 GBRAM500 GBHDD",
+          "item_qty": "3,00",
+          "item_net_price": "99,99",
+          "item_net_worth": "299,97",
+          "item_vat": "10%",
+          "item_gross_worth": "329,97"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "personal computer",
+          "item_qty": "4,00",
+          "item_net_price": "59,00",
+          "item_net_worth": "236,00",
+          "item_vat": "10%",
+          "item_gross_worth": "259,60"
+        },
+        {
+          "item_desc": "HP All-in-One Computer 22\" Full-HD Display Intel 2.90GHz 4GB 1TB HD Win10 - TEAL",
+          "item_qty": "1,00",
+          "item_net_price": "449,99",
+          "item_net_worth": "449,99",
+          "item_vat": "10%",
+          "item_gross_worth": "494,99"
+        },
+        {
+          "item_desc": "Dell Optiplex SFF Desktop Computer Windows 10 4GB 160GB",
+          "item_qty": "4,00",
+          "item_net_price": "89,99",
+          "item_net_worth": "359,96",
+          "item_vat": "10%",
+          "item_gross_worth": "395,96"
+        },
+        {
+          "item_desc": "HP Elite 8300 Business USFF Desktop Computer i3 4GB 250GB Windows 10",
+          "item_qty": "2,00",
+          "item_net_price": "84,99",
+          "item_net_worth": "169,98",
+          "item_vat": "10%",
+          "item_gross_worth": "186,98"
+        },
+        {
+          "item_desc": "SAMA RGB Gaming PC Desktop Computer i5 3.7GHz Nvidia GTX 1060 16GB Windows 10",
+          "item_qty": "5,00",
+          "item_net_price": "400,00",
+          "item_net_worth": "2 000,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 200,00"
+        },
+        {
+          "item_desc": "Lenovo C20-00...all in one desktop computer ...with Wireless Mouse.....",
+          "item_qty": "3,00",
+          "item_net_price": "277,64",
+          "item_net_worth": "832,92",
+          "item_vat": "10%",
+          "item_gross_worth": "916,21"
+        },
+        {
+          "item_desc": "Dell Optiplex 7040 SFF PC Computer Intel Core i5-6500 3.2GHz 4GB RAM 500GB HDD",
+          "item_qty": "3,00",
+          "item_net_price": "99,99",
+          "item_net_worth": "299,97",
+          "item_vat": "10%",
+          "item_gross_worth": "329,97"
+        }
+      ],
+      "ocr_ms": 7503.865000006044,
+      "extract_ms": 0.8842000097502023
+    },
+    {
+      "id": "katanaml-test-00017",
+      "gt_item_count": 7,
+      "pred_item_count": 7,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Cabi 5610 Striped White Blue Launch Maxi Dress Womens Sz M",
+          "item_qty": "3,00",
+          "item_net_price": "48,99",
+          "item_net_worth": "146,97",
+          "item_vat": "10%",
+          "item_gross_worth": "161,67"
+        },
+        {
+          "item_desc": "Bodenblackbluefloralshort sleevedresssize 6",
+          "item_qty": "2,00",
+          "item_net_price": "36,99",
+          "item_net_worth": "73,98",
+          "item_vat": "10%",
+          "item_gross_worth": "81,38"
+        },
+        {
+          "item_desc": "Ann Taylor LOFT3/4 Knit Sleeve Dress Size 0",
+          "item_qty": "4,00",
+          "item_net_price": "8,00",
+          "item_net_worth": "32,00",
+          "item_vat": "10%",
+          "item_gross_worth": "35,20"
+        },
+        {
+          "item_desc": "Divided Black Asymmetrical Dress-size 8-NWT",
+          "item_qty": "2,00",
+          "item_net_price": "7,99",
+          "item_net_worth": "15,98",
+          "item_vat": "10%",
+          "item_gross_worth": "17,58"
+        },
+        {
+          "item_desc": "Women Elegant Fashion O-Neck Knee Length Short Sleeve Retro Floral Print Dress",
+          "item_qty": "4,00",
+          "item_net_price": "12,00",
+          "item_net_worth": "48,00",
+          "item_vat": "10%",
+          "item_gross_worth": "52,80"
+        },
+        {
+          "item_desc": "Vintage 90s Sostanza Plus Size Dress 22w Floral Cottagecore",
+          "item_qty": "3,00",
+          "item_net_price": "49,96",
+          "item_net_worth": "149,88",
+          "item_vat": "10%",
+          "item_gross_worth": "164,87"
+        },
+        {
+          "item_desc": "Matilda Jane Women's Light Rising High Low Green Floral Dress Size L Pockets",
+          "item_qty": "1,00",
+          "item_net_price": "50,00",
+          "item_net_worth": "50,00",
+          "item_vat": "10%",
+          "item_gross_worth": "55,00"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Cabi 5610 Striped White Blue Launch Maxi Dress Womens Sz",
+          "item_qty": "3,00",
+          "item_net_price": "48,99",
+          "item_net_worth": "146,97",
+          "item_vat": "10%",
+          "item_gross_worth": "161,67"
+        },
+        {
+          "item_desc": "Boden black blue floral short sleeve dress size 6",
+          "item_qty": "2,00",
+          "item_net_price": "36,99",
+          "item_net_worth": "73,98",
+          "item_vat": "10%",
+          "item_gross_worth": "81,38"
+        },
+        {
+          "item_desc": "Ann Taylor LOFT 3/4 Knit Sleeve Dress Size 0",
+          "item_qty": "4,00",
+          "item_net_price": "8,00",
+          "item_net_worth": "32,00",
+          "item_vat": "10%",
+          "item_gross_worth": "35,20"
+        },
+        {
+          "item_desc": "Divided Black Asymmetrical Dress size 8 NWT",
+          "item_qty": "2,00",
+          "item_net_price": "7,99",
+          "item_net_worth": "15,98",
+          "item_vat": "10%",
+          "item_gross_worth": "17,58"
+        },
+        {
+          "item_desc": "Women Elegant Fashion O-Neck Knee Length Short Sleeve Retro Floral Print Dress",
+          "item_qty": "4,00",
+          "item_net_price": "12,00",
+          "item_net_worth": "48,00",
+          "item_vat": "10%",
+          "item_gross_worth": "52,80"
+        },
+        {
+          "item_desc": "Vintage 90s Sostanza Plus Size Dress 22W Floral Cottagecore",
+          "item_qty": "3,00",
+          "item_net_price": "49,96",
+          "item_net_worth": "149,88",
+          "item_vat": "10%",
+          "item_gross_worth": "164,87"
+        },
+        {
+          "item_desc": "Matilda Jane Women's Light Rising High Low Green Floral Dress Size L Pockets",
+          "item_qty": "1,00",
+          "item_net_price": "50,00",
+          "item_net_worth": "50,00",
+          "item_vat": "10%",
+          "item_gross_worth": "55,00"
+        }
+      ],
+      "ocr_ms": 6900.999499979662,
+      "extract_ms": 1.6328000056091696
+    },
+    {
+      "id": "katanaml-test-00018",
+      "gt_item_count": 3,
+      "pred_item_count": 3,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Vintage Cobalt Blue Spiral Stemmed Wine Glasses-Pair",
+          "item_qty": "1,00",
+          "item_net_price": "30,00",
+          "item_net_worth": "30,00",
+          "item_vat": "10%",
+          "item_gross_worth": "33,00"
+        },
+        {
+          "item_desc": "1 PCTricycle Shape Red Wine Rack Cocktail Holder Wine Display Rackfor Home Bar",
+          "item_qty": "5,00",
+          "item_net_price": "32,13",
+          "item_net_worth": "160,65",
+          "item_vat": "10%",
+          "item_gross_worth": "176,72"
+        },
+        {
+          "item_desc": "Wine Glass European Style Wine Glass Rackfor Home Kitchen Bar Restaurant",
+          "item_qty": "3,00",
+          "item_net_price": "31,79",
+          "item_net_worth": "95,37",
+          "item_vat": "10%",
+          "item_gross_worth": "104,91"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Vintage Cobalt Blue Spiral Stemmed Wine Glasses Pair",
+          "item_qty": "1,00",
+          "item_net_price": "30,00",
+          "item_net_worth": "30,00",
+          "item_vat": "10%",
+          "item_gross_worth": "33,00"
+        },
+        {
+          "item_desc": "1PC Tricycle Shape Red Wine Rack Cocktail Holder Wine Display Rack for Home Bar",
+          "item_qty": "5,00",
+          "item_net_price": "32,13",
+          "item_net_worth": "160,65",
+          "item_vat": "10%",
+          "item_gross_worth": "176,72"
+        },
+        {
+          "item_desc": "Wine Glass European Style Wine Glass Rack for Home Kitchen Bar Restaurant",
+          "item_qty": "3,00",
+          "item_net_price": "31,79",
+          "item_net_worth": "95,37",
+          "item_vat": "10%",
+          "item_gross_worth": "104,91"
+        }
+      ],
+      "ocr_ms": 6022.826800006442,
+      "extract_ms": 0.5273999995552003
+    },
+    {
+      "id": "katanaml-test-00019",
+      "gt_item_count": 2,
+      "pred_item_count": 2,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "spurious",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "spurious",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "3'x 2'Black Marvels Top Dining Table Italian Handmade Floral Art Christmas Gift",
+          "item_qty": "5,00",
+          "item_net_price": "2585,00",
+          "item_net_worth": "12 925,00",
+          "item_vat": "10%",
+          "item_gross_worth": "14 217,50"
+        },
+        {
+          "item_desc": "12\" Marble Coffee Table Top Multi Stone Peacock&Floral Inlay Home Decors W364",
+          "item_qty": "3,00",
+          "item_net_price": "264,27",
+          "item_net_worth": "792,81",
+          "item_vat": "10%",
+          "item_gross_worth": "872,09"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "3'x2' Black Marvels Top Dining Table Italian Handmade Floral Art Christmas Gift",
+          "item_qty": "5,00",
+          "item_net_price": "2585,00",
+          "item_net_worth": "12 925,00",
+          "item_vat": null,
+          "item_gross_worth": "14 217,50"
+        },
+        {
+          "item_desc": "12\" Marble Coffee Table Top Multi Stone Peacock & Floral Inlay Home Decors W364",
+          "item_qty": "3,00",
+          "item_net_price": "264,27",
+          "item_net_worth": "792,81",
+          "item_vat": null,
+          "item_gross_worth": "872,09"
+        }
+      ],
+      "ocr_ms": 5478.266399994027,
+      "extract_ms": 0.3205999964848161
+    },
+    {
+      "id": "katanaml-test-00020",
+      "gt_item_count": 4,
+      "pred_item_count": 4,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Microsoft Xbox One S 1 TB Console System Model 1681w/ One Controller&Cables",
+          "item_qty": "1,00",
+          "item_net_price": "219,99",
+          "item_net_worth": "219,99",
+          "item_vat": "10%",
+          "item_gross_worth": "241,99"
+        },
+        {
+          "item_desc": "Nintendo 64 N64 Console Complete in Box Mint Beautiful! From Japan!",
+          "item_qty": "1,00",
+          "item_net_price": "269,99",
+          "item_net_worth": "269,99",
+          "item_vat": "10%",
+          "item_gross_worth": "296,99"
+        },
+        {
+          "item_desc": "Pre Order New Sony Play Station 5 Console Disk Version Ships Fast 11/12 Confirmed",
+          "item_qty": "3,00",
+          "item_net_price": "850,00",
+          "item_net_worth": "2 550,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 805,00"
+        },
+        {
+          "item_desc": "Sony SCPH-30001 R Play Station 2 Fat Console System w/ Network Adapter",
+          "item_qty": "4,00",
+          "item_net_price": "79,99",
+          "item_net_worth": "319,96",
+          "item_vat": "10%",
+          "item_gross_worth": "351,96"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Microsoft Xbox One S 1TB Console System Model 1681 w/ One Controller & Cables",
+          "item_qty": "1,00",
+          "item_net_price": "219,99",
+          "item_net_worth": "219,99",
+          "item_vat": "10%",
+          "item_gross_worth": "241,99"
+        },
+        {
+          "item_desc": "Nintendo 64 N64 Console Complete in Box Mint Beautiful! From Japan!",
+          "item_qty": "1,00",
+          "item_net_price": "269,99",
+          "item_net_worth": "269,99",
+          "item_vat": "10%",
+          "item_gross_worth": "296,99"
+        },
+        {
+          "item_desc": "Pre Order New Sony PlayStation 5 Console Disk Version Ships Fast 11/12 Confirmed",
+          "item_qty": "3,00",
+          "item_net_price": "850,00",
+          "item_net_worth": "2550,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 805,00"
+        },
+        {
+          "item_desc": "Sony SCPH-30001R PlayStation 2F Fat Console System w/ Network Adapter",
+          "item_qty": "4,00",
+          "item_net_price": "79,99",
+          "item_net_worth": "319,96",
+          "item_vat": "10%",
+          "item_gross_worth": "351,96"
+        }
+      ],
+      "ocr_ms": 5869.200400018599,
+      "extract_ms": 0.7618000090587884
+    },
+    {
+      "id": "katanaml-test-00021",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "HPDesktop Computer 400 G1 Corei 33. 4 GHz 8 GB256 GBSSD 19\"LCD Windows 10 PC",
+          "item_qty": "2,00",
+          "item_net_price": "139,95",
+          "item_net_worth": "279,90",
+          "item_vat": "10%",
+          "item_gross_worth": "307,89"
+        },
+        {
+          "item_desc": "Lenovo C20-00. . . all in one desktopcomputer. . . with Wireless Mouse. . . .",
+          "item_qty": "5,00",
+          "item_net_price": "277,64",
+          "item_net_worth": "1388,20",
+          "item_vat": "10%",
+          "item_gross_worth": "1 527,02"
+        },
+        {
+          "item_desc": "AMDQuad Core Custom Built Gaming PCComputer Desktop 16 GB2 TBBlue LED",
+          "item_qty": "4,00",
+          "item_net_price": "509,99",
+          "item_net_worth": "2 039,96",
+          "item_vat": "10%",
+          "item_gross_worth": "2 243,96"
+        },
+        {
+          "item_desc": "CUSTOMBUILTAMDRYZEN THREADRIPPERGAMING COMPUTER，32 GBRAM，",
+          "item_qty": "3,00",
+          "item_net_price": "1400,00",
+          "item_net_worth": "4200,00",
+          "item_vat": "10%",
+          "item_gross_worth": "4 620,00"
+        },
+        {
+          "item_desc": "Dell Desktop Computer Optiplex 790 Tower PC Core i 58 GB 500 GBWindows 10 Pro",
+          "item_qty": "5,00",
+          "item_net_price": "149,95",
+          "item_net_worth": "749,75",
+          "item_vat": "10%",
+          "item_gross_worth": "824,73"
+        },
+        {
+          "item_desc": "Intel Compute Stick PC(32 GB, 1. 33 GHz, 2 GB)- BOXSTCK1 A32 WFC+Wireless Keyboard",
+          "item_qty": "1,00",
+          "item_net_price": "29,99",
+          "item_net_worth": "29,99",
+          "item_vat": "10%",
+          "item_gross_worth": "32,99"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "HP Desktop Computer 400 G1 Core i3 3.4GHz 8GB 256GB SSD 19\" LCD Windows 10 PC",
+          "item_qty": "2,00",
+          "item_net_price": "139,95",
+          "item_net_worth": "279,90",
+          "item_vat": "10%",
+          "item_gross_worth": "307,89"
+        },
+        {
+          "item_desc": "Lenovo C20-00...all in one desktop computer ..with Wireless Mouse....",
+          "item_qty": "5,00",
+          "item_net_price": "277,64",
+          "item_net_worth": "1388,20",
+          "item_vat": "10%",
+          "item_gross_worth": "1527,02"
+        },
+        {
+          "item_desc": "AMD Quad Core Custom Built Gaming PC Computer Desktop 16GB 2TB Blue LED",
+          "item_qty": "4,00",
+          "item_net_price": "509,99",
+          "item_net_worth": "2039,96",
+          "item_vat": "10%",
+          "item_gross_worth": "2 243,96"
+        },
+        {
+          "item_desc": "CUSTOM BUILT AMD RYZEN THREADRIPPER GAMING COMPUTER , 32 GB RAM,",
+          "item_qty": "3,00",
+          "item_net_price": "1 400,00",
+          "item_net_worth": "4200,00",
+          "item_vat": "10%",
+          "item_gross_worth": "4 620,00"
+        },
+        {
+          "item_desc": "Dell Desktop Computer Optiplex 790 Tower PC Core i5 8GB 500GB Windows 10 Pro",
+          "item_qty": "5,00",
+          "item_net_price": "149,95",
+          "item_net_worth": "749,75",
+          "item_vat": "10%",
+          "item_gross_worth": "824,73"
+        },
+        {
+          "item_desc": "Intel Compute Stick PC (32GB, 1.33GHz, 2GB) BOXSTCKIA32WFC + Wireless Keyboard",
+          "item_qty": "1,00",
+          "item_net_price": "29,99",
+          "item_net_worth": "29,99",
+          "item_vat": "10%",
+          "item_gross_worth": "32,99"
+        }
+      ],
+      "ocr_ms": 7617.159699992044,
+      "extract_ms": 1.0831000108737499
+    },
+    {
+      "id": "katanaml-test-00022",
+      "gt_item_count": 5,
+      "pred_item_count": 5,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "SONY Playstation 2 Console SCPH-50000\"Peal Color\"/ TESTED 11176",
+          "item_qty": "5,00",
+          "item_net_price": "45,00",
+          "item_net_worth": "225,00",
+          "item_vat": "10%",
+          "item_gross_worth": "247,50"
+        },
+        {
+          "item_desc": "Nintendo Switch Lite Gray CONSOLEONLY-No Accessories or Charger[B5-2]",
+          "item_qty": "1,00",
+          "item_net_price": "135,00",
+          "item_net_worth": "135,00",
+          "item_vat": "10%",
+          "item_gross_worth": "148,50"
+        },
+        {
+          "item_desc": "Nintendo Wii Console RVL-001 Complete Hookups W/ Mario&Sonic; Tested / Working",
+          "item_qty": "3,00",
+          "item_net_price": "78,88",
+          "item_net_worth": "236,64",
+          "item_vat": "10%",
+          "item_gross_worth": "260,30"
+        },
+        {
+          "item_desc": "B351 Nintendonew 3 DSconsole white Japan w/stylus pen",
+          "item_qty": "4,00",
+          "item_net_price": "79,99",
+          "item_net_worth": "319,96",
+          "item_vat": "10%",
+          "item_gross_worth": "351,96"
+        },
+        {
+          "item_desc": "Sega Saturn Console Gray HST-3200 HST-3210 Japanese",
+          "item_qty": "1,00",
+          "item_net_price": "119,98",
+          "item_net_worth": "119,98",
+          "item_vat": "10%",
+          "item_gross_worth": "131,98"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "SONY Playstation2 Console SCPH-50000 \" Peal Color \"I TESTED 11176",
+          "item_qty": "5,00",
+          "item_net_price": "45,00",
+          "item_net_worth": "225,00",
+          "item_vat": "10%",
+          "item_gross_worth": "247,50"
+        },
+        {
+          "item_desc": "Nintendo Switch Lite Gray CONSOLE ONLY No Accessories or Charger [B5-2]",
+          "item_qty": "1,00",
+          "item_net_price": "135,00",
+          "item_net_worth": "135,00",
+          "item_vat": "10%",
+          "item_gross_worth": "148,50"
+        },
+        {
+          "item_desc": "Nintendo Wii Console RVL-001 Complete Hookups W/ Mario&Sonic; Tested / Working",
+          "item_qty": "3,00",
+          "item_net_price": "78,88",
+          "item_net_worth": "236,64",
+          "item_vat": "10%",
+          "item_gross_worth": "260,30"
+        },
+        {
+          "item_desc": "B351 Nintendo new 3DS console White Japan w/stylus pen",
+          "item_qty": "4,00",
+          "item_net_price": "79,99",
+          "item_net_worth": "319,96",
+          "item_vat": "10%",
+          "item_gross_worth": "351,96"
+        },
+        {
+          "item_desc": "Sega Saturn Console Gray HST-3200 HST-3210 Japanese",
+          "item_qty": "1,00",
+          "item_net_price": "119,98",
+          "item_net_worth": "119,98",
+          "item_vat": "10%",
+          "item_gross_worth": "131,98"
+        }
+      ],
+      "ocr_ms": 7015.783000009833,
+      "extract_ms": 0.6158000032883137
+    },
+    {
+      "id": "katanaml-test-00023",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "2pcsbabyboysclothescotton hoodied top+pants baby boys Outfitsgentleman",
+          "item_qty": "5,00",
+          "item_net_price": "10,99",
+          "item_net_worth": "54,95",
+          "item_vat": "10%",
+          "item_gross_worth": "60,45"
+        },
+        {
+          "item_desc": "fire los angeles dress Medium",
+          "item_qty": "2,00",
+          "item_net_price": "6,50",
+          "item_net_worth": "13,00",
+          "item_vat": "10%",
+          "item_gross_worth": "14,30"
+        },
+        {
+          "item_desc": "PASDECALAISDRESSWOMENS SIZE 36",
+          "item_qty": "3,00",
+          "item_net_price": "9,95",
+          "item_net_worth": "29,85",
+          "item_vat": "10%",
+          "item_gross_worth": "32,83"
+        },
+        {
+          "item_desc": "Zara Yellow Shift Dress XS",
+          "item_qty": "5,00",
+          "item_net_price": "24,75",
+          "item_net_worth": "123,75",
+          "item_vat": "10%",
+          "item_gross_worth": "136,13"
+        },
+        {
+          "item_desc": "miley cyrus Bubble Dress",
+          "item_qty": "2,00",
+          "item_net_price": "16,00",
+          "item_net_worth": "32,00",
+          "item_vat": "10%",
+          "item_gross_worth": "35,20"
+        },
+        {
+          "item_desc": "NWT$1200 J. Crew Silk Chiffon Ivory Wedding Dresswith Beading",
+          "item_qty": "4,00",
+          "item_net_price": "295,00",
+          "item_net_worth": "1180,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1 298,00"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "2pcs baby boys clothes cotton hoodied top+pants baby boys Outfits gentleman",
+          "item_qty": "5,00",
+          "item_net_price": "10,99",
+          "item_net_worth": "54,95",
+          "item_vat": "10%",
+          "item_gross_worth": "60,45"
+        },
+        {
+          "item_desc": "fire los angeles dress Medium",
+          "item_qty": "2,00",
+          "item_net_price": "6,50",
+          "item_net_worth": "13,00",
+          "item_vat": "10%",
+          "item_gross_worth": "14,30"
+        },
+        {
+          "item_desc": "PAS DE CALAIS DRESS WOMENS SIZE 36",
+          "item_qty": "3,00",
+          "item_net_price": "9,95",
+          "item_net_worth": "29,85",
+          "item_vat": "10%",
+          "item_gross_worth": "32,83"
+        },
+        {
+          "item_desc": "Zara Yellow Shift Dress XS",
+          "item_qty": "5,00",
+          "item_net_price": "24,75",
+          "item_net_worth": "123,75",
+          "item_vat": "10%",
+          "item_gross_worth": "136,13"
+        },
+        {
+          "item_desc": "miley cyrus Bubble Dress",
+          "item_qty": "2,00",
+          "item_net_price": "16,00",
+          "item_net_worth": "32,00",
+          "item_vat": "10%",
+          "item_gross_worth": "35,20"
+        },
+        {
+          "item_desc": "NWT $1200 J.Crew Silk Chiffon Ivory Wedding Dress with Beading",
+          "item_qty": "4,00",
+          "item_net_price": "295,00",
+          "item_net_worth": "1180,00",
+          "item_vat": "10%",
+          "item_gross_worth": "1298,00"
+        }
+      ],
+      "ocr_ms": 7553.435500012711,
+      "extract_ms": 0.7425000076182187
+    },
+    {
+      "id": "katanaml-test-00024",
+      "gt_item_count": 6,
+      "pred_item_count": 6,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "Used Couch Dark Blue",
+          "item_qty": "2,00",
+          "item_net_price": "97,00",
+          "item_net_worth": "194,00",
+          "item_vat": "10%",
+          "item_gross_worth": "213,40"
+        },
+        {
+          "item_desc": "Blue Shiny Stone Floral Art Dinning Table Top Marble Kitchen Table Top 48 Inches",
+          "item_qty": "3,00",
+          "item_net_price": "3960,00",
+          "item_net_worth": "11 880,00",
+          "item_vat": "10%",
+          "item_gross_worth": "13 068,00"
+        },
+        {
+          "item_desc": "24\" Sale Online Coffee Top Table Marquetry Inlay Floral Design Christmas Gift",
+          "item_qty": "5,00",
+          "item_net_price": "1188,00",
+          "item_net_worth": "5 940,00",
+          "item_vat": "10%",
+          "item_gross_worth": "6 534,00"
+        },
+        {
+          "item_desc": "34\"x 34\"Marble Round Top Coffee Table Elephant Floral Inlaid Art Christmas Gifts",
+          "item_qty": "3,00",
+          "item_net_price": "1900,00",
+          "item_net_worth": "5700,00",
+          "item_vat": "10%",
+          "item_gross_worth": "6 270,00"
+        },
+        {
+          "item_desc": "35\" Round Marble Coffee Top Table Floral Marquetry Inlay Furniture Decors B430",
+          "item_qty": "4,00",
+          "item_net_price": "1 259,00",
+          "item_net_worth": "5 036,00",
+          "item_vat": "10%",
+          "item_gross_worth": "5 539,60"
+        },
+        {
+          "item_desc": "54 Inches Marble Dinning Table Top Hand Crafted Reception Table Home Furniture",
+          "item_qty": "2,00",
+          "item_net_price": "4 452,00",
+          "item_net_worth": "8904,00",
+          "item_vat": "10%",
+          "item_gross_worth": "9794,40"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "Used Couch Dark Blue",
+          "item_qty": "2,00",
+          "item_net_price": "97,00",
+          "item_net_worth": "194,00",
+          "item_vat": "10%",
+          "item_gross_worth": "213,40"
+        },
+        {
+          "item_desc": "Blue Shiny Stone Floral Art Dinning Table Top Marble Kitchen Table Top 48 Inches",
+          "item_qty": "3,00",
+          "item_net_price": "3960,00",
+          "item_net_worth": "11 880,00",
+          "item_vat": "10%",
+          "item_gross_worth": "13 068,00"
+        },
+        {
+          "item_desc": "24\" Sale Online Coffee Top Table Marquetry Inlay Floral Design Christmas Gift",
+          "item_qty": "5,00",
+          "item_net_price": "1188,00",
+          "item_net_worth": "5940,00",
+          "item_vat": "10%",
+          "item_gross_worth": "6534,00"
+        },
+        {
+          "item_desc": "34\"x34\" Marble Round Top Coffee Table Elephant Floral Inlaid Art Christmas Gifts",
+          "item_qty": "3,00",
+          "item_net_price": "1900,00",
+          "item_net_worth": "5 700,00",
+          "item_vat": "10%",
+          "item_gross_worth": "6270,00"
+        },
+        {
+          "item_desc": "35\" Round Marble Coffee Top Table Floral Marquetry Inlay Furniture Decors B430",
+          "item_qty": "4,00",
+          "item_net_price": "1259,00",
+          "item_net_worth": "5036,00",
+          "item_vat": "10%",
+          "item_gross_worth": "5539,60"
+        },
+        {
+          "item_desc": "54 Inches Marble Dinning Table Top Hand Crafted Reception Table Home Furniture",
+          "item_qty": "2,00",
+          "item_net_price": "4452,00",
+          "item_net_worth": "8904,00",
+          "item_vat": "10%",
+          "item_gross_worth": "9 794,40"
+        }
+      ],
+      "ocr_ms": 8760.90190000832,
+      "extract_ms": 0.8584000170230865
+    },
+    {
+      "id": "katanaml-test-00025",
+      "gt_item_count": 5,
+      "pred_item_count": 5,
+      "counts_match": true,
+      "per_item_outcomes": [
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "correct",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        },
+        {
+          "item_desc": "wrong",
+          "item_qty": "correct",
+          "item_net_price": "correct",
+          "item_net_worth": "correct",
+          "item_vat": "correct",
+          "item_gross_worth": "correct"
+        }
+      ],
+      "predicted_items": [
+        {
+          "item_desc": "N64 Nintendo System Console Lot Bundle W/ 2 Games 1 Controller Tested Working",
+          "item_qty": "5,00",
+          "item_net_price": "95,99",
+          "item_net_worth": "479,95",
+          "item_vat": "10%",
+          "item_gross_worth": "527,95"
+        },
+        {
+          "item_desc": "Original Nintendo Gaming Console with Robot, 9 games& extras",
+          "item_qty": "5,00",
+          "item_net_price": "475,00",
+          "item_net_worth": "2 375,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 612,50"
+        },
+        {
+          "item_desc": "Nintendo BLUEWii System Game Console Completewith 2 Motion Remotes Tested Work",
+          "item_qty": "2,00",
+          "item_net_price": "99,98",
+          "item_net_worth": "199,96",
+          "item_vat": "10%",
+          "item_gross_worth": "219,96"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Clear Purple with Box MGB-001 Japan Tested 53",
+          "item_qty": "4,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "340,00",
+          "item_vat": "10%",
+          "item_gross_worth": "374,00"
+        },
+        {
+          "item_desc": "Playstation 2 Slimconsolewhite SCPH-90000 boxed Japan PS2 System",
+          "item_qty": "3,00",
+          "item_net_price": "199,00",
+          "item_net_worth": "597,00",
+          "item_vat": "10%",
+          "item_gross_worth": "656,70"
+        }
+      ],
+      "gt_items": [
+        {
+          "item_desc": "N64 Nintendo System Console Lot Bundle W/ 2 Games 1 Controller Tested Working",
+          "item_qty": "5,00",
+          "item_net_price": "95,99",
+          "item_net_worth": "479,95",
+          "item_vat": "10%",
+          "item_gross_worth": "527,95"
+        },
+        {
+          "item_desc": "Original Nintendo Gaming Console with Robot, 9 games & extras",
+          "item_qty": "5,00",
+          "item_net_price": "475,00",
+          "item_net_worth": "2375,00",
+          "item_vat": "10%",
+          "item_gross_worth": "2 612,50"
+        },
+        {
+          "item_desc": "Nintendo BLUE Wii System Game Console Complete with 2 Motion Remotes Tested Work",
+          "item_qty": "2,00",
+          "item_net_price": "99,98",
+          "item_net_worth": "199,96",
+          "item_vat": "10%",
+          "item_gross_worth": "219,96"
+        },
+        {
+          "item_desc": "Nintendo Gameboy Pocket Console Clear Purple with Box MGB-001 Japan Tested 53",
+          "item_qty": "4,00",
+          "item_net_price": "85,00",
+          "item_net_worth": "340,00",
+          "item_vat": "10%",
+          "item_gross_worth": "374,00"
+        },
+        {
+          "item_desc": "Playstation 2 Slim console white SCPH-90000 boxed Japan PS2",
+          "item_qty": "3,00",
+          "item_net_price": "199,00",
+          "item_net_worth": "597,00",
+          "item_vat": "10%",
+          "item_gross_worth": "656,70"
+        }
+      ],
+      "ocr_ms": 6753.141499997582,
+      "extract_ms": 0.9088000224437565
+    }
+  ]
+}

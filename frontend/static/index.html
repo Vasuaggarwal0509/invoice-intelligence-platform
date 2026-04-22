@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Intelligence — PoC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app">
+
+        <!-- ═══════════════════ TOP APP BAR ═══════════════════ -->
+        <header class="topbar">
+            <div class="topbar-brand">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <line x1="8" y1="9" x2="16" y2="9"/>
+                    <line x1="8" y1="13" x2="16" y2="13"/>
+                    <line x1="8" y1="17" x2="12" y2="17"/>
+                </svg>
+                <span class="topbar-title">Invoice Intelligence</span>
+            </div>
+            <div class="topbar-meta">
+                <span class="meta-pill">
+                    <span class="meta-pill-dot" id="cache-indicator"></span>
+                    <span id="cache-count-text">0 / 0 cached</span>
+                </span>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- ═════════════ LEFT SIDEBAR — INVOICE LIST ═════════════ -->
+            <aside class="sidebar sidebar-left">
+                <div class="sidebar-header">
+                    <h2>Invoices</h2>
+                    <div class="controls">
+                        <label>Split
+                            <select id="split-select">
+                                <option value="test" selected>test</option>
+                                <option value="validation">validation</option>
+                                <option value="train">train</option>
+                            </select>
+                        </label>
+                        <label>Show
+                            <input type="number" id="limit-input" value="10" min="1" max="500">
+                        </label>
+                        <button id="reload-btn" type="button">Reload</button>
+                    </div>
+                </div>
+                <ul id="invoice-list" class="invoice-list">
+                    <li class="invoice-placeholder">Loading…</li>
+                </ul>
+            </aside>
+
+            <!-- ═════════════════ MIDDLE — PREVIEW ═════════════════ -->
+            <main class="preview" id="preview">
+                <!-- Empty state -->
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-card">
+                        <div class="empty-eyebrow">End-to-end invoice intelligence</div>
+                        <h3>Select an invoice on the left to run the pipeline.</h3>
+                        <div class="pipeline-diagram" role="img" aria-label="Pipeline stages">
+                            <div class="pipe-step">
+                                <div class="pipe-step-icon">1</div>
+                                <div class="pipe-step-label">OCR</div>
+                                <div class="pipe-step-sub">PP-OCRv5</div>
+                            </div>
+                            <div class="pipe-step-arrow">
+                                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" aria-hidden="true">
+                                    <path d="M0 4 H18 M14 1 L18 4 L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="pipe-step">
+                                <div class="pipe-step-icon">2</div>
+                                <div class="pipe-step-label">Extract</div>
+                                <div class="pipe-step-sub">regex + anchors</div>
+                            </div>
+                            <div class="pipe-step-arrow">
+                                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" aria-hidden="true">
+                                    <path d="M0 4 H18 M14 1 L18 4 L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="pipe-step">
+                                <div class="pipe-step-icon">3</div>
+                                <div class="pipe-step-label">Tables</div>
+                                <div class="pipe-step-sub">spatial clustering</div>
+                            </div>
+                            <div class="pipe-step-arrow">
+                                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" aria-hidden="true">
+                                    <path d="M0 4 H18 M14 1 L18 4 L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="pipe-step">
+                                <div class="pipe-step-icon">4</div>
+                                <div class="pipe-step-label">Validate</div>
+                                <div class="pipe-step-sub">checksums + math</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading state -->
+                <div id="loading-state" class="loading-state" hidden>
+                    <div class="spinner" aria-label="Loading"></div>
+                    <div class="loading-title">Running OCR…</div>
+                    <div class="loading-sub">First click runs the full pipeline (~5–7&nbsp;s on CPU). Cached after.</div>
+                </div>
+
+                <!-- Preview -->
+                <div id="preview-container" class="preview-container" hidden>
+                    <img id="invoice-image" alt="Invoice preview">
+                    <svg id="overlay" class="bbox-overlay"></svg>
+                </div>
+
+                <!-- Zoom + pan controls — shown only when a preview is loaded -->
+                <div class="zoom-controls" id="zoom-controls" hidden>
+                    <button type="button" id="zoom-out-btn" title="Zoom out (mouse wheel)" aria-label="Zoom out">&#8722;</button>
+                    <button type="button" id="zoom-reset-btn" title="Reset zoom · drag to pan, wheel to zoom">
+                        <span id="zoom-label">100%</span>
+                    </button>
+                    <button type="button" id="zoom-in-btn" title="Zoom in (mouse wheel)" aria-label="Zoom in">&#43;</button>
+                </div>
+            </main>
+
+            <!-- ═════════════ RIGHT SIDEBAR — PANELS ═════════════ -->
+            <aside class="sidebar sidebar-right">
+                <div id="right-empty" class="right-empty">
+                    <p class="muted">Data will appear here once an invoice is selected.</p>
+                </div>
+
+                <div id="right-panels" class="right-panels" hidden>
+
+                    <!-- KPI strip — computed per invoice -->
+                    <section class="kpi-strip" aria-label="Per-invoice KPIs">
+                        <div class="kpi-tile" id="kpi-fields" title="Number of header fields populated by extraction">
+                            <div class="kpi-label">Fields</div>
+                            <div class="kpi-value"><span class="kpi-num">—</span><span class="kpi-denom">/&nbsp;7</span></div>
+                            <div class="kpi-sub">extracted</div>
+                        </div>
+                        <div class="kpi-tile" id="kpi-accuracy" title="Fields whose value matches the Donut ground truth (whitespace-insensitive)">
+                            <div class="kpi-label">Accuracy</div>
+                            <div class="kpi-value"><span class="kpi-num">—</span><span class="kpi-denom">/&nbsp;7</span></div>
+                            <div class="kpi-sub">vs ground truth</div>
+                        </div>
+                        <div class="kpi-tile" id="kpi-validation">
+                            <div class="kpi-label">Validation</div>
+                            <div class="kpi-value kpi-pills">
+                                <span class="mini-pill mini-pill-pass" id="kpi-pass" title="Passing rules">—</span>
+                                <span class="mini-pill mini-pill-fail" id="kpi-fail" title="Failing rules">—</span>
+                                <span class="mini-pill mini-pill-na"   id="kpi-na"   title="Not applicable">—</span>
+                            </div>
+                            <div class="kpi-sub">pass · fail · n/a</div>
+                        </div>
+                        <div class="kpi-tile" id="kpi-latency" data-tooltip="">
+                            <div class="kpi-label">Latency</div>
+                            <div class="kpi-value"><span class="kpi-num">—</span><span class="kpi-denom">&nbsp;ms</span></div>
+                            <div class="kpi-sub">hover for breakdown</div>
+                        </div>
+                    </section>
+
+                    <!-- Extraction panel -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Extracted fields</h3>
+                            <span class="panel-hint">Hover to highlight on preview</span>
+                        </div>
+                        <table id="extraction-table">
+                            <thead>
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </section>
+
+                    <!-- Items panel -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Line items <span class="muted" id="items-count">0</span></h3>
+                        </div>
+                        <div class="table-scroll">
+                            <table id="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>Net price</th>
+                                        <th>Net worth</th>
+                                        <th>VAT</th>
+                                        <th>Gross</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Validation panel -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Validation</h3>
+                        </div>
+                        <div id="validation-groups"></div>
+                    </section>
+
+                    <!-- OCR panel -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>OCR lines <span class="muted" id="ocr-count">0</span></h3>
+                            <span class="panel-hint">Hover to highlight</span>
+                        </div>
+                        <ol id="ocr-list" class="ocr-list"></ol>
+                    </section>
+
+                    <!-- Download actions -->
+                    <section class="panel-actions">
+                        <a id="download-csv" href="#" class="btn btn-primary" download>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            <span>Download CSV</span>
+                        </a>
+                        <a id="download-json" href="#" class="btn btn-secondary" download>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span>JSON</span>
+                        </a>
+                    </section>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

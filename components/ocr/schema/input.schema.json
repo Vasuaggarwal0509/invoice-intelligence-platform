@@ -1,0 +1,75 @@
+{
+  "description": "Service-boundary input for OCR (and any component consuming an image).\n\nOne of ``image_bytes`` or ``image_uri`` is required. ``image_bytes`` is\nthe default for local / single-process invocation; ``image_uri`` is for\ndistributed deployments (S3, GCS, HTTP) where the bytes should not be\ncopied over the wire.\n\nCarrying ``id``, ``filename``, and ``content_type`` next to the bytes\nmeans a downstream service can log, cache, and route without parsing\nthe bytes themselves \u2014 this is the shape AWS Textract and Google\nDocument AI use for their batch submit APIs.",
+  "properties": {
+    "id": {
+      "description": "Stable identifier, e.g. dataset sample id or UUID.",
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "content_type": {
+      "description": "MIME type of the referenced bytes / URI target.",
+      "enum": [
+        "application/pdf",
+        "image/png",
+        "image/jpeg",
+        "image/tiff",
+        "image/webp"
+      ],
+      "title": "Content Type",
+      "type": "string"
+    },
+    "image_bytes": {
+      "anyOf": [
+        {
+          "format": "base64url",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Inline image bytes. Mutually exclusive with `image_uri`.",
+      "title": "Image Bytes"
+    },
+    "image_uri": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "URI (s3://, gs://, https://, file://) pointing at the image. Backends must fetch if they honour this branch. Mutually exclusive with `image_bytes`.",
+      "title": "Image Uri"
+    },
+    "filename": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Original filename, for logs / provenance; not used for OCR.",
+      "title": "Filename"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "description": "Free-form bag for upstream metadata (email sender, WhatsApp number, dataset split, ...).",
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "content_type"
+  ],
+  "title": "InvoiceInput",
+  "type": "object"
+}

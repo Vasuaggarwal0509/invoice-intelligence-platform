@@ -1,0 +1,44 @@
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- Virtual environments -------------------------------------------------
+venv/
+.venv/
+env/
+.env
+
+# --- Test / coverage ------------------------------------------------------
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# --- Local tool state -----------------------------------------------------
+.claude/
+.idea/
+.vscode/
+
+# --- Large regenerable dataset cache --------------------------------------
+# 264 MB HuggingFace-cached dataset; re-downloaded by data_sources loaders.
+data/katanaml/
+# Pipeline run cache (rebuilt on first backend run).
+data/cache/
+# Spot-check render outputs (regenerable by evaluation tools). Keep evaluation/reports/ committed.
+evaluation/inspection/
+
+# --- OS -------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Secrets --------------------------------------------------------------
+*.pem
+*.key
+.env.local
+.env.*.local

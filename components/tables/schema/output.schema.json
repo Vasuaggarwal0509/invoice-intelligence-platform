@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "InvoiceItem": {
+      "description": "One line item from an invoice. All fields optional \u2014 unmatched values are None.",
+      "properties": {
+        "item_desc": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Desc"
+        },
+        "item_qty": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Qty"
+        },
+        "item_net_price": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Net Price"
+        },
+        "item_net_worth": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Net Worth"
+        },
+        "item_vat": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Vat"
+        },
+        "item_gross_worth": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Gross Worth"
+        }
+      },
+      "title": "InvoiceItem",
+      "type": "object"
+    }
+  },
+  "description": "Everything the table-extraction stage produces for one invoice.",
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/InvoiceItem"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "extractor": {
+      "description": "Extractor identifier, e.g. 'spatial'.",
+      "minLength": 1,
+      "title": "Extractor",
+      "type": "string"
+    },
+    "duration_ms": {
+      "minimum": 0.0,
+      "title": "Duration Ms",
+      "type": "number"
+    },
+    "diagnostics": {
+      "additionalProperties": true,
+      "description": "Per-run diagnostics (anchor y-coords, detected item count, etc.).",
+      "title": "Diagnostics",
+      "type": "object"
+    }
+  },
+  "required": [
+    "extractor",
+    "duration_ms"
+  ],
+  "title": "TableExtractionResult",
+  "type": "object"
+}

@@ -1,0 +1,21 @@
+{
+  "fields": {
+    "invoice_no": {
+      "name": "invoice_no",
+      "value": "12345",
+      "confidence": 0.95,
+      "source": "regex",
+      "source_detail": "invoice_no anchor"
+    },
+    "invoice_date": {
+      "name": "invoice_date",
+      "value": null,
+      "confidence": 0.0,
+      "source": "none",
+      "source_detail": null
+    }
+  },
+  "extractor": "heuristic",
+  "duration_ms": 0.6,
+  "diagnostics": {}
+}

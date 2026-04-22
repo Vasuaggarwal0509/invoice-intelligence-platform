@@ -1,0 +1,191 @@
+{
+  "$defs": {
+    "BoundingBox": {
+      "description": "Axis-aligned bounding box in image pixel coordinates.\n\nOrigin is top-left (image convention): x grows right, y grows down.",
+      "properties": {
+        "x0": {
+          "description": "Left edge",
+          "title": "X0",
+          "type": "number"
+        },
+        "y0": {
+          "description": "Top edge",
+          "title": "Y0",
+          "type": "number"
+        },
+        "x1": {
+          "description": "Right edge",
+          "title": "X1",
+          "type": "number"
+        },
+        "y1": {
+          "description": "Bottom edge",
+          "title": "Y1",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x0",
+        "y0",
+        "x1",
+        "y1"
+      ],
+      "title": "BoundingBox",
+      "type": "object"
+    },
+    "Line": {
+      "description": "A line-level detection as emitted natively by most OCR engines.",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "bbox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Polygon"
+        },
+        "tokens": {
+          "items": {
+            "$ref": "#/$defs/Token"
+          },
+          "title": "Tokens",
+          "type": "array"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "text",
+        "bbox",
+        "confidence"
+      ],
+      "title": "Line",
+      "type": "object"
+    },
+    "PageSize": {
+      "description": "Source image dimensions in pixels.",
+      "properties": {
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ],
+      "title": "PageSize",
+      "type": "object"
+    },
+    "Token": {
+      "description": "A single word-level detection.\n\nFor OCR engines that only emit line-level detections (like RapidOCR /\nPaddleOCR), tokens are derived from lines by splitting on whitespace and\ninterpolating each word's bbox proportionally along the line. That\nderivation is the responsibility of the backend; consumers of Token do\nnot need to care where it came from.",
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "bbox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "4-point polygon; preserves rotation when the OCR backend supports it.",
+          "title": "Polygon"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "text",
+        "bbox",
+        "confidence"
+      ],
+      "title": "Token",
+      "type": "object"
+    }
+  },
+  "description": "Everything the OCR stage produces for one image.\n\nConsumed downstream by:\n  - components/extraction (entity extraction from tokens + layout)\n  - components/tables     (line-item extraction)\n  - components/qr         (cross-check against QR-decoded IRP fields)",
+  "properties": {
+    "tokens": {
+      "items": {
+        "$ref": "#/$defs/Token"
+      },
+      "title": "Tokens",
+      "type": "array"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/Line"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "page": {
+      "$ref": "#/$defs/PageSize"
+    },
+    "backend": {
+      "description": "Backend identifier, e.g. 'rapidocr', 'tesseract'.",
+      "minLength": 1,
+      "title": "Backend",
+      "type": "string"
+    },
+    "duration_ms": {
+      "minimum": 0.0,
+      "title": "Duration Ms",
+      "type": "number"
+    }
+  },
+  "required": [
+    "page",
+    "backend",
+    "duration_ms"
+  ],
+  "title": "OCRResult",
+  "type": "object"
+}

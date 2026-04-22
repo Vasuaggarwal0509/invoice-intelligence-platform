@@ -1,0 +1,31 @@
+{
+  "extraction": {
+    "fields": {
+      "invoice_no": {
+        "name": "invoice_no",
+        "value": "12345",
+        "confidence": 0.95,
+        "source": "regex",
+        "source_detail": "invoice_no anchor"
+      }
+    },
+    "extractor": "heuristic",
+    "duration_ms": 0.6,
+    "diagnostics": {}
+  },
+  "tables": {
+    "items": [
+      {
+        "item_desc": "Widget",
+        "item_qty": "2,00",
+        "item_net_price": "50,00",
+        "item_net_worth": "100,00",
+        "item_vat": "10%",
+        "item_gross_worth": "110,00"
+      }
+    ],
+    "extractor": "spatial",
+    "duration_ms": 0.5,
+    "diagnostics": {}
+  }
+}

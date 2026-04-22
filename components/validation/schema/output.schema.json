@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "RuleFinding": {
+      "description": "A single rule's outcome for a single target.",
+      "properties": {
+        "rule_name": {
+          "description": "Rule identifier, e.g. 'iban_checksum'.",
+          "minLength": 1,
+          "title": "Rule Name",
+          "type": "string"
+        },
+        "target": {
+          "description": "What the rule was checking. For field rules, the field name; for item rules, 'item[N]' + field; for cross-sample rules, a stable tag.",
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "outcome": {
+          "$ref": "#/$defs/RuleOutcome"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Human-readable explanation, mostly populated on FAIL or NOT_APPLICABLE.",
+          "title": "Reason"
+        },
+        "expected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "For numeric rules, the computed expected value (makes failures inspectable).",
+          "title": "Expected"
+        },
+        "observed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "For numeric rules, the actual observed value.",
+          "title": "Observed"
+        }
+      },
+      "required": [
+        "rule_name",
+        "target",
+        "outcome"
+      ],
+      "title": "RuleFinding",
+      "type": "object"
+    },
+    "RuleOutcome": {
+      "description": "The three-state result of a validation rule.",
+      "enum": [
+        "pass",
+        "fail",
+        "not_applicable"
+      ],
+      "title": "RuleOutcome",
+      "type": "string"
+    }
+  },
+  "description": "Collection of rule findings from running the validation engine on one invoice.",
+  "properties": {
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/RuleFinding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "source": {
+      "default": "engine",
+      "description": "Who produced this result (for audit trails).",
+      "minLength": 1,
+      "title": "Source",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "title": "ValidationResult",
+  "type": "object"
+}

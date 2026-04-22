@@ -1,0 +1,24 @@
+{
+  "findings": [
+    {
+      "rule_name": "invoice_no.format",
+      "target": "invoice_no",
+      "outcome": "pass",
+      "reason": "8 digits present",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "rule_name": "item.arithmetic",
+      "target": "items[0]",
+      "outcome": "pass",
+      "reason": "qty × net_price ≈ net_worth within tolerance",
+      "expected": "100.00",
+      "observed": "100.00"
+    }
+  ],
+  "source": "engine",
+  "metadata": {
+    "rule_count": 2
+  }
+}

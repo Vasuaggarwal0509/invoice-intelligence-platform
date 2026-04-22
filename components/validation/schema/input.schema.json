@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "ExtractedField": {
+      "description": "One extracted field from an invoice.",
+      "properties": {
+        "name": {
+          "description": "Field key, e.g. 'invoice_no'.",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Extracted string; None if the extractor did not find the field.",
+          "title": "Value"
+        },
+        "confidence": {
+          "default": 0.0,
+          "description": "0.0 means 'not found'. Higher means the extractor is more sure.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "source": {
+          "default": "none",
+          "description": "Which rule produced this field: 'regex', 'label_anchor', 'column_heuristic', or 'none'.",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Human-readable note about the exact rule, e.g. 'Invoice no anchor'.",
+          "title": "Source Detail"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ExtractedField",
+      "type": "object"
+    },
+    "ExtractionResult": {
+      "description": "Everything the extraction stage produces for one invoice.",
+      "properties": {
+        "fields": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ExtractedField"
+          },
+          "title": "Fields",
+          "type": "object"
+        },
+        "extractor": {
+          "description": "Extractor identifier, e.g. 'heuristic'.",
+          "minLength": 1,
+          "title": "Extractor",
+          "type": "string"
+        },
+        "duration_ms": {
+          "minimum": 0.0,
+          "title": "Duration Ms",
+          "type": "number"
+        },
+        "diagnostics": {
+          "additionalProperties": true,
+          "description": "Optional per-run diagnostics (e.g. detected column boundary).",
+          "title": "Diagnostics",
+          "type": "object"
+        }
+      },
+      "required": [
+        "extractor",
+        "duration_ms"
+      ],
+      "title": "ExtractionResult",
+      "type": "object"
+    },
+    "InvoiceItem": {
+      "description": "One line item from an invoice. All fields optional \u2014 unmatched values are None.",
+      "properties": {
+        "item_desc": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Desc"
+        },
+        "item_qty": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Qty"
+        },
+        "item_net_price": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Net Price"
+        },
+        "item_net_worth": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Net Worth"
+        },
+        "item_vat": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Vat"
+        },
+        "item_gross_worth": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Gross Worth"
+        }
+      },
+      "title": "InvoiceItem",
+      "type": "object"
+    },
+    "TableExtractionResult": {
+      "description": "Everything the table-extraction stage produces for one invoice.",
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/$defs/InvoiceItem"
+          },
+          "title": "Items",
+          "type": "array"
+        },
+        "extractor": {
+          "description": "Extractor identifier, e.g. 'spatial'.",
+          "minLength": 1,
+          "title": "Extractor",
+          "type": "string"
+        },
+        "duration_ms": {
+          "minimum": 0.0,
+          "title": "Duration Ms",
+          "type": "number"
+        },
+        "diagnostics": {
+          "additionalProperties": true,
+          "description": "Per-run diagnostics (anchor y-coords, detected item count, etc.).",
+          "title": "Diagnostics",
+          "type": "object"
+        }
+      },
+      "required": [
+        "extractor",
+        "duration_ms"
+      ],
+      "title": "TableExtractionResult",
+      "type": "object"
+    }
+  },
+  "description": "Compound input: an ExtractionResult + a TableExtractionResult.",
+  "properties": {
+    "extraction": {
+      "$ref": "#/$defs/ExtractionResult",
+      "description": "Header-field extraction result."
+    },
+    "tables": {
+      "$ref": "#/$defs/TableExtractionResult",
+      "description": "Line-item extraction result."
+    }
+  },
+  "required": [
+    "extraction",
+    "tables"
+  ],
+  "title": "ValidationInput",
+  "type": "object"
+}

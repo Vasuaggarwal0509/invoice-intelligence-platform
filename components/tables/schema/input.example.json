@@ -1,0 +1,131 @@
+{
+  "tokens": [],
+  "lines": [
+    {
+      "text": "ITEMS",
+      "bbox": {
+        "x0": 100.0,
+        "y0": 500.0,
+        "x1": 200.0,
+        "y1": 525.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "1.",
+      "bbox": {
+        "x0": 120.0,
+        "y0": 600.0,
+        "x1": 145.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "Widget",
+      "bbox": {
+        "x0": 180.0,
+        "y0": 600.0,
+        "x1": 300.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.95
+    },
+    {
+      "text": "2,00",
+      "bbox": {
+        "x0": 350.0,
+        "y0": 600.0,
+        "x1": 400.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "each",
+      "bbox": {
+        "x0": 430.0,
+        "y0": 600.0,
+        "x1": 470.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.98
+    },
+    {
+      "text": "50,00",
+      "bbox": {
+        "x0": 500.0,
+        "y0": 600.0,
+        "x1": 570.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "100,00",
+      "bbox": {
+        "x0": 600.0,
+        "y0": 600.0,
+        "x1": 670.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "10%",
+      "bbox": {
+        "x0": 700.0,
+        "y0": 600.0,
+        "x1": 740.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "110,00",
+      "bbox": {
+        "x0": 770.0,
+        "y0": 600.0,
+        "x1": 840.0,
+        "y1": 625.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    },
+    {
+      "text": "SUMMARY",
+      "bbox": {
+        "x0": 100.0,
+        "y0": 700.0,
+        "x1": 200.0,
+        "y1": 725.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    }
+  ],
+  "page": {
+    "width": 900,
+    "height": 1200
+  },
+  "backend": "rapidocr",
+  "duration_ms": 200.0
+}

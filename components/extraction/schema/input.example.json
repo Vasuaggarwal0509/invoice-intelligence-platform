@@ -1,0 +1,23 @@
+{
+  "tokens": [],
+  "lines": [
+    {
+      "text": "Invoice no: 12345",
+      "bbox": {
+        "x0": 100.0,
+        "y0": 50.0,
+        "x1": 500.0,
+        "y1": 80.0
+      },
+      "polygon": null,
+      "tokens": [],
+      "confidence": 0.99
+    }
+  ],
+  "page": {
+    "width": 640,
+    "height": 480
+  },
+  "backend": "rapidocr",
+  "duration_ms": 187.4
+}

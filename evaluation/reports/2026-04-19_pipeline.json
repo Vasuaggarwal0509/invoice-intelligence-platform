@@ -1,0 +1,432 @@
+{
+  "date": "2026-04-19",
+  "dataset": "katanaml-invoices-donut-v1",
+  "split": "test",
+  "sample_count": 26,
+  "wall_clock_s": 179.70539650000865,
+  "clean_invoice_rate": 0.9230769230769231,
+  "per_rule_stats": {
+    "invoice_no_format": {
+      "pass": 26,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "invoice_date_format": {
+      "pass": 26,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "tax_id_format": {
+      "pass": 52,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "iban_shape": {
+      "pass": 26,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "iban_checksum": {
+      "pass": 24,
+      "fail": 2,
+      "not_applicable": 0
+    },
+    "item_net_worth_consistency": {
+      "pass": 106,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "item_gross_worth_consistency": {
+      "pass": 106,
+      "fail": 0,
+      "not_applicable": 0
+    },
+    "batch_duplicate": {
+      "pass": 26,
+      "fail": 0,
+      "not_applicable": 0
+    }
+  },
+  "samples": [
+    {
+      "id": "katanaml-test-00000",
+      "ocr_ms": 5101.228500017896,
+      "extract_ms": 0.3978000022470951,
+      "tables_ms": 0.15320000238716602,
+      "item_count_pred": 1,
+      "validation_summary": {
+        "pass": 9,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00001",
+      "ocr_ms": 6264.118999999482,
+      "extract_ms": 0.5521000130102038,
+      "tables_ms": 0.6456999981310219,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 19,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00002",
+      "ocr_ms": 3425.0796000123955,
+      "extract_ms": 0.3311999898869544,
+      "tables_ms": 0.12539999443106353,
+      "item_count_pred": 1,
+      "validation_summary": {
+        "pass": 9,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00003",
+      "ocr_ms": 4356.210800004192,
+      "extract_ms": 0.6823000148870051,
+      "tables_ms": 0.3741999971680343,
+      "item_count_pred": 2,
+      "validation_summary": {
+        "pass": 11,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00004",
+      "ocr_ms": 9901.963100011926,
+      "extract_ms": 0.7961000083014369,
+      "tables_ms": 1.1169000063091516,
+      "item_count_pred": 7,
+      "validation_summary": {
+        "pass": 21,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00005",
+      "ocr_ms": 7942.069799988531,
+      "extract_ms": 1.0050999990198761,
+      "tables_ms": 1.104700000723824,
+      "item_count_pred": 5,
+      "validation_summary": {
+        "pass": 17,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00006",
+      "ocr_ms": 7628.752399992663,
+      "extract_ms": 0.6533999985549599,
+      "tables_ms": 0.7128999859560281,
+      "item_count_pred": 5,
+      "validation_summary": {
+        "pass": 17,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00007",
+      "ocr_ms": 3960.189100005664,
+      "extract_ms": 0.6479999865405262,
+      "tables_ms": 0.24349999148398638,
+      "item_count_pred": 1,
+      "validation_summary": {
+        "pass": 9,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00008",
+      "ocr_ms": 5586.545700003626,
+      "extract_ms": 1.1685000208672136,
+      "tables_ms": 0.7842000050004572,
+      "item_count_pred": 3,
+      "validation_summary": {
+        "pass": 13,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00009",
+      "ocr_ms": 5495.624899980612,
+      "extract_ms": 0.6655000033788383,
+      "tables_ms": 0.24660001508891582,
+      "item_count_pred": 1,
+      "validation_summary": {
+        "pass": 9,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00010",
+      "ocr_ms": 8117.541500017978,
+      "extract_ms": 0.7943999953567982,
+      "tables_ms": 0.9407999750692397,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 19,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00011",
+      "ocr_ms": 5472.332800010918,
+      "extract_ms": 0.6260999944061041,
+      "tables_ms": 0.35180000122636557,
+      "item_count_pred": 2,
+      "validation_summary": {
+        "pass": 10,
+        "fail": 1,
+        "not_applicable": 0
+      },
+      "validation_failures": [
+        {
+          "rule": "iban_checksum",
+          "target": "iban",
+          "reason": "mod-97 check failed (OCR corruption or invalid IBAN)",
+          "expected": null,
+          "observed": "GB23MPY118052629547218"
+        }
+      ],
+      "all_checks_pass": false
+    },
+    {
+      "id": "katanaml-test-00012",
+      "ocr_ms": 6956.515199999558,
+      "extract_ms": 0.9547999943606555,
+      "tables_ms": 0.9612000139895827,
+      "item_count_pred": 5,
+      "validation_summary": {
+        "pass": 17,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00013",
+      "ocr_ms": 8441.441599978134,
+      "extract_ms": 0.7092000159900635,
+      "tables_ms": 0.8434000192210078,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 19,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00014",
+      "ocr_ms": 6193.531600001734,
+      "extract_ms": 0.677400006679818,
+      "tables_ms": 0.4875000158790499,
+      "item_count_pred": 3,
+      "validation_summary": {
+        "pass": 13,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00015",
+      "ocr_ms": 4983.892799995374,
+      "extract_ms": 0.6636999896727502,
+      "tables_ms": 0.2482999989297241,
+      "item_count_pred": 1,
+      "validation_summary": {
+        "pass": 9,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00016",
+      "ocr_ms": 9259.172099991702,
+      "extract_ms": 0.7742999878246337,
+      "tables_ms": 1.0799999872688204,
+      "item_count_pred": 7,
+      "validation_summary": {
+        "pass": 21,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00017",
+      "ocr_ms": 7878.1041000038385,
+      "extract_ms": 0.7222999993246049,
+      "tables_ms": 0.9129999962169677,
+      "item_count_pred": 7,
+      "validation_summary": {
+        "pass": 21,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00018",
+      "ocr_ms": 6938.519599993015,
+      "extract_ms": 0.6468000065069646,
+      "tables_ms": 0.4743000026792288,
+      "item_count_pred": 3,
+      "validation_summary": {
+        "pass": 13,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00019",
+      "ocr_ms": 7043.360500014387,
+      "extract_ms": 0.9619999909773469,
+      "tables_ms": 0.3992000129073858,
+      "item_count_pred": 2,
+      "validation_summary": {
+        "pass": 11,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00020",
+      "ocr_ms": 7353.733700001612,
+      "extract_ms": 0.6852000078652054,
+      "tables_ms": 0.6187999970279634,
+      "item_count_pred": 4,
+      "validation_summary": {
+        "pass": 15,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00021",
+      "ocr_ms": 8214.666999992914,
+      "extract_ms": 0.750600011087954,
+      "tables_ms": 0.8556999964639544,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 18,
+        "fail": 1,
+        "not_applicable": 0
+      },
+      "validation_failures": [
+        {
+          "rule": "iban_checksum",
+          "target": "iban",
+          "reason": "mod-97 check failed (OCR corruption or invalid IBAN)",
+          "expected": null,
+          "observed": "GB91DID006197597108680"
+        }
+      ],
+      "all_checks_pass": false
+    },
+    {
+      "id": "katanaml-test-00022",
+      "ocr_ms": 6674.949200008996,
+      "extract_ms": 0.915299984626472,
+      "tables_ms": 0.9113999840337783,
+      "item_count_pred": 5,
+      "validation_summary": {
+        "pass": 17,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00023",
+      "ocr_ms": 7873.170899983961,
+      "extract_ms": 0.7046000100672245,
+      "tables_ms": 0.8104000007733703,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 19,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00024",
+      "ocr_ms": 8721.839099976933,
+      "extract_ms": 0.8074000070337206,
+      "tables_ms": 0.9187000105157495,
+      "item_count_pred": 6,
+      "validation_summary": {
+        "pass": 19,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    },
+    {
+      "id": "katanaml-test-00025",
+      "ocr_ms": 6948.317799979122,
+      "extract_ms": 1.0045999952126294,
+      "tables_ms": 1.111799996579066,
+      "item_count_pred": 5,
+      "validation_summary": {
+        "pass": 17,
+        "fail": 0,
+        "not_applicable": 0
+      },
+      "validation_failures": [],
+      "all_checks_pass": true
+    }
+  ]
+}
