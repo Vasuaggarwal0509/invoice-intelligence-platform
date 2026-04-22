@@ -13,11 +13,14 @@ venv/
 env/
 .env
 
-# --- Test / coverage ------------------------------------------------------
+# --- Test / coverage / lint caches ---------------------------------------
 .pytest_cache/
 .coverage
 coverage.xml
 htmlcov/
+.mypy_cache/
+.ruff_cache/
+.tox/
 
 # --- Local tool state -----------------------------------------------------
 .claude/
@@ -31,8 +34,23 @@ htmlcov/
 data/katanaml/
 # Pipeline run cache (rebuilt on first backend run).
 data/cache/
+# User-uploaded invoice blobs (business_layer.services.storage).
+# Workspace-partitioned bytes — would leak real invoice content across users.
+data/blobs/
 # Spot-check render outputs (regenerable). Keep extraction_layer/evaluation/reports/ committed.
 extraction_layer/evaluation/inspection/
+
+# --- Local databases -----------------------------------------------------
+# business_layer's default SQLite path lives under data/ and is real user
+# state (sessions, hashes, invoices). Never commit. Blanket *.db catches
+# any dev that overrides PLATFORM_DATABASE_URL to a different location.
+*.db
+*.sqlite
+*.sqlite3
+# SQLite auxiliary files (WAL mode creates these alongside the DB).
+*.db-journal
+*.db-wal
+*.db-shm
 
 # --- OS -------------------------------------------------------------------
 .DS_Store
@@ -44,3 +62,7 @@ desktop.ini
 *.key
 .env.local
 .env.*.local
+
+# --- Logs ----------------------------------------------------------------
+*.log
+logs/

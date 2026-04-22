@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Invoice Intelligence</title>
+    <link rel="stylesheet" href="/static/business/css/style.css" />
+</head>
+<body>
+    <header id="topbar" hidden>
+        <div class="brand">Invoices</div>
+        <nav class="topnav">
+            <a href="#/dashboard" data-nav="dashboard">Home</a>
+            <a href="#/inbox" data-nav="inbox">Inbox</a>
+        </nav>
+        <button id="logout-btn" type="button" class="link-btn">Log out</button>
+    </header>
+
+    <main id="app-root">
+        <!-- Views render into here by js/app.js. -->
+    </main>
+
+    <!-- Screens as <template> blocks — cloned by JS when rendering. -->
+
+    <template id="view-login">
+        <section class="view view-login">
+            <h1>Welcome</h1>
+            <p class="muted">Enter your phone to continue.</p>
+            <form id="form-phone" novalidate>
+                <label>
+                    <span>Phone number</span>
+                    <input type="tel" name="phone" inputmode="tel" required autocomplete="tel"
+                           placeholder="+919876543210" />
+                </label>
+                <button type="submit" class="primary">Send code</button>
+                <p class="error" data-role="error" hidden></p>
+            </form>
+        </section>
+    </template>
+
+    <template id="view-otp">
+        <section class="view view-otp">
+            <h1>Enter the code</h1>
+            <p class="muted">We sent a 6-digit code to your phone.</p>
+            <form id="form-otp" novalidate>
+                <label>
+                    <span>Code</span>
+                    <input type="text" name="code" inputmode="numeric" required autocomplete="one-time-code"
+                           pattern="[0-9]{6}" maxlength="6" />
+                </label>
+                <label>
+                    <span>Business name <em class="muted small">(new users only)</em></span>
+                    <input type="text" name="display_name" maxlength="120" autocomplete="organization" />
+                </label>
+                <button type="submit" class="primary">Continue</button>
+                <button type="button" class="link-btn" data-action="back">Use a different number</button>
+                <p class="error" data-role="error" hidden></p>
+            </form>
+        </section>
+    </template>
+
+    <template id="view-dashboard">
+        <section class="view view-dashboard">
+            <h1 data-role="greeting">Welcome back</h1>
+            <p class="muted">Upload an invoice to get started. Real KPIs land in Sprint&nbsp;3.</p>
+            <div class="kpi-row">
+                <div class="kpi-tile"><div class="kpi-label">Invoices this month</div><div class="kpi-value">—</div></div>
+                <div class="kpi-tile"><div class="kpi-label">Total spend</div><div class="kpi-value">—</div></div>
+                <div class="kpi-tile"><div class="kpi-label">ITC savable</div><div class="kpi-value">—</div></div>
+                <div class="kpi-tile"><div class="kpi-label">Needs review</div><div class="kpi-value">—</div></div>
+            </div>
+
+            <div class="upload-card">
+                <h2>Add an invoice</h2>
+                <p class="muted small">PDF, PNG, JPG, TIFF, or WebP up to 25 MB.</p>
+                <form id="form-upload" novalidate>
+                    <input type="file" name="file" accept="image/png,image/jpeg,image/tiff,image/webp,application/pdf" required />
+                    <button type="submit" class="primary">Upload</button>
+                </form>
+                <p class="error" data-role="error" hidden></p>
+                <p class="muted small" data-role="upload-status" hidden></p>
+            </div>
+        </section>
+    </template>
+
+    <template id="view-inbox">
+        <section class="view view-inbox">
+            <h1>Inbox</h1>
+            <p class="muted small" data-role="empty-hint" hidden>No uploads yet. Start on the home page.</p>
+            <div class="inbox-wrapper">
+                <table class="inbox-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>From / File</th>
+                            <th>Vendor</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody data-role="inbox-body">
+                        <!-- JS fills in -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </template>
+
+    <template id="view-invoice">
+        <section class="view view-invoice">
+            <a href="#/inbox" class="link-btn back">← Back to inbox</a>
+            <div class="invoice-grid">
+                <div class="invoice-image-wrap">
+                    <img data-role="invoice-image" alt="Invoice preview" />
+                </div>
+                <div class="invoice-fields">
+                    <h1 data-role="vendor">—</h1>
+                    <p class="muted small" data-role="status-chip"></p>
+                    <dl>
+                        <dt>Invoice number</dt><dd data-role="invoice-no">—</dd>
+                        <dt>Date</dt><dd data-role="invoice-date">—</dd>
+                        <dt>Amount</dt><dd data-role="total">—</dd>
+                    </dl>
+                    <div class="flags" data-role="flags" hidden>
+                        <h2>Things to check</h2>
+                        <ul data-role="flags-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <script src="/static/business/js/api.js"></script>
+    <script src="/static/business/js/auth.js"></script>
+    <script src="/static/business/js/dashboard.js"></script>
+    <script src="/static/business/js/inbox.js"></script>
+    <script src="/static/business/js/invoice.js"></script>
+    <script src="/static/business/js/app.js"></script>
+</body>
+</html>
