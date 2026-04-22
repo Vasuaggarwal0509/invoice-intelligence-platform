@@ -1,0 +1,16 @@
+# Business layer runtime dependencies.
+#
+# Sprint 0 of implementation not yet landed. See docs/business_plan.md §9
+# for the full list of deps this layer will add.
+#
+# Not separately installed — composed into the root requirements.txt via
+# `-r business_layer/requirements.txt`.
+
+# Placeholder list — uncomment + pin during Sprint 0:
+# sqlalchemy>=2.0
+# pydantic-settings>=2.0
+# argon2-cffi>=23.1
+# cryptography>=42.0
+# python-magic>=0.4
+# itsdangerous>=2.2
+# structlog>=24.1

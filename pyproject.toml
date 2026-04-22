@@ -5,33 +5,22 @@ build-backend = "hatchling.build"
 [project]
 name = "invoice-intelligence-platform"
 version = "0.0.1"
-description = "GST Invoice Intelligence Platform — research prototype"
+description = "GST Invoice Intelligence Platform — extraction_layer (PoC) + business_layer (onboarding)."
 requires-python = ">=3.10"
-dependencies = [
-    "rapidocr-onnxruntime>=1.3.0",
-    "pydantic>=2.0",
-    "numpy>=1.24",
-    "pillow>=10.1",
-    "datasets>=2.14",
-    "rapidfuzz>=3.0",
-    "fastapi>=0.110",
-    "uvicorn[standard]>=0.27",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "pytest-cov",
-]
-tesseract = ["pytesseract>=0.3"]
-paddleocr = ["paddleocr>=3.0"]
-doctr = ["python-doctr[torch]>=0.7"]
+# Layer-specific deps are documented in each layer's requirements.txt and
+# composed into the root requirements.txt. This file intentionally has no
+# `[project.dependencies]` block — keeps dep locality close to layer code.
 
 [tool.hatch.build.targets.wheel]
-packages = ["components", "data_sources", "tools", "backend"]
+packages = ["extraction_layer", "business_layer"]
 
 [tool.pytest.ini_options]
-testpaths = ["components", "data_sources", "backend"]
+testpaths = [
+    "extraction_layer/components",
+    "extraction_layer/data_sources",
+    "extraction_layer/backend",
+    "business_layer",
+]
 python_files = ["test_*.py"]
 markers = [
     "ocr_heavy: slow tests that load real OCR models (~1-2s each); deselect with '-m \"not ocr_heavy\"'",

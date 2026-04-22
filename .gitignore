@@ -26,11 +26,13 @@ htmlcov/
 
 # --- Large regenerable dataset cache --------------------------------------
 # 264 MB HuggingFace-cached dataset; re-downloaded by data_sources loaders.
+# Kept at repo root (not under extraction_layer/) — HF embeds the full path
+# into its lock filename and Windows MAX_PATH=260 overflows with extra depth.
 data/katanaml/
 # Pipeline run cache (rebuilt on first backend run).
 data/cache/
-# Spot-check render outputs (regenerable by evaluation tools). Keep evaluation/reports/ committed.
-evaluation/inspection/
+# Spot-check render outputs (regenerable). Keep extraction_layer/evaluation/reports/ committed.
+extraction_layer/evaluation/inspection/
 
 # --- OS -------------------------------------------------------------------
 .DS_Store
