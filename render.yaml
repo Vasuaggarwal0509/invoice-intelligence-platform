@@ -8,7 +8,6 @@
 #
 # What this manifest declares:
 #   * One Docker-runtime web service on the free tier
-#   * A 1 GB persistent disk for the SQLite DB
 #   * Auto-deploy on every push to main
 #   * Health check pointing at GET /health (must return 200)
 #   * Generated PLATFORM_SECRET_KEY (Render mints + persists it; never in git)
@@ -26,8 +25,17 @@
 #   * 750 instance-hours/month — single service stays well under
 #   * Sleeps after 15 min idle, ~30 s cold start. Acceptable for demo
 #     use; upgrade to Starter ($7/mo) if it bites.
-#   * Free disks survive across deploys. Manually-attached disks max
-#     out at 1 GB on free tier.
+#   * NO PERSISTENT DISKS on free tier. SQLite data lives in the
+#     container's ephemeral filesystem and resets on every redeploy.
+#     Acceptable for demo (re-create test accounts after each push to
+#     main). To make data persistent: upgrade to Starter ($7/mo) and
+#     add back the `disk:` block below the service definition:
+#         disk:
+#           name: sqlite-data
+#           mountPath: /app/data
+#           sizeGB: 1
+#     Or migrate to Render's free Postgres (free for 90 days, $7/mo
+#     after).
 
 services:
   - type: web
@@ -38,11 +46,6 @@ services:
     autoDeploy: true
     healthCheckPath: /health
     dockerfilePath: ./Dockerfile
-
-    disk:
-      name: sqlite-data
-      mountPath: /app/data
-      sizeGB: 1
 
     envVars:
       # Master secret. Render generates 32+ random bytes and persists
@@ -55,7 +58,10 @@ services:
       - key: PLATFORM_ENV
         value: prod
 
-      # SQLite on the mounted persistent disk so it survives redeploys.
+      # SQLite on the container's ephemeral filesystem. Resets on every
+      # redeploy — acceptable for demo, re-create test accounts after
+      # each push. See "Free tier caveats" above for the persistent
+      # alternative.
       - key: PLATFORM_DATABASE_URL
         value: sqlite:////app/data/business.db
 
