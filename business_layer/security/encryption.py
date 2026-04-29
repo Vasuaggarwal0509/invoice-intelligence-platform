@@ -27,7 +27,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from business_layer.config import get_settings
 
 _NONCE_BYTES = 12  # AES-GCM standard
-_KEY_BYTES = 32    # AES-256
+_KEY_BYTES = 32  # AES-256
 
 
 def _derive_key() -> bytes:

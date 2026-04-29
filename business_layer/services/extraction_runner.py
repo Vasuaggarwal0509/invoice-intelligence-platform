@@ -113,9 +113,7 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     # (3) run the pipeline.
     started = time.perf_counter()
     try:
-        ocr_result, extraction_result, tables_result, validation_result = (
-            _get_pipeline().run(image)
-        )
+        ocr_result, extraction_result, tables_result, validation_result = _get_pipeline().run(image)
     except Exception as exc:
         _fail(session, inbox_id=inbox.id)
         raise DependencyError(
@@ -128,9 +126,7 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     ocr_json = ocr_result.model_dump_json()
     extraction_json = extraction_result.model_dump_json()
     tables_json = tables_result.model_dump_json()
-    validation_json = (
-        validation_result.model_dump_json() if validation_result is not None else None
-    )
+    validation_json = validation_result.model_dump_json() if validation_result is not None else None
 
     # (5) persist pipeline_runs.
     pipeline_runs_repo.create(
@@ -161,7 +157,9 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     finding_rows: list[dict] = []
     if validation_result is not None:
         for finding in validation_result.findings:
-            raw = finding.outcome.value if hasattr(finding.outcome, "value") else str(finding.outcome)
+            raw = (
+                finding.outcome.value if hasattr(finding.outcome, "value") else str(finding.outcome)
+            )
             outcome_upper = raw.upper()
             finding_rows.append(
                 {
@@ -184,8 +182,11 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
         findings=finding_rows,
     )
 
-    # (7) project extracted fields into the invoice row.
+    # (7) project extracted fields + computed totals into the invoice row.
     extracted = _extract_projectable_fields(extraction_result)
+    total_minor = _sum_items_to_minor(tables_result)
+    if total_minor is not None:
+        extracted["total_amount_minor"] = total_minor  # type: ignore[assignment]
     invoices_repo.update_extracted_fields(
         session,
         invoice_id=job.invoice_id,
@@ -226,21 +227,27 @@ def _bytes_to_ndarray(data: bytes, content_type: str) -> np.ndarray:
 
 
 def _extract_projectable_fields(extraction_result) -> dict:  # type: ignore[no-untyped-def]
-    """Pull out the six columns we store on ``invoices``.
+    """Pull out the columns we denormalise onto ``invoices``.
 
     :class:`ExtractionResult.fields` is a ``dict[str, ExtractedField]``
-    keyed by field name (e.g. ``'invoice_no'``, ``'seller'``). We
-    pick the ones that have a 1:1 mapping to invoice columns;
-    everything else stays in the JSON blob for forensics.
+    keyed by the canonical label names from
+    :data:`extraction_layer.components.extraction.heuristic.labels.LABEL_VARIANTS`
+    — ``seller``, ``client``, ``invoice_no``, ``date``, ``tax_id``.
+
+    The extractor does NOT split ``tax_id`` into seller vs client; both
+    entities' tax IDs land under one key. Convention: persist into
+    ``seller_gstin`` since on Indian invoices the supplier's GSTIN is
+    the one buyers reconcile against (the ITC-claim side). If we later
+    wire a seller-vs-client disambiguator, the second value lands in
+    ``client_gstin`` via the same projection.
     """
     # field-name key → invoices column
     mapping = {
         "invoice_no": "invoice_no",
-        "invoice_date": "invoice_date",
+        "date": "invoice_date",
         "seller": "vendor_name",
         "client": "client_name",
-        "seller_tax_id": "seller_gstin",
-        "client_tax_id": "client_gstin",
+        "tax_id": "seller_gstin",
     }
     out: dict[str, str | None] = {v: None for v in mapping.values()}
     fields_dict = getattr(extraction_result, "fields", {}) or {}
@@ -251,13 +258,82 @@ def _extract_projectable_fields(extraction_result) -> dict:  # type: ignore[no-u
     return out
 
 
+def _sum_items_to_minor(tables_result) -> int | None:  # type: ignore[no-untyped-def]
+    """Sum ``item_gross_worth`` across items → total invoice amount in paise.
+
+    Returns ``None`` if no parseable totals were found (all items
+    blank or unparseable). We store money as INTEGER paise to avoid
+    floating-point drift in aggregate KPIs.
+
+    Parser is permissive — strips currency symbols, thousands separators,
+    whitespace — because OCR output varies (``$ 1,234.56``, ``₹1234.56``,
+    ``1 234,56``, etc.). Ambiguous European decimals (``1.234,56``) are
+    coerced by the last-separator-wins heuristic which is good enough
+    for Indian invoices (decimal dot, thousands comma).
+    """
+    items = getattr(tables_result, "items", []) or []
+    if not items:
+        return None
+
+    total_paise = 0
+    found_any = False
+    for item in items:
+        gross_s = getattr(item, "item_gross_worth", None)
+        parsed = _parse_money_to_paise(gross_s)
+        if parsed is not None:
+            total_paise += parsed
+            found_any = True
+    return total_paise if found_any else None
+
+
+def _parse_money_to_paise(raw: str | None) -> int | None:
+    """Best-effort parse of a money string to integer paise.
+
+    Returns None on empty / unparseable input — callers treat that as
+    "no signal" and fall back to the previous value (or leave NULL).
+    """
+    if not raw:
+        return None
+    # Strip non-digit/dot/comma/minus characters (currency symbols,
+    # whitespace, letters like "Rs.").
+    cleaned = "".join(ch for ch in str(raw) if ch.isdigit() or ch in ".,-")
+    if not cleaned or cleaned in {".", ",", "-"}:
+        return None
+    # Prefer the LAST separator as the decimal mark (handles "1,234.56"
+    # and "1.234,56"). Everything before it with both separators stripped
+    # is the integer part.
+    last_comma = cleaned.rfind(",")
+    last_dot = cleaned.rfind(".")
+    decimal_idx = max(last_comma, last_dot)
+    if decimal_idx == -1:
+        # No decimal part — treat whole number.
+        try:
+            return int(cleaned) * 100
+        except ValueError:
+            return None
+    int_part = cleaned[:decimal_idx].replace(",", "").replace(".", "")
+    dec_part = cleaned[decimal_idx + 1 :]
+    # Pad/truncate decimal to exactly 2 digits.
+    if len(dec_part) >= 2:
+        dec_part = dec_part[:2]
+    else:
+        dec_part = dec_part.ljust(2, "0")
+    sign = -1 if int_part.startswith("-") else 1
+    int_part = int_part.lstrip("-")
+    try:
+        return sign * (int(int_part or "0") * 100 + int(dec_part or "0"))
+    except ValueError:
+        return None
+
+
 def _stringify(v) -> str | None:  # type: ignore[no-untyped-def]
     if v is None:
         return None
-    if isinstance(v, (str, int, float, bool)):
+    if isinstance(v, str | int | float | bool):
         return str(v)
     try:
         import json
+
         return json.dumps(v)
     except Exception:
         return str(v)

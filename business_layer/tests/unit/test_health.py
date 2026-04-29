@@ -4,10 +4,16 @@ from __future__ import annotations
 
 
 def test_health_returns_ok(test_client) -> None:  # type: ignore[no-untyped-def]
-    """GET /health returns 200 + {status: ok} when the DB is reachable."""
+    """GET /health returns 200 with version + git_sha + db check when reachable."""
     response = test_client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    body = response.json()
+    assert body["status"] == "ok"
+    assert body["checks"] == {"db": "ok"}
+    # Version comes from pyproject.toml — non-empty string, dotted SemVer.
+    assert isinstance(body["version"], str) and body["version"]
+    # git_sha is "dev" in tests (no RENDER_GIT_COMMIT or GIT_SHA env set).
+    assert body["git_sha"] == "dev"
 
 
 def test_health_sets_request_id_header(test_client) -> None:  # type: ignore[no-untyped-def]

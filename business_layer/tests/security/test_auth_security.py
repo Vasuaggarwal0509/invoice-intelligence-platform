@@ -14,7 +14,6 @@ import pytest
 
 from business_layer.security.rate_limit import limiter
 
-
 PHONE = "+919000000099"
 
 
@@ -36,6 +35,7 @@ def relaxed_rate_limits(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PLATFORM_RATE_LIMIT_OTP_PER_MIN", "100")
     # Settings is lru_cached; clear so the next call picks up the env.
     from business_layer.config import get_settings
+
     get_settings.cache_clear()
 
 
@@ -58,7 +58,7 @@ class TestOtpMaxAttempts:
         test_client.post("/api/auth/otp/request", json={"phone": PHONE})
         correct = _latest_otp(PHONE, caplog)
         # Guess wrong code 5 times (max_attempts default = 5).
-        wrong = ("123456" if correct != "123456" else "654321")
+        wrong = "123456" if correct != "123456" else "654321"
         for _ in range(5):
             r = test_client.post(
                 "/api/auth/otp/verify",
@@ -109,9 +109,7 @@ class TestOtpExpiry:
 class TestSingleUseOtp:
     """An OTP must not be reusable after success."""
 
-    def test_reused_code_rejected(
-        self, test_client, caplog: pytest.LogCaptureFixture
-    ) -> None:  # type: ignore[no-untyped-def]
+    def test_reused_code_rejected(self, test_client, caplog: pytest.LogCaptureFixture) -> None:  # type: ignore[no-untyped-def]
         caplog.set_level(logging.INFO, logger="business_layer.routes.auth")
         test_client.post("/api/auth/otp/request", json={"phone": PHONE})
         code = _latest_otp(PHONE, caplog)
@@ -159,7 +157,11 @@ class TestSessionCookieFlags:
         )
         assert r.status_code == 200
 
-        set_cookie_lines = r.headers.get_list("set-cookie") if hasattr(r.headers, "get_list") else [r.headers.get("set-cookie", "")]
+        set_cookie_lines = (
+            r.headers.get_list("set-cookie")
+            if hasattr(r.headers, "get_list")
+            else [r.headers.get("set-cookie", "")]
+        )
         session_lines = [c for c in set_cookie_lines if c and c.lower().startswith("bl_session=")]
         assert session_lines, "bl_session cookie not set"
         raw = session_lines[0].lower()
@@ -204,5 +206,9 @@ class TestCsrfOnStateChangingRoutes:
         test_client.cookies.clear()
         r = test_client.get("/health")
         assert r.status_code == 200
-        set_cookie = r.headers.get_list("set-cookie") if hasattr(r.headers, "get_list") else [r.headers.get("set-cookie", "")]
+        set_cookie = (
+            r.headers.get_list("set-cookie")
+            if hasattr(r.headers, "get_list")
+            else [r.headers.get("set-cookie", "")]
+        )
         assert any("bl_csrf=" in (c or "").lower() for c in set_cookie)

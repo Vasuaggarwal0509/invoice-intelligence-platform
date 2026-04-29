@@ -29,7 +29,14 @@
             state.phone = phone;
             onNext();
         } catch (err) {
-            showError(form, err.detail || 'Could not send the code. Try again.');
+            // Normalise the error message for SMBs — tax/technical jargon
+            // in raw Pydantic validation messages isn't helpful.
+            let msg = err.detail || 'Could not send the code. Try again.';
+            if (err.code === 'validation_failed' && /phone/i.test(msg)) {
+                msg = 'That phone number does not look right. Include country code, e.g. +919876543210.';
+            }
+            if (err.code === 'rate_limited') msg = 'Too many tries. Please wait a moment.';
+            showError(form, msg);
         } finally {
             btn.disabled = false;
         }

@@ -8,6 +8,7 @@ from extraction_layer.data_sources.types import Sample
 
 def _img():
     import numpy as np
+
     return np.full((8, 8, 3), 255, dtype=np.uint8)
 
 

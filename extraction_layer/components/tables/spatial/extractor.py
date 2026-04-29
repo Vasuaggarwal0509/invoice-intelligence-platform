@@ -44,7 +44,6 @@ from extraction_layer.components.ocr.types import Line, OCRResult
 from ..base import BaseTableExtractor
 from ..types import InvoiceItem, TableExtractionResult
 
-
 # Pattern for an item anchor: standalone integer followed by a dot.
 _ITEM_NUMBER = re.compile(r"^\s*(\d+)\s*\.\s*$")
 
@@ -77,9 +76,7 @@ class SpatialTableExtractor(BaseTableExtractor):
             return _empty(self.extractor_name, start, {"reason": "no ITEMS anchor"})
 
         bottom_y = (
-            float(summary_top_y)
-            if summary_top_y is not None
-            else float(ocr_result.page.height)
+            float(summary_top_y) if summary_top_y is not None else float(ocr_result.page.height)
         )
 
         # Region lines (indices preserved for precise anchor exclusion).
@@ -204,12 +201,8 @@ class SpatialTableExtractor(BaseTableExtractor):
         if desc_line_1 is not None:
             desc_parts.append(desc_line_1.text.strip())
 
-        desc_left = (
-            desc_line_1.bbox.x0 if desc_line_1 is not None else anchor_line.bbox.x1 + 10
-        )
-        desc_right = (
-            decimals[0][0] - 10 if decimals else page_width / 3.0
-        )
+        desc_left = desc_line_1.bbox.x0 if desc_line_1 is not None else anchor_line.bbox.x1 + 10
+        desc_right = decimals[0][0] - 10 if decimals else page_width / 3.0
 
         for idx, line in region:
             if idx == anchor_idx:

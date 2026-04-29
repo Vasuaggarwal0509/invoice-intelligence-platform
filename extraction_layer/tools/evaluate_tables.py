@@ -28,7 +28,6 @@ from extraction_layer.components.tables import make_table_extractor
 from extraction_layer.data_sources import make_dataset
 from extraction_layer.data_sources.katanaml_invoices import KatanamlInvoicesDataset
 
-
 ITEM_FIELDS: list[str] = [
     "item_desc",
     "item_qty",
@@ -114,7 +113,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--split", default="test", help="Dataset split (default: test).")
     parser.add_argument("--gate", type=float, default=0.85, help="Avg per-field F1 gate.")
-    parser.add_argument("--max-samples", type=int, default=None, help="Limit sample count (smoke runs).")
+    parser.add_argument(
+        "--max-samples", type=int, default=None, help="Limit sample count (smoke runs)."
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -194,10 +195,7 @@ def main(argv: list[str] | None = None) -> int:
         sample_records.append(record)
 
         correct_fields = sum(
-            1
-            for it in per_sample_field_outcomes
-            for outcome in it.values()
-            if outcome == "correct"
+            1 for it in per_sample_field_outcomes for outcome in it.values() if outcome == "correct"
         )
         total_fields = len(per_sample_field_outcomes) * len(ITEM_FIELDS)
         print(
@@ -257,10 +255,7 @@ def main(argv: list[str] | None = None) -> int:
     ]
     for idx, r in enumerate(sample_records):
         correct = sum(
-            1
-            for it in r["per_item_outcomes"]
-            for outcome in it.values()
-            if outcome == "correct"
+            1 for it in r["per_item_outcomes"] for outcome in it.values() if outcome == "correct"
         )
         total_fields = len(r["per_item_outcomes"]) * len(ITEM_FIELDS)
         lines.append(
@@ -278,9 +273,7 @@ def main(argv: list[str] | None = None) -> int:
     failing_count = 0
     for r in sample_records:
         all_correct = all(
-            outcome == "correct"
-            for it in r["per_item_outcomes"]
-            for outcome in it.values()
+            outcome == "correct" for it in r["per_item_outcomes"] for outcome in it.values()
         )
         if all_correct and r["counts_match"]:
             continue

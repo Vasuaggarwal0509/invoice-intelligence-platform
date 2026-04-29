@@ -49,9 +49,13 @@ class TestSingleInvoiceValidation:
     def test_bad_item_arithmetic_triggers_fail(self, engine):
         result = engine.validate(
             make_extraction(),
-            make_tables(items=[
-                make_item(qty="2,00", net_price="10,00", net_worth="99,00", gross_worth="108,90"),
-            ]),
+            make_tables(
+                items=[
+                    make_item(
+                        qty="2,00", net_price="10,00", net_worth="99,00", gross_worth="108,90"
+                    ),
+                ]
+            ),
         )
         failures = result.failures()
         assert any(f.rule_name == "item_net_worth_consistency" for f in failures)
@@ -64,8 +68,11 @@ class TestSingleInvoiceValidation:
 
     def test_missing_fields_degrade_to_not_applicable(self, engine):
         extraction = make_extraction(
-            invoice_no=None, invoice_date=None, iban=None,
-            seller_tax_id=None, client_tax_id=None,
+            invoice_no=None,
+            invoice_date=None,
+            iban=None,
+            seller_tax_id=None,
+            client_tax_id=None,
         )
         result = engine.validate(extraction, tables=None)
         assert result.all_checks_pass()  # missing != failure

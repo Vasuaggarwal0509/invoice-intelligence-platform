@@ -18,7 +18,6 @@ from typing import Any
 from extraction_layer.components.extraction.types import ExtractionResult
 from extraction_layer.components.tables.types import InvoiceItem, TableExtractionResult
 
-
 HEADER_COLUMNS: list[str] = [
     "invoice_no",
     "invoice_date",
@@ -117,6 +116,6 @@ def batch_to_csv(
             f"extractions length ({len(extractions)})"
         )
     all_rows: list[dict[str, Any]] = []
-    for extraction, tables in zip(extractions, tables_list):
+    for extraction, tables in zip(extractions, tables_list, strict=False):
         all_rows.extend(invoice_to_csv_rows(extraction, tables))
     return write_csv(all_rows)

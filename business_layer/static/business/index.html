@@ -62,12 +62,24 @@
     <template id="view-dashboard">
         <section class="view view-dashboard">
             <h1 data-role="greeting">Welcome back</h1>
-            <p class="muted">Upload an invoice to get started. Real KPIs land in Sprint&nbsp;3.</p>
+            <p class="muted small" data-role="period">This month</p>
             <div class="kpi-row">
-                <div class="kpi-tile"><div class="kpi-label">Invoices this month</div><div class="kpi-value">—</div></div>
-                <div class="kpi-tile"><div class="kpi-label">Total spend</div><div class="kpi-value">—</div></div>
-                <div class="kpi-tile"><div class="kpi-label">ITC savable</div><div class="kpi-value">—</div></div>
-                <div class="kpi-tile"><div class="kpi-label">Needs review</div><div class="kpi-value">—</div></div>
+                <div class="kpi-tile">
+                    <div class="kpi-label">Invoices this month</div>
+                    <div class="kpi-value" data-role="kpi-count">—</div>
+                </div>
+                <div class="kpi-tile">
+                    <div class="kpi-label">Total spend</div>
+                    <div class="kpi-value" data-role="kpi-spend">—</div>
+                </div>
+                <div class="kpi-tile">
+                    <div class="kpi-label">ITC eligible <em class="muted small">est.</em></div>
+                    <div class="kpi-value" data-role="kpi-itc">—</div>
+                </div>
+                <div class="kpi-tile">
+                    <div class="kpi-label">Needs review</div>
+                    <div class="kpi-value" data-role="kpi-review">—</div>
+                </div>
             </div>
 
             <div class="upload-card">
@@ -80,6 +92,60 @@
                 <p class="error" data-role="error" hidden></p>
                 <p class="muted small" data-role="upload-status" hidden></p>
             </div>
+
+            <section class="top-vendors" data-role="top-vendors-wrap" hidden>
+                <h2>Top vendors this month</h2>
+                <ul class="vendor-list" data-role="top-vendors-list"></ul>
+            </section>
+
+            <section class="needs-review-card" data-role="needs-review-wrap" hidden>
+                <h2>Needs your review</h2>
+                <ul class="review-list" data-role="needs-review-list"></ul>
+            </section>
+
+            <section class="sources-card">
+                <h2>Email inbox</h2>
+                <div data-role="sources-body">
+                    <p class="muted small">
+                        Connect your email so invoices arrive automatically —
+                        we read only messages whose subject matches invoice-like
+                        keywords (editable in <code>config/config.json</code>).
+                    </p>
+                    <a id="btn-connect-email" class="primary btn-connect"
+                       href="/api/oauth/google/start">Connect Email</a>
+                    <p class="muted small" data-role="gmail-connected-hint" hidden>
+                        Gmail connected. New invoices arrive every
+                        <span data-role="poll-interval">15</span> minutes.
+                        <button type="button" class="link-btn" data-role="gmail-disconnect">Disconnect</button>
+                    </p>
+                </div>
+            </section>
+
+            <section class="ca-link-card">
+                <h2>Your CA firm</h2>
+                <div data-role="ca-link-unlinked" hidden>
+                    <p class="muted small">
+                        If your CA firm has registered on this platform, add their 15-digit
+                        GSTIN below and they can review your invoices.
+                    </p>
+                    <form id="form-ca-link" novalidate>
+                        <input type="text" name="ca_gstin" maxlength="15"
+                               placeholder="22AAAAA0000A1Z5"
+                               pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9][A-Z0-9]Z[A-Z0-9]"
+                               required />
+                        <button type="submit" class="primary">Link CA</button>
+                    </form>
+                    <p class="error" data-role="ca-link-error" hidden></p>
+                </div>
+                <div data-role="ca-link-linked" hidden>
+                    <p>
+                        Linked with
+                        <strong data-role="ca-link-name"></strong>
+                        (<span class="muted small" data-role="ca-link-gstin"></span>)
+                    </p>
+                    <button type="button" class="link-btn" data-role="ca-unlink-btn">Unlink</button>
+                </div>
+            </section>
         </section>
     </template>
 

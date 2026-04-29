@@ -65,10 +65,7 @@ class TestInvoiceToCsvRows:
         assert row["item_index"] == "0"
 
     def test_header_fields_present_on_every_row(self):
-        items = [
-            InvoiceItem(item_desc=f"desc-{i}", item_qty=f"{i},00")
-            for i in range(3)
-        ]
+        items = [InvoiceItem(item_desc=f"desc-{i}", item_qty=f"{i},00") for i in range(3)]
         rows = invoice_to_csv_rows(_extraction(), _tables(items))
         assert len(rows) == 3
         for i, row in enumerate(rows):

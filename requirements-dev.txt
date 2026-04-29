@@ -1,0 +1,36 @@
+# Development + CI tooling — pinned so reviews and CI runs don't drift.
+#
+# Local install:   pip install -r requirements-dev.txt
+# (This file pulls in runtime via the -r line at the bottom.)
+#
+# Production image (Dockerfile) installs ONLY requirements.txt — these
+# tools never ship to a deployed instance.
+
+# --- Test runner + coverage ----------------------------------------------
+# pytest 9.0.3+ patches GHSA-6w46-j5rx-g56g (private-data exposure in
+# rare cases when test fixtures relied on tmp_path).
+pytest==9.0.3
+pytest-cov==6.0.0
+
+# --- Lint + format -------------------------------------------------------
+ruff==0.8.4
+
+# --- Type checking -------------------------------------------------------
+mypy==1.13.0
+
+# --- Security audit ------------------------------------------------------
+# bandit: source-level Python security linter (catches assert in prod code,
+#   sql=string concat, etc.).
+# pip-audit: scans installed deps against the PyPI vulnerability DB.
+bandit==1.8.0
+pip-audit==2.7.3
+
+# --- Pre-commit harness --------------------------------------------------
+# Runs the same lint/test commands locally on `git commit`. Optional but
+# the .pre-commit-config.yaml file in the repo root references it.
+pre-commit==4.0.1
+
+# --- Runtime deps (composed) ---------------------------------------------
+# Including this means a single `pip install -r requirements-dev.txt`
+# gives a full working development environment — no second command.
+-r requirements.txt

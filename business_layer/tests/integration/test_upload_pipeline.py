@@ -18,14 +18,12 @@ out of the default suite.
 
 from __future__ import annotations
 
-import io
 import logging
 import re
 import struct
 import zlib
 
 import pytest
-
 
 PHONE = "+919000000121"
 
@@ -110,15 +108,23 @@ def stubbed_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
         )
         extraction = ExtractionResult(
             fields={
-                "seller": ExtractedField(name="seller", value="Stub Vendor Pvt Ltd", confidence=0.9, source="stub"),
-                "invoice_no": ExtractedField(name="invoice_no", value="INV-001", confidence=0.9, source="stub"),
-                "invoice_date": ExtractedField(name="invoice_date", value="2026-04-22", confidence=0.9, source="stub"),
+                "seller": ExtractedField(
+                    name="seller", value="Stub Vendor Pvt Ltd", confidence=0.9, source="stub"
+                ),
+                "invoice_no": ExtractedField(
+                    name="invoice_no", value="INV-001", confidence=0.9, source="stub"
+                ),
+                "invoice_date": ExtractedField(
+                    name="invoice_date", value="2026-04-22", confidence=0.9, source="stub"
+                ),
             },
             extractor="stub",
             duration_ms=0.2,
         )
         tables = TableExtractionResult(
-            items=[], extractor="stub", duration_ms=0.1,
+            items=[],
+            extractor="stub",
+            duration_ms=0.1,
         )
         validation = ValidationResult(
             findings=[
@@ -134,6 +140,7 @@ def stubbed_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
 
     # Reset the cached pipeline singleton so our stub wires in for this test.
     import business_layer.services.extraction_runner as er
+
     er._pipeline_singleton = None
     monkeypatch.setattr(
         "extraction_layer.backend.app.pipeline.PipelineRunner.run",

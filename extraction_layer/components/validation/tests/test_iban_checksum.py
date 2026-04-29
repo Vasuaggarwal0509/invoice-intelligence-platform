@@ -2,7 +2,10 @@
 
 import pytest
 
-from extraction_layer.components.validation.rules.iban_checksum import iban_is_valid, validate_iban_checksum
+from extraction_layer.components.validation.rules.iban_checksum import (
+    iban_is_valid,
+    validate_iban_checksum,
+)
 from extraction_layer.components.validation.types import RuleOutcome
 
 from ._fixtures import make_extraction
@@ -11,10 +14,10 @@ from ._fixtures import make_extraction
 class TestIbanIsValid:
     # ECBS / Wikipedia canonical valid IBANs.
     VALID = [
-        "GB82WEST12345698765432",     # UK
-        "DE89370400440532013000",     # Germany
+        "GB82WEST12345698765432",  # UK
+        "DE89370400440532013000",  # Germany
         "FR1420041010050500013M02606",  # France
-        "NL91ABNA0417164300",         # Netherlands
+        "NL91ABNA0417164300",  # Netherlands
     ]
 
     @pytest.mark.parametrize("iban", VALID)
@@ -28,10 +31,10 @@ class TestIbanIsValid:
     @pytest.mark.parametrize(
         "iban",
         [
-            "GB00WEST12345698765432",           # wrong check digits — deterministically invalid
-            "GB83WEST12345698765432",           # check digits one off from valid GB82...
-            "GB82WEST123456987654ZZ",           # wrong final chars
-            "DE00370400440532013000",           # wrong check digits on valid DE IBAN
+            "GB00WEST12345698765432",  # wrong check digits — deterministically invalid
+            "GB83WEST12345698765432",  # check digits one off from valid GB82...
+            "GB82WEST123456987654ZZ",  # wrong final chars
+            "DE00370400440532013000",  # wrong check digits on valid DE IBAN
         ],
     )
     def test_invalid_ibans(self, iban):
@@ -45,8 +48,8 @@ class TestIbanIsValid:
     @pytest.mark.parametrize(
         "iban_from_ocr_error",
         [
-            "GB10YCPS61791374226282",           # sample 07: GT had extra "791" chunk; stripped version is coincidentally valid
-            "GB31LZXS20242755934691",           # sample 01: S↔5 swap at position 8; coincidentally valid
+            "GB10YCPS61791374226282",  # sample 07: GT had extra "791" chunk; stripped version is coincidentally valid
+            "GB31LZXS20242755934691",  # sample 01: S↔5 swap at position 8; coincidentally valid
         ],
     )
     def test_some_ocr_errors_pass_mod97_coincidentally(self, iban_from_ocr_error):

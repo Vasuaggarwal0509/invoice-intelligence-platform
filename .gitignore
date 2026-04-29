@@ -9,6 +9,7 @@ dist/
 
 # --- Virtual environments -------------------------------------------------
 venv/
+venv_*/            # venv_wsl, venv_linux, etc. when dev machines need multiple
 .venv/
 env/
 .env
@@ -16,11 +17,17 @@ env/
 # --- Test / coverage / lint caches ---------------------------------------
 .pytest_cache/
 .coverage
+.coverage.*
 coverage.xml
 htmlcov/
 .mypy_cache/
 .ruff_cache/
 .tox/
+dist/
+*.egg-info/
+
+# --- Pre-commit cache (per-user) -----------------------------------------
+.pre-commit-cache/
 
 # --- Local tool state -----------------------------------------------------
 .claude/
@@ -62,6 +69,11 @@ desktop.ini
 *.key
 .env.local
 .env.*.local
+# OAuth client JSONs (Google, Microsoft, etc.) — the repo commits only
+# *_dummy.json placeholders; real downloads stay local.
+secrets/*
+!secrets/*_dummy.json
+!secrets/.gitkeep
 
 # --- Logs ----------------------------------------------------------------
 *.log

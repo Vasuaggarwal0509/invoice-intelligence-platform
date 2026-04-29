@@ -10,12 +10,11 @@ from __future__ import annotations
 
 import json
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from business_layer.db.tables import inbox_messages as t_inbox
 from business_layer.db.tables import sources as t_sources
-from sqlalchemy import select
-
 from business_layer.errors import NotFoundError
 from business_layer.models.invoice import (
     InvoiceDetailBusiness,
@@ -89,9 +88,7 @@ def _summary(
         findings_summary={
             "pass": sum(1 for f in findings_public if f.outcome == "PASS"),
             "fail": sum(1 for f in findings_public if f.outcome == "FAIL"),
-            "not_applicable": sum(
-                1 for f in findings_public if f.outcome == "NOT_APPLICABLE"
-            ),
+            "not_applicable": sum(1 for f in findings_public if f.outcome == "NOT_APPLICABLE"),
         },
         image_url=f"/api/invoices/{invoice.id}/image",
     )
@@ -106,20 +103,14 @@ def get_business_detail(
     Business owner doesn't care about PASS / NOT_APPLICABLE rows. The
     ones that matter are the ones the platform wants them to look at.
     """
-    summary, findings = _summary(
-        session, workspace_id=workspace_id, invoice_id=invoice_id
-    )
+    summary, findings = _summary(session, workspace_id=workspace_id, invoice_id=invoice_id)
     flags = [f for f in findings if f.outcome == "FAIL"]
     return InvoiceDetailBusiness(invoice=summary, flags=flags)
 
 
-def get_ca_detail(
-    session: Session, *, workspace_id: str, invoice_id: str
-) -> InvoiceDetailCa:
+def get_ca_detail(session: Session, *, workspace_id: str, invoice_id: str) -> InvoiceDetailCa:
     """Full detail — every rule + raw pipeline JSON. Used by CA persona (Sprint 4)."""
-    summary, findings = _summary(
-        session, workspace_id=workspace_id, invoice_id=invoice_id
-    )
+    summary, findings = _summary(session, workspace_id=workspace_id, invoice_id=invoice_id)
     latest = pipeline_runs_repo.find_latest_for_invoice(
         session, invoice_id=invoice_id, workspace_id=workspace_id
     )

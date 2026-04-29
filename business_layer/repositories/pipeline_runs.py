@@ -102,9 +102,7 @@ def create(
             created_at=now_ms(),
         )
     )
-    row = session.execute(
-        select(pipeline_runs).where(pipeline_runs.c.id == pid)
-    ).first()
+    row = session.execute(select(pipeline_runs).where(pipeline_runs.c.id == pid)).first()
     assert row is not None
     return _row_to_dc(row)
 

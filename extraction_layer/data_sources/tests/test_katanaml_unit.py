@@ -12,7 +12,6 @@ from PIL import Image
 from extraction_layer.data_sources.katanaml_invoices.loader import KatanamlInvoicesDataset
 from extraction_layer.data_sources.types import Sample
 
-
 # ----- _image_to_rgb_ndarray -----------------------------------------------
 
 

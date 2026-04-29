@@ -15,4 +15,4 @@ from business_layer.repositories.sessions import SessionRow
 from business_layer.repositories.users import UserRow
 from business_layer.repositories.workspaces import WorkspaceRow
 
-__all__ = ["UserRow", "WorkspaceRow", "SessionRow"]
+__all__ = ["SessionRow", "UserRow", "WorkspaceRow"]

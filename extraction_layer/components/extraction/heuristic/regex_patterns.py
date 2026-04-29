@@ -20,7 +20,6 @@ Each pattern is case-insensitive and captures the value in group 1.
 
 import re
 
-
 # Invoice number: e.g. "Invoice no: 12345", "Invoiceno:12345", "Invoicen0:12345"
 # The label + optional punctuation + 4+ digits.
 INVOICE_NO = re.compile(
@@ -90,12 +89,12 @@ IBAN_BARE = re.compile(r"(?P<value>[A-Z]{2}\d{2}[A-Z0-9]{11,30})")
 
 
 __all__ = [
-    "INVOICE_NO",
-    "INVOICE_NO_BARE",
     "DATE_ANCHORED",
     "DATE_BARE",
-    "TAX_ID_ANCHORED",
-    "TAX_ID_BARE",
     "IBAN_ANCHORED",
     "IBAN_BARE",
+    "INVOICE_NO",
+    "INVOICE_NO_BARE",
+    "TAX_ID_ANCHORED",
+    "TAX_ID_BARE",
 ]

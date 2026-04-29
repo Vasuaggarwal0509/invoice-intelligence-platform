@@ -11,16 +11,16 @@ are marked ``dataset_heavy`` so they can be deselected with:
 import numpy as np
 import pytest
 
-
 # Skip the whole module if the HF datasets library is not installed.
 pytest.importorskip(
     "datasets",
     reason="HuggingFace 'datasets' library not installed; skip dataset integration tests",
 )
 
-from extraction_layer.data_sources.katanaml_invoices.loader import KatanamlInvoicesDataset  # noqa: E402
-from extraction_layer.data_sources.types import Sample  # noqa: E402
-
+from extraction_layer.data_sources.katanaml_invoices.loader import (
+    KatanamlInvoicesDataset,
+)
+from extraction_layer.data_sources.types import Sample
 
 pytestmark = pytest.mark.dataset_heavy
 
@@ -75,9 +75,9 @@ def test_ground_truth_has_donut_header(dataset):
     assert isinstance(header, dict)
     # Research §4.1 documented these fields; at least one header key is expected.
     plausible_keys = {"invoice_no", "invoice_date", "seller", "client"}
-    assert plausible_keys.intersection(header.keys()), (
-        f"Expected at least one of {plausible_keys} in header, got keys {list(header.keys())}"
-    )
+    assert plausible_keys.intersection(
+        header.keys()
+    ), f"Expected at least one of {plausible_keys} in header, got keys {list(header.keys())}"
 
 
 def test_items_accessor_returns_list(dataset):

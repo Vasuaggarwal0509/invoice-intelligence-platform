@@ -338,3 +338,120 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
 .flags h2 { margin-top: 0; font-size: 16px; color: var(--amber); }
 .flags ul { margin: 6px 0 0; padding-left: 18px; }
 .flags li { margin: 4px 0; font-size: 14px; }
+
+/* --- Top vendors + needs-review cards --- */
+
+.top-vendors, .needs-review-card {
+    margin-top: 26px;
+}
+
+.vendor-list, .review-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.vendor-list li, .review-list li {
+    display: grid;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    cursor: default;
+}
+
+.vendor-list li { grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; }
+.review-list li { grid-template-columns: 1fr auto; gap: 4px 12px; cursor: pointer; }
+.review-list li:hover { background: var(--bg-elevated); }
+
+.vendor-list li:last-child,
+.review-list li:last-child { border-bottom: 0; }
+
+.vendor-name, .review-vendor {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.vendor-amount, .review-amount {
+    font-weight: 600;
+    font-size: 15px;
+    text-align: right;
+}
+
+.vendor-meta, .review-meta {
+    grid-column: 1 / -1;
+    color: var(--fg-muted);
+    font-size: 13px;
+}
+
+.review-fail-count {
+    font-weight: 500;
+    color: var(--amber);
+}
+
+/* --- Sources card (Connect Email) --- */
+
+.sources-card {
+    margin-top: 26px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+}
+
+.sources-card h2 { margin: 0 0 8px; font-size: 16px; }
+
+.sources-card a.btn-connect {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.sources-card a.btn-connect:hover { background: var(--primary-hover); }
+
+.sources-card code {
+    background: #e2e8f0;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* --- CA link card --- */
+
+.ca-link-card {
+    margin-top: 26px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+}
+
+.ca-link-card h2 { margin: 0 0 6px; font-size: 16px; }
+
+.ca-link-card form {
+    flex-direction: row;
+    gap: 8px;
+    align-items: stretch;
+    margin-top: 10px;
+}
+
+.ca-link-card input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.ca-link-card button.primary {
+    padding: 10px 14px;
+    font-size: 14px;
+}

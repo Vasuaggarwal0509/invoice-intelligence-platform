@@ -60,9 +60,7 @@ def find_by_workspace_and_kind(
 
 
 def list_by_workspace(session: Session, *, workspace_id: str) -> list[SourceRow]:
-    rows = session.execute(
-        select(sources).where(sources.c.workspace_id == workspace_id)
-    ).all()
+    rows = session.execute(select(sources).where(sources.c.workspace_id == workspace_id)).all()
     return [_row_to_dc(r) for r in rows]
 
 
@@ -101,9 +99,7 @@ def get_or_create_upload_source(
     default_extraction_mode: str = "instant",
 ) -> SourceRow:
     """Return the workspace's 'upload' source, creating it if absent."""
-    existing = find_by_workspace_and_kind(
-        session, workspace_id=workspace_id, kind="upload"
-    )
+    existing = find_by_workspace_and_kind(session, workspace_id=workspace_id, kind="upload")
     if existing is not None:
         return existing
     return create(

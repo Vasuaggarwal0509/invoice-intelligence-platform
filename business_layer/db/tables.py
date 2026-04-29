@@ -76,7 +76,9 @@ workspaces = Table(
     Column("status", String, nullable=False, server_default="'active'"),
     Column("region", String),
     Column("default_extraction_mode", String, nullable=False, server_default="'instant'"),
+    Column("ca_gstin", String),
     Column("created_at", BigInteger, nullable=False),
+    Index("ix_workspaces_ca_gstin", "ca_gstin"),
     UniqueConstraint("owner_user_id", name="uq_workspaces_owner"),
     CheckConstraint(
         "created_via IN ('self_signup','invite','admin')",

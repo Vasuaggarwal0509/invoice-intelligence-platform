@@ -1,0 +1,167 @@
+dummy.txt — running ledger of placeholder credentials + stub files.
+=====================================================================
+
+Everything listed here has a "_dummy" suffix in its filename (for
+JSON/key files) or carries a placeholder value (for env vars). When
+a real credential is available:
+
+  • For files: DROP the "_dummy" from the filename and (if needed)
+    update the corresponding PLATFORM_* env var in .env.local to
+    point at the new filename. The code reads paths from settings, so
+    no source edits are required.
+
+  • For env vars: replace the placeholder value in .env.local with the
+    real one. The variable NAMES stay the same across dummy ↔ real —
+    the value is what changes.
+
+  • Every *_dummy.json file is also gitignored behind the
+    `secrets/*  !*_dummy.json` pattern in .gitignore, so a real file
+    placed in `secrets/` is never committed by mistake.
+
+---------------------------------------------------------------------
+SPRINT 0–1 — internal secrets (no third party)
+---------------------------------------------------------------------
+
+[ENV] PLATFORM_SECRET_KEY
+  Why: master key used for HMAC-signing session tokens, encrypting
+       OAuth refresh tokens at rest (AES-GCM), signing OAuth state,
+       itsdangerous serializers.
+  Default: (no default — fails fast on startup if missing).
+  How to generate: python -c "import secrets; print(secrets.token_urlsafe(48))"
+  Length: at least 32 characters. Generator above gives 64.
+  Location: .env.local at repo root.
+
+---------------------------------------------------------------------
+SPRINT 4 — CA persona (NO external credentials)
+---------------------------------------------------------------------
+
+The CA persona uses email + password + argon2 locally. No Google or
+any third-party cred involved. Nothing to swap here.
+
+---------------------------------------------------------------------
+EMAIL INGESTION SPRINT — Gmail via OAuth 2.0
+---------------------------------------------------------------------
+
+[FILE] secrets/google_oauth_client_dummy.json
+  What: Google Cloud OAuth 2.0 "Web application" client JSON. Contains
+        our APP's identity as an OAuth consumer — NOT per-user tokens.
+        Per-user refresh tokens are encrypted and stored in the DB on
+        sources.credentials_encrypted.
+  Where to get it:
+    1. console.cloud.google.com → create (or pick) a project
+    2. APIs & Services → Library → search "Gmail API" → Enable
+    3. APIs & Services → OAuth consent screen
+       - User type: External
+       - App name, support email, developer contact
+       - Scopes tab: ADD https://www.googleapis.com/auth/gmail.readonly
+       - Test users tab: add the Gmail addresses that can sign in during
+         development (up to 100 users allowed before Google verification
+         is required; for a college project this is plenty)
+    4. APIs & Services → Credentials → Create Credentials → OAuth
+       client ID
+       - Application type: Web application
+       - Authorized redirect URIs: http://localhost:8001/api/oauth/google/callback
+         (and your prod URL later if you deploy)
+    5. Click "Download JSON" → save as secrets/google_oauth_client.json
+       (drop the _dummy suffix). Update the env var below to match.
+  Content shape (see secrets/google_oauth_client_dummy.json for the real
+  structure, just with placeholder values):
+    {
+      "web": {
+        "client_id": "...apps.googleusercontent.com",
+        "project_id": "...",
+        "client_secret": "...",
+        "redirect_uris": ["http://localhost:8001/api/oauth/google/callback"],
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token"
+      }
+    }
+  Safety: the dummy file's client_id starts with "dummy-". Our server
+  checks this prefix and gracefully degrades: /api/oauth/google/start
+  returns 502 "gmail integration is not configured" instead of sending
+  the user through a broken consent screen.
+
+[ENV] PLATFORM_GOOGLE_OAUTH_CLIENT_FILE
+  Default: secrets/google_oauth_client_dummy.json
+  Swap to: secrets/google_oauth_client.json
+  Used by: business_layer.services.oauth.google_oauth (server-side
+           Flow constructor) + app.py startup check.
+
+[ENV] PLATFORM_GOOGLE_OAUTH_REDIRECT_URI
+  Default: http://localhost:8001/api/oauth/google/callback
+  Prod: https://<your-domain>/api/oauth/google/callback
+  Note: must match BYTE-FOR-BYTE one of the Authorized redirect URIs
+  entries you added in the Google Cloud Console. Trailing slashes
+  matter. Scheme matters.
+
+[ENV] PLATFORM_GMAIL_POLL_INTERVAL_SECONDS
+  Default: 900 (15 minutes). Minimum 60.
+  Tighten to 120 for faster demo feedback; loosen to 3600 for
+  low-volume production.
+
+[ENV] PLATFORM_GMAIL_BACKFILL_DAYS
+  Default: 30. How far back the FIRST poll looks when a new Gmail
+  source is connected. Subsequent polls use last_polled_at instead.
+
+[CONFIG] config/config.json → email_ingestion.subject_keywords
+  Current list: invoice, bill, receipt, gst, tax invoice, purchase
+                order, po, statement, payment, rechnung, factura
+  Add more as you observe vendors who don't match today. Requires
+  a server restart to take effect (no hot-reload in v1).
+
+---------------------------------------------------------------------
+FUTURE SPRINTS — credentials not yet wired, listed for awareness
+---------------------------------------------------------------------
+
+-- Outlook / Microsoft Graph --------------------------------------
+[FILE]  secrets/ms_graph_client_dummy.json  (future)
+[ENV]   PLATFORM_MS_GRAPH_CLIENT_FILE       (future)
+[ENV]   PLATFORM_MS_GRAPH_REDIRECT_URI      (future)
+Where from: portal.azure.com → App registrations → New registration.
+Scope to request: Mail.Read (plus offline_access for refresh token).
+
+-- WhatsApp Business Cloud API ------------------------------------
+[ENV]   PLATFORM_WHATSAPP_ACCESS_TOKEN_DUMMY    (future)
+[ENV]   PLATFORM_WHATSAPP_VERIFY_TOKEN_DUMMY    (future)
+[ENV]   PLATFORM_WHATSAPP_PHONE_NUMBER_ID_DUMMY (future)
+Where from: developers.facebook.com → WhatsApp Business API.
+Note: Meta's business verification is slow and variable. DEFER until
+other connectors land.
+
+-- GSTIN active-status lookup (Sprint 5 reconciliation) -----------
+[ENV]   PLATFORM_MASTERS_INDIA_API_KEY_DUMMY  (future)
+Where from: mastersindia.co → signup (free tier ~100 lookups/day).
+Fallback: HeuristicStubProvider (regex-only check — no key needed).
+
+-- LLM-backed chat (Sprint 7, optional) ---------------------------
+[ENV]   PLATFORM_ANTHROPIC_API_KEY_DUMMY  (future)
+Where from: console.anthropic.com
+Fallback: rule-based chat (no LLM, no key needed).
+
+-- SMS provider (for real phone OTP delivery, Sprint 5+) ----------
+[ENV]   PLATFORM_SMS_PROVIDER           (future)   # "twilio" | "msg91"
+[ENV]   PLATFORM_SMS_ACCOUNT_SID_DUMMY  (future)   # Twilio variant
+[ENV]   PLATFORM_SMS_AUTH_TOKEN_DUMMY   (future)   # Twilio variant
+Today: dev mode prints OTPs to server logs; no provider needed.
+
+---------------------------------------------------------------------
+CREDENTIAL HYGIENE
+---------------------------------------------------------------------
+
+* Never commit a file without "_dummy" in its name under secrets/.
+  The .gitignore rule is: secrets/* is ignored, !secrets/*_dummy.json
+  is the sole exception.
+
+* Never put a real secret in source. pydantic-settings reads every
+  PLATFORM_* value from the environment (or .env.local) at process
+  start — that's the authoritative place for secrets.
+
+* Rotate PLATFORM_SECRET_KEY only as a planned operation — session
+  cookies and encrypted OAuth tokens both depend on it. Rotating
+  invalidates all sessions (users re-login) and makes stored OAuth
+  tokens undecryptable (users reconnect Gmail / Outlook). A rotation
+  helper lives on the roadmap for Sprint 6+.
+
+* If you suspect a credential was committed: rewrite history with
+  git filter-repo + rotate the leaked credential at its source.
+  Never try to "just delete the file" — git history still has it.

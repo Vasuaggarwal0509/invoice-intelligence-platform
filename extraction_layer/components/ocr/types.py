@@ -19,7 +19,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-
 # 4-point polygon in image pixel space, each point as [x, y].
 # Kept as a bare alias rather than a BaseModel so RapidOCR's native output
 # can be stored without per-point re-validation (and JSON payloads stay flat).
@@ -159,7 +158,9 @@ class InvoiceInput(BaseModel):
         val_json_bytes="base64",
     )
 
-    id: str = Field(..., min_length=1, description="Stable identifier, e.g. dataset sample id or UUID.")
+    id: str = Field(
+        ..., min_length=1, description="Stable identifier, e.g. dataset sample id or UUID."
+    )
     content_type: ContentType = Field(
         ...,
         description="MIME type of the referenced bytes / URI target.",
@@ -193,7 +194,5 @@ class InvoiceInput(BaseModel):
                 "InvoiceInput: provide exactly one of `image_bytes` or `image_uri`, not both."
             )
         if not has_bytes and not has_uri:
-            raise ValueError(
-                "InvoiceInput: one of `image_bytes` or `image_uri` is required."
-            )
+            raise ValueError("InvoiceInput: one of `image_bytes` or `image_uri` is required.")
         return self

@@ -1,0 +1,83 @@
+# Files explicitly excluded from the Docker build context.
+#
+# Without this list every `docker build` would push 270+ MB of dataset
+# cache to the daemon and bake it into image layers. The pattern is
+# allow-list-by-omission: anything NOT here gets COPY'd, so we err on
+# the side of excluding rather than including.
+
+# --- Version control ----------------------------------------------------
+.git
+.gitignore
+.github
+
+# --- Virtual envs (never ship to a container) --------------------------
+venv
+venv_*
+.venv
+env
+
+# --- Caches that bloat the image ---------------------------------------
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+.coverage.*
+htmlcov
+coverage.xml
+.tox
+.pre-commit-cache
+
+# --- Build artifacts -----------------------------------------------------
+dist
+build
+*.egg-info
+
+# --- Heavy dataset / model caches (regenerable; gitignored) ------------
+data
+extraction_layer/data
+extraction_layer/evaluation/inspection
+
+# --- Local databases (real user state, never in an image) --------------
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# --- Tests + docs ------------------------------------------------------
+# Production image runs the SERVER, not the test suite. Excluding tests
+# saves ~1 MB and prevents `pytest` from being importable in production
+# (which would let an attacker run arbitrary tests if they got code-exec).
+**/tests
+docs
+
+# --- Secrets - belt and braces -----------------------------------------
+# .gitignore already keeps these out of git, .dockerignore keeps them
+# out of the image build context if the dev has untracked secrets locally.
+.env
+.env.local
+.env.*.local
+secrets/*
+!secrets/*_dummy.json
+!secrets/.gitkeep
+
+# --- IDE / OS noise ----------------------------------------------------
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs --------------------------------------------------------------
+*.log
+logs
+
+# --- This file (no need to ship the .dockerignore inside the image) ----
+.dockerignore
+Dockerfile

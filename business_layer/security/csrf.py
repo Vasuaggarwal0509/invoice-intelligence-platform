@@ -50,8 +50,8 @@ def ensure_csrf_cookie(request: Request, response: Response) -> str:
         response.set_cookie(
             _CSRF_COOKIE_NAME,
             token,
-            httponly=False,   # intentional — see docstring
-            secure=True,      # Settings.session_cookie_secure should match
+            httponly=False,  # intentional — see docstring
+            secure=True,  # Settings.session_cookie_secure should match
             samesite="lax",
             path="/",
         )

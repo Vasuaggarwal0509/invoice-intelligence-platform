@@ -6,6 +6,7 @@ import logging
 
 from fastapi import APIRouter, Depends, File, UploadFile
 
+from business_layer.errors import AuthorizationError
 from business_layer.models.inbox import UploadResponse
 from business_layer.services import UserRow, WorkspaceRow
 from business_layer.services.upload_service import ingest_upload
@@ -29,6 +30,10 @@ async def post_upload(
     scoping comes from the authenticated context.
     """
     user, workspace = ctx
+    if user.role != "business":
+        # CA accounts don't upload — they review invoices their
+        # clients uploaded. Keeps the provenance chain clean.
+        raise AuthorizationError("upload is for business accounts only")
     raw = await file.read()
     result = ingest_upload(
         session,

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -23,7 +22,13 @@ from business_layer.errors import (
 
 class TestHierarchy:
     def test_client_subclasses(self) -> None:
-        for cls in (AuthenticationError, NotFoundError, ConflictError, BusinessRuleError, RateLimitedError):
+        for cls in (
+            AuthenticationError,
+            NotFoundError,
+            ConflictError,
+            BusinessRuleError,
+            RateLimitedError,
+        ):
             assert issubclass(cls, ClientError)
             assert issubclass(cls, PlatformError)
 

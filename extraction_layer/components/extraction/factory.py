@@ -7,7 +7,6 @@ from typing import Any
 
 from .base import BaseExtractor
 
-
 _REGISTRY: dict[str, str] = {
     "heuristic": "extraction_layer.components.extraction.heuristic.extractor.HeuristicExtractor",
     "layoutlmv3": "extraction_layer.components.extraction.layoutlm_backend.LayoutLMv3Extractor",
@@ -31,9 +30,7 @@ def make_extractor(name: str = "heuristic", **kwargs: Any) -> BaseExtractor:
         NotImplementedError: Scaffolded backends raise when .extract is called.
     """
     if name not in _REGISTRY:
-        raise ValueError(
-            f"Unknown extractor {name!r}. Available: {available_extractors()}"
-        )
+        raise ValueError(f"Unknown extractor {name!r}. Available: {available_extractors()}")
     module_path, class_name = _REGISTRY[name].rsplit(".", 1)
     module = importlib.import_module(module_path)
     cls: type[BaseExtractor] = getattr(module, class_name)

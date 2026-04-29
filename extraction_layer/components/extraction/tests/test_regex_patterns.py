@@ -13,7 +13,6 @@ from extraction_layer.components.extraction.heuristic.regex_patterns import (
     TAX_ID_BARE,
 )
 
-
 # ----- INVOICE_NO ----------------------------------------------------------
 
 
@@ -23,12 +22,12 @@ class TestInvoiceNoAnchored:
         [
             ("Invoice no: 97159829", "97159829"),
             ("Invoice no:97159829", "97159829"),
-            ("Invoiceno:97159829", "97159829"),          # space-lost
+            ("Invoiceno:97159829", "97159829"),  # space-lost
             ("Invoiceno 97159829", "97159829"),
-            ("Invoicen0:97159829", "97159829"),          # o -> 0 OCR error
+            ("Invoicen0:97159829", "97159829"),  # o -> 0 OCR error
             ("Invoice no. 12222347", "12222347"),
-            ("invoice no: 123456", "123456"),            # lowercase
-            ("INVOICE NO: 12345678", "12345678"),        # uppercase
+            ("invoice no: 123456", "123456"),  # lowercase
+            ("INVOICE NO: 12345678", "12345678"),  # uppercase
         ],
     )
     def test_matches_variants(self, text, expected):
@@ -100,11 +99,11 @@ class TestTaxIdAnchored:
         [
             ("Tax Id: 985-73-8194", "985-73-8194"),
             ("Tax Id:985-73-8194", "985-73-8194"),
-            ("Taxld:985-73-8194", "985-73-8194"),           # I -> l OCR
-            ("Tax ld:985-73-8194", "985-73-8194"),          # I -> l with space
+            ("Taxld:985-73-8194", "985-73-8194"),  # I -> l OCR
+            ("Tax ld:985-73-8194", "985-73-8194"),  # I -> l with space
             ("TaxId:985-73-8194", "985-73-8194"),
-            ("Tax 1d: 985-73-8194", "985-73-8194"),          # I -> 1 OCR
-            ("TAX ID: 985-73-8194", "985-73-8194"),          # uppercase
+            ("Tax 1d: 985-73-8194", "985-73-8194"),  # I -> 1 OCR
+            ("TAX ID: 985-73-8194", "985-73-8194"),  # uppercase
         ],
     )
     def test_matches_variants(self, text, expected):

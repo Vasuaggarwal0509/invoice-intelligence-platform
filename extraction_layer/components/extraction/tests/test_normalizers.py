@@ -61,11 +61,11 @@ class TestDoesNotOverSplit:
     @pytest.mark.parametrize(
         "inp",
         [
-            "Castro PLC",                     # acronym, stays
-            "Smith-Cook",                     # hyphenated, stays
-            "9879 Elizabeth Common",          # already correct, stays
-            "Lake Jonathan, RI 12335",        # already correct, stays
-            "Bradley-Andrade",                # hyphenated name, stays
+            "Castro PLC",  # acronym, stays
+            "Smith-Cook",  # hyphenated, stays
+            "9879 Elizabeth Common",  # already correct, stays
+            "Lake Jonathan, RI 12335",  # already correct, stays
+            "Bradley-Andrade",  # hyphenated name, stays
         ],
     )
     def test_already_correct_is_unchanged(self, inp):
@@ -78,8 +78,8 @@ class TestUppercaseRunsNotSplit:
     @pytest.mark.parametrize(
         "inp",
         [
-            "WV79662",                       # state+zip that GT sometimes keeps joined
-            "AA81651",                       # same pattern, but GT separates — can't tell
+            "WV79662",  # state+zip that GT sometimes keeps joined
+            "AA81651",  # same pattern, but GT separates — can't tell
         ],
     )
     def test_uppercase_followed_by_digit_not_split(self, inp):

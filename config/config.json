@@ -1,0 +1,63 @@
+{
+  "_doc": [
+    "Runtime configuration read by business_layer.config.runtime_config.",
+    "Edit this file to change operator-tunable behaviour (filter keywords,",
+    "limits, allow-lists) WITHOUT touching code. Changes take effect after",
+    "a server restart (no hot reload in v1 — would be easy to add later).",
+    "",
+    "Secrets do NOT live here. They live in .env.local as PLATFORM_* env",
+    "vars and are loaded via pydantic-settings.",
+    "",
+    "Schema is validated at load time by runtime_config.py — an unknown",
+    "field or wrong type fails fast with a clear error."
+  ],
+
+  "email_ingestion": {
+    "_doc": [
+      "Controls the Gmail/Outlook/IMAP filter + download behaviour.",
+      "See business_layer/services/connectors/ for consumers.",
+      "",
+      "`subject_keywords` — case-insensitive substrings. A message must",
+      "contain at least one of these in its subject to be considered an",
+      "invoice candidate. Empty list means no keyword filter (pull",
+      "everything with an attachment). Add more keywords as you observe",
+      "new vendor naming patterns.",
+      "",
+      "`supported_content_types` — MIME types the pipeline can consume.",
+      "Attachments of other types are skipped (not an error).",
+      "",
+      "`backfill_days` — how far back to look when a source is first",
+      "connected. Later polls only fetch messages newer than the last",
+      "`last_polled_at` stamp.",
+      "",
+      "`max_attachments_per_message` — defensive cap against a malicious",
+      "mail with thousands of tiny parts.",
+      "",
+      "`max_messages_per_poll` — soft limit on how much work one poll",
+      "tick does. Remaining messages come on the next tick."
+    ],
+    "subject_keywords": [
+      "invoice",
+      "bill",
+      "receipt",
+      "gst",
+      "tax invoice",
+      "purchase order",
+      "po",
+      "statement",
+      "payment",
+      "rechnung",
+      "factura"
+    ],
+    "supported_content_types": [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/tiff",
+      "image/webp"
+    ],
+    "backfill_days": 30,
+    "max_attachments_per_message": 10,
+    "max_messages_per_poll": 100
+  }
+}

@@ -92,7 +92,5 @@ def find_active_by_hash(session: Session, *, token_hash: str) -> SessionRow | No
 def revoke_by_hash(session: Session, *, token_hash: str) -> None:
     """Revoke a session immediately. Idempotent."""
     session.execute(
-        update(t_sessions)
-        .where(t_sessions.c.token_hash == token_hash)
-        .values(revoked_at=now_ms())
+        update(t_sessions).where(t_sessions.c.token_hash == token_hash).values(revoked_at=now_ms())
     )

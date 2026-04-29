@@ -29,15 +29,13 @@ class TestLineIsLabel:
         "text,key",
         [
             ("Seller: Bradley-Andrade 123 Main", "seller"),  # label+value too long
-            ("Invoice no: 12345", "invoice_no"),             # has value
+            ("Invoice no: 12345", "invoice_no"),  # has value
             ("Some random text", "seller"),
             ("", "seller"),
         ],
     )
     def test_rejects_label_plus_value_or_unrelated(self, text, key):
-        assert not line_is_label(text, key), (
-            f"expected {text!r} NOT to match key {key!r}"
-        )
+        assert not line_is_label(text, key), f"expected {text!r} NOT to match key {key!r}"
 
 
 class TestLineContainsLabel:
@@ -46,7 +44,7 @@ class TestLineContainsLabel:
         [
             ("Invoice no: 12345", "invoice_no"),
             ("Invoiceno:12345", "invoice_no"),
-            ("Invoicen0:12345", "invoice_no"),       # o->0 OCR
+            ("Invoicen0:12345", "invoice_no"),  # o->0 OCR
             ("Tax Id: 985-73-8194", "tax_id"),
             ("Taxld:985-73-8194", "tax_id"),
             ("IBAN: GB81...", "iban"),

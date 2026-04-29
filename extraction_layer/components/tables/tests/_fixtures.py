@@ -8,7 +8,6 @@ description wrapping — match what OCR produces on actual invoices.
 
 from extraction_layer.components.ocr.types import BoundingBox, Line, OCRResult, PageSize
 
-
 # Reference column x-ranges for the fixtures:
 # No.          : x=100-130
 # Description  : x=150-300

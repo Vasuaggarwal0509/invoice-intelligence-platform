@@ -14,7 +14,6 @@ from extraction_layer.components.extraction.types import ExtractionResult
 
 from ..types import RuleFinding, RuleOutcome
 
-
 _INVOICE_NO = re.compile(r"^\d{6,10}$")
 _TAX_ID = re.compile(r"^\d{3}-\d{2}-\d{4}$")
 _IBAN_SHAPE = re.compile(r"^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$")

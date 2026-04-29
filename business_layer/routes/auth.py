@@ -13,8 +13,8 @@ from sqlalchemy.orm import Session
 
 from business_layer.config import Settings
 from business_layer.models.auth import (
-    OtpVerifyRequest,
     OtpRequestRequest,
+    OtpVerifyRequest,
     SessionResponse,
     SimpleStatus,
     UserPublic,
@@ -23,7 +23,6 @@ from business_layer.models.auth import (
 from business_layer.services import UserRow, WorkspaceRow
 from business_layer.services.auth_service import (
     request_otp,
-    resolve_session,
     revoke_session,
     verify_otp_and_start_session,
 )
@@ -57,6 +56,7 @@ def _public_workspace(row: WorkspaceRow) -> WorkspacePublic:
         name=row.name,
         gstin=row.gstin,
         default_extraction_mode=row.default_extraction_mode,  # type: ignore[arg-type]
+        ca_gstin=row.ca_gstin,
     )
 
 

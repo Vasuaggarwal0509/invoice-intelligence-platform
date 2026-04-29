@@ -123,9 +123,7 @@ def ingest_upload(
     )
 
     # (5–7) one transaction: source + inbox + invoice + job.
-    source = sources_repo.get_or_create_upload_source(
-        session, workspace_id=workspace_id
-    )
+    source = sources_repo.get_or_create_upload_source(session, workspace_id=workspace_id)
     inbox = inbox_repo.create(
         session,
         workspace_id=workspace_id,

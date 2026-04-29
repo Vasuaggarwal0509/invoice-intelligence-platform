@@ -20,7 +20,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 from extraction_layer.components.ocr.types import OCRResult
 
-
 # Skip the whole module if RapidOCR isn't installed — lets test_types and
 # test_base still run in minimal envs.
 pytest.importorskip(
@@ -28,9 +27,8 @@ pytest.importorskip(
     reason="rapidocr-onnxruntime not installed; skip RapidOCR integration tests",
 )
 
-from extraction_layer.components.ocr.rapidocr_backend import RapidOCRBackend  # noqa: E402
-from extraction_layer.components.ocr.types import BoundingBox  # noqa: E402
-
+from extraction_layer.components.ocr.rapidocr_backend import RapidOCRBackend
+from extraction_layer.components.ocr.types import BoundingBox
 
 pytestmark = pytest.mark.ocr_heavy
 
@@ -178,9 +176,7 @@ def test_warmup_runs_without_raising(backend):
 
 def test_split_line_into_tokens_single_word():
     bbox = BoundingBox(x0=0, y0=0, x1=100, y1=20)
-    tokens = RapidOCRBackend._split_line_into_tokens(
-        text="INVOICE", bbox=bbox, line_confidence=0.9
-    )
+    tokens = RapidOCRBackend._split_line_into_tokens(text="INVOICE", bbox=bbox, line_confidence=0.9)
     assert len(tokens) == 1
     assert tokens[0].text == "INVOICE"
     assert tokens[0].bbox.as_tuple() == (0.0, 0.0, 100.0, 20.0)
@@ -188,9 +184,7 @@ def test_split_line_into_tokens_single_word():
 
 def test_split_line_into_tokens_two_words_proportional():
     bbox = BoundingBox(x0=0, y0=0, x1=100, y1=20)
-    tokens = RapidOCRBackend._split_line_into_tokens(
-        text="AB CD", bbox=bbox, line_confidence=0.8
-    )
+    tokens = RapidOCRBackend._split_line_into_tokens(text="AB CD", bbox=bbox, line_confidence=0.8)
     assert [t.text for t in tokens] == ["AB", "CD"]
     # total chars = 2 + 2 + 1(space) = 5
     # AB: 0..2/5 = 0..40 ; CD: 3..5/5 = 60..100
@@ -202,9 +196,7 @@ def test_split_line_into_tokens_two_words_proportional():
 
 def test_split_empty_line_returns_no_tokens():
     bbox = BoundingBox(x0=0, y0=0, x1=100, y1=20)
-    tokens = RapidOCRBackend._split_line_into_tokens(
-        text="", bbox=bbox, line_confidence=0.5
-    )
+    tokens = RapidOCRBackend._split_line_into_tokens(text="", bbox=bbox, line_confidence=0.5)
     assert tokens == []
 
 

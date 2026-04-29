@@ -25,7 +25,9 @@ class TestNoDuplicates:
 
 class TestWithDuplicates:
     def test_two_identical_both_flagged(self):
-        dup = make_extraction(invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024")
+        dup = make_extraction(
+            invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024"
+        )
         batch = [dup, dup]
         findings = detect_duplicates(batch)
         assert len(findings) == 2
@@ -34,14 +36,18 @@ class TestWithDuplicates:
             assert "duplicate" in f_list[0].reason.lower()
 
     def test_triplet_all_three_flagged(self):
-        dup = make_extraction(invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024")
+        dup = make_extraction(
+            invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024"
+        )
         batch = [dup, dup, dup]
         findings = detect_duplicates(batch)
         assert len(findings) == 3
         assert all(f_list[0].outcome == RuleOutcome.FAIL for f_list in findings)
 
     def test_mixed_batch(self):
-        dup = make_extraction(invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024")
+        dup = make_extraction(
+            invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024"
+        )
         distinct = make_extraction(
             invoice_no="78", seller_tax_id="888-88-8888", invoice_date="06/06/2024"
         )
@@ -52,7 +58,9 @@ class TestWithDuplicates:
         assert findings[2][0].outcome == RuleOutcome.FAIL
 
     def test_reason_mentions_other_indexes(self):
-        dup = make_extraction(invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024")
+        dup = make_extraction(
+            invoice_no="77", seller_tax_id="999-99-9999", invoice_date="05/05/2024"
+        )
         batch = [dup, dup]
         findings = detect_duplicates(batch)
         assert "1" in findings[0][0].reason

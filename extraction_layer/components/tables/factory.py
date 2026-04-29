@@ -7,7 +7,6 @@ from typing import Any
 
 from .base import BaseTableExtractor
 
-
 _REGISTRY: dict[str, str] = {
     "spatial": "extraction_layer.components.tables.spatial.extractor.SpatialTableExtractor",
     "pp_structure": "extraction_layer.components.tables.pp_structure_backend.PPStructureTableExtractor",

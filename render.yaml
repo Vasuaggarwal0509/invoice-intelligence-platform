@@ -1,0 +1,83 @@
+# Render Blueprint — declarative deploy spec.
+#
+# Connect this repo on render.com → "Blueprint" → "New Blueprint Instance"
+# and Render reads this file. Subsequent pushes to `main` trigger
+# auto-rebuilds (autoDeploy: true). The CI workflow at
+# .github/workflows/ci.yml acts as the merge gate; once tests pass and
+# the PR lands on main, Render takes it from there.
+#
+# What this manifest declares:
+#   * One Docker-runtime web service on the free tier
+#   * A 1 GB persistent disk for the SQLite DB
+#   * Auto-deploy on every push to main
+#   * Health check pointing at GET /health (must return 200)
+#   * Generated PLATFORM_SECRET_KEY (Render mints + persists it; never in git)
+#
+# What stays manual — set via the Render dashboard once the service has
+# a public URL:
+#   * PLATFORM_GOOGLE_OAUTH_CLIENT_FILE      → upload via Render's Secret
+#                                              Files feature, NOT committed
+#   * PLATFORM_GOOGLE_OAUTH_REDIRECT_URI     → set to
+#       https://<your-slug>.onrender.com/api/oauth/google/callback
+#       (and ALSO add the same URL to the Google Cloud Console authorised
+#       redirect URIs list — Google compares byte-for-byte).
+#
+# Free tier caveats:
+#   * 750 instance-hours/month — single service stays well under
+#   * Sleeps after 15 min idle, ~30 s cold start. Acceptable for demo
+#     use; upgrade to Starter ($7/mo) if it bites.
+#   * Free disks survive across deploys. Manually-attached disks max
+#     out at 1 GB on free tier.
+
+services:
+  - type: web
+    name: invoice-intelligence
+    runtime: docker
+    plan: free
+    region: oregon          # closest free region; switch to singapore/frankfurt later if latency matters
+    autoDeploy: true
+    healthCheckPath: /health
+    dockerfilePath: ./Dockerfile
+
+    disk:
+      name: sqlite-data
+      mountPath: /app/data
+      sizeGB: 1
+
+    envVars:
+      # Master secret. Render generates 32+ random bytes and persists
+      # the value across deploys — never visible in this file or in git.
+      - key: PLATFORM_SECRET_KEY
+        generateValue: true
+
+      # Production mode toggles secure-cookie defaults + skips dev-only
+      # branches (e.g. printing OTPs to logs).
+      - key: PLATFORM_ENV
+        value: prod
+
+      # SQLite on the mounted persistent disk so it survives redeploys.
+      - key: PLATFORM_DATABASE_URL
+        value: sqlite:////app/data/business.db
+
+      # Cookie hardening for HTTPS-only traffic.
+      - key: PLATFORM_SESSION_COOKIE_SECURE
+        value: "true"
+
+      # Default 'lax' is correct for a single-domain app with cross-site
+      # OAuth callbacks. Documented here so future-us doesn't wonder.
+      - key: PLATFORM_SESSION_COOKIE_SAMESITE
+        value: "lax"
+
+      # Hsts ON in production — ~1 year max-age default is set in the
+      # security_headers middleware when this flag is true.
+      - key: PLATFORM_HSTS_ENABLED
+        value: "true"
+
+      # Default INFO is right; DEBUG only when actively investigating.
+      - key: PLATFORM_LOG_LEVEL
+        value: INFO
+
+      # OAuth redirect URI — sync:false marks it as "set in dashboard".
+      # MUST be configured before the OAuth flow works.
+      - key: PLATFORM_GOOGLE_OAUTH_REDIRECT_URI
+        sync: false

@@ -19,7 +19,8 @@ To enable:
 This scaffold exists so ``make_dataset('sroie')`` is discoverable on day one.
 """
 
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from ..base import BaseDataset
 from ..types import Sample
@@ -48,11 +49,7 @@ class SROIEDataset(BaseDataset):
         )
 
     def get(self, split: str, index: int) -> Sample:
-        raise NotImplementedError(
-            "SROIEDataset is scaffolded but not implemented at PoC time."
-        )
+        raise NotImplementedError("SROIEDataset is scaffolded but not implemented at PoC time.")
 
     def count(self, split: str) -> int:
-        raise NotImplementedError(
-            "SROIEDataset is scaffolded but not implemented at PoC time."
-        )
+        raise NotImplementedError("SROIEDataset is scaffolded but not implemented at PoC time.")

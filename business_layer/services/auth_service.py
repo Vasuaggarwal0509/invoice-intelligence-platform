@@ -25,12 +25,11 @@ from dataclasses import dataclass
 
 from sqlalchemy.orm import Session
 
-from business_layer.config import Settings, get_settings
+from business_layer.config import get_settings
 from business_layer.errors import (
     AuthenticationError,
     BusinessRuleError,
     ConflictError,
-    NotFoundError,
 )
 from business_layer.repositories import events as events_repo
 from business_layer.repositories import otp_challenges as otp_repo
@@ -165,9 +164,7 @@ def verify_otp_and_start_session(
         per_seconds=60,
     )
 
-    challenge = otp_repo.find_latest_active(
-        session, phone=phone, purpose="login"
-    )
+    challenge = otp_repo.find_latest_active(session, phone=phone, purpose="login")
     if challenge is None:
         _log.info("auth.otp.verify.no_active_challenge", extra={"phone_prefix": phone[:3] + "***"})
         raise AuthenticationError("invalid or expired code")

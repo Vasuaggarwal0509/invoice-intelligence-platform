@@ -19,7 +19,9 @@ class TestInvoiceNo:
         f = validate_invoice_no(make_extraction(invoice_no="97159829"))
         assert f.outcome == RuleOutcome.PASS
 
-    @pytest.mark.parametrize("bad", ["abc", "123", "12345678901"])  # too short / non-digit / too long
+    @pytest.mark.parametrize(
+        "bad", ["abc", "123", "12345678901"]
+    )  # too short / non-digit / too long
     def test_invalid(self, bad):
         f = validate_invoice_no(make_extraction(invoice_no=bad))
         assert f.outcome == RuleOutcome.FAIL
@@ -37,9 +39,9 @@ class TestInvoiceDate:
     @pytest.mark.parametrize(
         "bad",
         [
-            "2015-09-18",     # ISO-8601 — not the katanaml convention
-            "18/09/2015",     # DD/MM/YYYY — wrong month/day order for an actual month
-            "9/18",           # incomplete
+            "2015-09-18",  # ISO-8601 — not the katanaml convention
+            "18/09/2015",  # DD/MM/YYYY — wrong month/day order for an actual month
+            "9/18",  # incomplete
             "garbage",
         ],
     )

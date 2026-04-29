@@ -14,8 +14,9 @@ Donut wrapping.
 """
 
 import json
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 import numpy as np
 from PIL import Image
@@ -94,9 +95,7 @@ class KatanamlInvoicesDataset(BaseDataset):
         self._require_split(split)
         subset = self._dataset[split]
         if index < 0 or index >= len(subset):
-            raise IndexError(
-                f"Index {index} out of range for split {split!r} (size {len(subset)})"
-            )
+            raise IndexError(f"Index {index} out of range for split {split!r} (size {len(subset)})")
         row = subset[int(index)]
         return self._row_to_sample(row, split, int(index))
 
@@ -126,9 +125,7 @@ class KatanamlInvoicesDataset(BaseDataset):
 
     def _require_split(self, split: str) -> None:
         if split not in self._dataset:
-            raise ValueError(
-                f"Unknown split {split!r}. Available: {self.splits}"
-            )
+            raise ValueError(f"Unknown split {split!r}. Available: {self.splits}")
 
     def _row_to_sample(self, row: dict[str, Any], split: str, index: int) -> Sample:
         image = self._image_to_rgb_ndarray(row["image"])

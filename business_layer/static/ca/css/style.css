@@ -1,0 +1,181 @@
+/* CA persona shell — visually distinct from business shell (green accent). */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+    --fg: #0f172a;
+    --fg-muted: #64748b;
+    --bg: #ffffff;
+    --bg-elevated: #f8fafc;
+    --border: #e2e8f0;
+    --primary: #0f766e;       /* teal — distinguishes CA from blue business shell */
+    --primary-hover: #115e59;
+    --error: #b91c1c;
+    --amber: #d97706;
+    --success: #16a34a;
+    --radius: 10px;
+    --max-content-width: 720px;
+}
+
+html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+}
+
+main#app-root {
+    padding: 24px 20px;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+header#topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+}
+
+header#topbar .brand { font-weight: 700; font-size: 18px; color: var(--primary); }
+header#topbar .topnav { display: flex; gap: 16px; flex: 1; }
+header#topbar .topnav a {
+    color: var(--fg-muted); text-decoration: none;
+    font-size: 15px; font-weight: 500;
+}
+header#topbar .topnav a.active { color: var(--primary); }
+
+.view h1 { font-size: 26px; margin: 6px 0 8px; }
+.view h2 { font-size: 18px; margin: 20px 0 8px; }
+.muted { color: var(--fg-muted); }
+.small { font-size: 0.85em; }
+.hint { color: var(--fg-muted); font-size: 12px; margin-top: 2px; }
+
+form {
+    display: flex; flex-direction: column;
+    gap: 14px; margin-top: 18px;
+}
+form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+form input {
+    appearance: none; width: 100%;
+    padding: 14px; font-size: 18px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--bg); color: var(--fg);
+}
+form input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+button { cursor: pointer; font-size: 16px; font-family: inherit; }
+button.primary {
+    padding: 14px 16px; background: var(--primary);
+    color: white; border: 0; border-radius: var(--radius);
+    font-weight: 600;
+}
+button.primary:hover:not(:disabled) { background: var(--primary-hover); }
+button.primary:disabled { opacity: 0.6; cursor: default; }
+
+.link-btn, a.link-btn {
+    background: transparent; border: 0;
+    color: var(--primary); padding: 8px 0;
+    text-align: left; font-weight: 500; text-decoration: none;
+    display: inline-block; font-size: 15px;
+}
+.link-btn:hover, a.link-btn:hover { text-decoration: underline; }
+
+.error { color: var(--error); font-size: 14px; margin: 0; }
+
+/* --- Client list --- */
+
+.client-list {
+    list-style: none; margin: 16px 0 0; padding: 0;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.client-list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 14px 16px; gap: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    background: var(--bg);
+}
+.client-list li:hover { background: var(--bg-elevated); }
+.client-list li:last-child { border-bottom: 0; }
+
+.client-name { font-weight: 600; font-size: 16px; }
+.client-gstin { color: var(--fg-muted); font-size: 13px; grid-column: 1 / -1; }
+.client-meta {
+    grid-column: 1 / -1;
+    display: flex; gap: 12px;
+    font-size: 13px; color: var(--fg-muted);
+}
+.client-meta .badge-flags {
+    color: var(--amber);
+    font-weight: 600;
+}
+.client-amount { font-weight: 600; text-align: right; }
+
+/* --- Invoice table --- */
+
+.inbox-wrapper { margin-top: 16px; overflow-x: auto; }
+.inbox-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.inbox-table th, .inbox-table td {
+    padding: 10px 12px; text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.inbox-table th {
+    font-size: 12px; text-transform: uppercase;
+    color: var(--fg-muted); letter-spacing: 0.04em;
+}
+.inbox-table tr.row-link { cursor: pointer; }
+.inbox-table tr.row-link:hover { background: var(--bg-elevated); }
+.inbox-table td.dim { color: var(--fg-muted); }
+
+.flags-count-badge {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 12px;
+    background: #fef3c7; color: var(--amber);
+    font-weight: 600; font-size: 12px;
+}
+.flags-count-badge.zero { background: #dcfce7; color: var(--success); }
+
+/* --- Invoice detail --- */
+
+.invoice-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 12px;
+}
+@media (min-width: 720px) {
+    .invoice-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.invoice-image-wrap {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; background: var(--bg-elevated);
+}
+.invoice-image-wrap img { display: block; width: 100%; height: auto; }
+
+.invoice-fields dl {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 8px 16px; margin: 16px 0 0;
+}
+.invoice-fields dt {
+    color: var(--fg-muted); font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+}
+.invoice-fields dd { margin: 0; font-size: 16px; font-weight: 500; }
+
+.findings-all {
+    margin-top: 20px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+}
+
+.findings-all h2 { margin-top: 0; font-size: 16px; }
+.findings-all ul { margin: 8px 0 0; padding-left: 18px; }
+.findings-all li { margin: 6px 0; font-size: 14px; }
+.findings-all .outcome-pass { color: var(--success); font-weight: 600; }
+.findings-all .outcome-fail { color: var(--error); font-weight: 600; }
+.findings-all .outcome-na   { color: var(--fg-muted); }

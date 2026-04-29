@@ -77,10 +77,9 @@ class TestMalformedInput:
 
     def test_record_missing_id_or_data_is_ignored(self, cache_path):
         cache_path.write_text(
-            '{"id": "a"}\n'                    # no data
-            '{"data": {"x": 1}}\n'             # no id
-            '{"id": "b", "data": {"x": 2}}\n'  # valid
-            ,
+            '{"id": "a"}\n'  # no data
+            '{"data": {"x": 1}}\n'  # no id
+            '{"id": "b", "data": {"x": 2}}\n',  # valid
             encoding="utf-8",
         )
         cache = PipelineCache(cache_path)

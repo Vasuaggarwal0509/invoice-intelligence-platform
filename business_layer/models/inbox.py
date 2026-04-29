@@ -20,8 +20,8 @@ class InboxRow(BaseModel):
     invoice_id: str | None
     source_kind: Literal["gmail", "outlook", "whatsapp", "upload", "folder"]
     sender: str | None
-    subject: str | None                              # displayed as "File" for uploads
-    received_at: int                                 # unix ms
+    subject: str | None  # displayed as "File" for uploads
+    received_at: int  # unix ms
     content_type: str
     status: Literal["queued", "extracting", "extracted", "failed", "ignored"]
     vendor_name: str | None

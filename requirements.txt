@@ -1,18 +1,13 @@
-# Root requirements — composes dev tooling + both layers' deps.
+# Root requirements — runtime only. Composes per-layer deps.
 #
-# One install command from repo root:
+# Production / container install:
 #   pip install -r requirements.txt && pip install -e .
 #
-# The `-e .` step makes both `extraction_layer` and `business_layer` importable
-# as editable packages in this venv (see pyproject.toml).
-
-# --- Dev tooling (runs across both layers) --------------------------------
-pytest>=7.0
-pytest-cov
-ruff>=0.4
-mypy>=1.8
-bandit>=1.7
-pip-audit>=2.7
+# Development install (adds pytest/ruff/mypy/bandit/pip-audit):
+#   pip install -r requirements-dev.txt && pip install -e .
+#
+# The `-e .` step makes both `extraction_layer` and `business_layer`
+# importable as editable packages in this venv (see pyproject.toml).
 
 # --- Layer deps (composed) ------------------------------------------------
 -r extraction_layer/requirements.txt
