@@ -69,9 +69,17 @@ def detect_columns(ocr_result: OCRResult) -> ColumnLayout:
     if block_start_y is not None:
         for i, line in enumerate(lines):
             # Skip the anchor lines themselves.
-            if seller_anchor_y is not None and line.bbox.y0 == seller_anchor_y and line_is_label(line.text, "seller"):
+            if (
+                seller_anchor_y is not None
+                and line.bbox.y0 == seller_anchor_y
+                and line_is_label(line.text, "seller")
+            ):
                 continue
-            if client_anchor_y is not None and line.bbox.y0 == client_anchor_y and line_is_label(line.text, "client"):
+            if (
+                client_anchor_y is not None
+                and line.bbox.y0 == client_anchor_y
+                and line_is_label(line.text, "client")
+            ):
                 continue
             # Line must be below the earliest anchor, and above items start.
             if line.bbox.y0 < block_start_y:

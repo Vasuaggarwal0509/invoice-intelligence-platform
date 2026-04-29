@@ -28,7 +28,6 @@ from extraction_layer.components._common.invoice_anchors import (
 )
 from extraction_layer.components._common.text import contains_variant, matches_variant
 
-
 # Keyed by canonical label name. Variants include OCR-quirk forms observed
 # in the 2026-04-18 spot-check ("Invoiceno", "Invoicen0", "Taxld", etc.).
 # Structural anchors (``items_start`` / ``summary_start``) reference the

@@ -5,8 +5,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query
 
 from business_layer.models.inbox import InboxListResponse, InboxRow
-from business_layer.services import UserRow, WorkspaceRow
-from business_layer.services import inbox_service
+from business_layer.services import UserRow, WorkspaceRow, inbox_service
 
 from .deps import current_context_dep, session_dep
 

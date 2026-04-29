@@ -22,13 +22,16 @@ Phone = Annotated[
     ),
 ]
 
-# GSTIN format regex. 15 chars: state(2) + PAN(10) + entity(1) + Z + check(1).
-# Full checksum validation is in the extraction_layer validation rules;
+# GSTIN format regex. 15 chars total: state(2) + PAN(10) + entity(1) + Z + check(1).
+# PAN breakdown within those 10: 5 uppercase letters + 4 digits + 1 uppercase letter.
+# Entity character (position 13) is usually a digit but can be a letter for
+# partnerships/associations — admit both via [A-Z0-9].
+# Full GSTIN checksum validation lives in extraction_layer validation rules;
 # here we only gatekeep shape.
 Gstin = Annotated[
     str,
     StringConstraints(
-        pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z]\d[A-Z0-9]Z[A-Z0-9]$",
+        pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$",
         min_length=15,
         max_length=15,
     ),

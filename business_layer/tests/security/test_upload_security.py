@@ -27,7 +27,12 @@ def _tiny_png_bytes() -> bytes:
 
 
 def _chunk(tag: bytes, data: bytes) -> bytes:
-    return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+    return (
+        struct.pack(">I", len(data))
+        + tag
+        + data
+        + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+    )
 
 
 def _otp_from_logs(phone: str, caplog: pytest.LogCaptureFixture) -> str:
@@ -51,9 +56,7 @@ def _login_as(test_client, phone: str, caplog: pytest.LogCaptureFixture) -> None
 
 
 class TestUploadRejections:
-    def test_non_image_bytes_rejected(
-        self, test_client, caplog: pytest.LogCaptureFixture
-    ) -> None:  # type: ignore[no-untyped-def]
+    def test_non_image_bytes_rejected(self, test_client, caplog: pytest.LogCaptureFixture) -> None:  # type: ignore[no-untyped-def]
         _login_as(test_client, "+919000000200", caplog)
         r = test_client.post(
             "/api/upload",
@@ -62,9 +65,7 @@ class TestUploadRejections:
         assert r.status_code == 422
         assert r.json()["code"] == "validation_failed"
 
-    def test_empty_upload_rejected(
-        self, test_client, caplog: pytest.LogCaptureFixture
-    ) -> None:  # type: ignore[no-untyped-def]
+    def test_empty_upload_rejected(self, test_client, caplog: pytest.LogCaptureFixture) -> None:  # type: ignore[no-untyped-def]
         _login_as(test_client, "+919000000201", caplog)
         r = test_client.post(
             "/api/upload",
@@ -97,6 +98,7 @@ class TestUploadRejections:
         # Settings validator) so the test doesn't generate 25 MB.
         monkeypatch.setenv("PLATFORM_UPLOAD_MAX_BYTES", "2048")
         from business_layer.config import get_settings
+
         get_settings.cache_clear()
 
         # Build a blob larger than the new cap, starting with a PNG
@@ -119,21 +121,27 @@ class TestInvoiceIdor:
         self, test_client, caplog: pytest.LogCaptureFixture
     ) -> None:  # type: ignore[no-untyped-def]
         # Stub the pipeline so the upload actually produces an invoice.
+        import business_layer.services.extraction_runner as er
         from extraction_layer.components.extraction.types import ExtractionResult
         from extraction_layer.components.ocr.types import OCRResult, PageSize
         from extraction_layer.components.tables.types import TableExtractionResult
 
-        import business_layer.services.extraction_runner as er
-
         def _fake_run(self, image):  # type: ignore[no-untyped-def]
             return (
-                OCRResult(tokens=[], lines=[], page=PageSize(width=2, height=2), backend="stub", duration_ms=0.1),
+                OCRResult(
+                    tokens=[],
+                    lines=[],
+                    page=PageSize(width=2, height=2),
+                    backend="stub",
+                    duration_ms=0.1,
+                ),
                 ExtractionResult(fields={}, extractor="stub", duration_ms=0.1),
                 TableExtractionResult(items=[], extractor="stub", duration_ms=0.1),
                 None,
             )
 
         import extraction_layer.backend.app.pipeline as pl
+
         original = pl.PipelineRunner.run
         pl.PipelineRunner.run = _fake_run  # type: ignore[assignment]
         # Reset cached pipeline singleton inside extraction_runner so the
@@ -149,6 +157,7 @@ class TestInvoiceIdor:
             invoice_id_a = up.json()["invoice_id"]
 
             from business_layer.workers.extraction_worker import drain_now
+
             drain_now()
 
             # Log out A, sign up as Workspace B.

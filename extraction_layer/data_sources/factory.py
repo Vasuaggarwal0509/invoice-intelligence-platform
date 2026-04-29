@@ -11,7 +11,6 @@ from typing import Any
 
 from .base import BaseDataset
 
-
 _REGISTRY: dict[str, str] = {
     "katanaml": "extraction_layer.data_sources.katanaml_invoices.loader.KatanamlInvoicesDataset",
     "midd": "extraction_layer.data_sources.midd.loader.MIDDDataset",
@@ -41,9 +40,7 @@ def make_dataset(name: str = "katanaml", **kwargs: Any) -> BaseDataset:
         NotImplementedError: Scaffolded datasets raise when methods are called.
     """
     if name not in _REGISTRY:
-        raise ValueError(
-            f"Unknown dataset {name!r}. Available: {available_datasets()}"
-        )
+        raise ValueError(f"Unknown dataset {name!r}. Available: {available_datasets()}")
 
     module_path, class_name = _REGISTRY[name].rsplit(".", 1)
     module = importlib.import_module(module_path)

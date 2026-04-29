@@ -12,7 +12,6 @@ from extraction_layer.data_sources.base import BaseDataset
 from extraction_layer.data_sources.midd.loader import MIDDDataset
 from extraction_layer.data_sources.sroie.loader import SROIEDataset
 
-
 SCAFFOLDED = [
     pytest.param(MIDDDataset, "midd", id="midd"),
     pytest.param(SROIEDataset, "sroie", id="sroie"),

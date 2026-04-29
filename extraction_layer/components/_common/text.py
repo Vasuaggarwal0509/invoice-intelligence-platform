@@ -18,10 +18,9 @@ import re
 
 from rapidfuzz import fuzz
 
-
 __all__ = [
-    "matches_variant",
     "contains_variant",
+    "matches_variant",
     "normalize_multiword_spacing",
 ]
 

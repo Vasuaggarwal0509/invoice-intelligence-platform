@@ -26,7 +26,6 @@ from typing import Literal
 from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 # Absolute path to the business_layer/ package root. Used to resolve
 # default paths (SQLite file, migrations, static assets) regardless of
 # which CWD the process was started from.
@@ -95,12 +94,12 @@ class Settings(BaseSettings):
     session_cookie_samesite: Literal["lax", "strict", "none"] = Field(default="lax")
 
     # --- OTP --------------------------------------------------------------
-    otp_ttl_seconds: int = Field(default=300, ge=30, le=900)       # 5 min
+    otp_ttl_seconds: int = Field(default=300, ge=30, le=900)  # 5 min
     otp_max_attempts: int = Field(default=5, ge=1, le=10)
 
     # --- Brute-force lockout ---------------------------------------------
     login_max_attempts: int = Field(default=10, ge=1, le=100)
-    login_lockout_seconds: int = Field(default=900, ge=60)          # 15 min
+    login_lockout_seconds: int = Field(default=900, ge=60)  # 15 min
 
     # --- Upload limits ----------------------------------------------------
     upload_max_bytes: int = Field(default=25 * 1024 * 1024, ge=1024)  # 25 MB
@@ -118,6 +117,33 @@ class Settings(BaseSettings):
     # --- Logging ---------------------------------------------------------
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = Field(default="INFO")
 
+    # --- Gmail connector -------------------------------------------------
+    # Path to the OAuth 2.0 Web Application client JSON downloaded from
+    # Google Cloud Console → APIs & Services → Credentials.
+    # Defaults to the `_dummy` placeholder so the server boots on a
+    # fresh clone without crashing — Gmail features 404 until the
+    # real file is swapped in and this path updated.
+    google_oauth_client_file: Path = Field(
+        default=_HERE.parent / "secrets" / "google_oauth_client_dummy.json",
+        description="Path to google_oauth_client.json (rename from _dummy when real).",
+    )
+
+    # Public callback URL registered under Authorized redirect URIs in
+    # the Google Cloud Console. Must match EXACTLY (scheme, host, port,
+    # path — Google compares byte-for-byte).
+    google_oauth_redirect_uri: str = Field(
+        default="http://localhost:8001/api/oauth/google/callback",
+    )
+
+    # Poll cadence per connected source. Gmail quota is enormous; the
+    # limiting factor is UX latency (user expects new invoices within
+    # ~15 min of arrival). Tighten to 120s for demo if desired.
+    gmail_poll_interval_seconds: int = Field(default=900, ge=60)
+
+    # How far back to look on a first-time connection. Later ticks
+    # only fetch messages newer than the source's last_polled_at.
+    gmail_backfill_days: int = Field(default=30, ge=1, le=365)
+
     # --- Validators ------------------------------------------------------
     @field_validator("secret_key")
     @classmethod
@@ -125,7 +151,7 @@ class Settings(BaseSettings):
         if len(v.get_secret_value()) < 32:
             raise ValueError(
                 "PLATFORM_SECRET_KEY must be at least 32 characters "
-                "(generate via `python -c \"import secrets; print(secrets.token_urlsafe(32))\"`)"
+                '(generate via `python -c "import secrets; print(secrets.token_urlsafe(32))"`)'
             )
         return v
 

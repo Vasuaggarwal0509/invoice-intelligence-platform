@@ -12,7 +12,6 @@ from typing import Any
 
 from .base import BaseOCR
 
-
 # Maps a short backend key to the dotted path of its class. Lazy-imported.
 _BACKEND_REGISTRY: dict[str, str] = {
     "rapidocr": "extraction_layer.components.ocr.rapidocr_backend.RapidOCRBackend",
@@ -43,9 +42,7 @@ def make_ocr(backend: str = "rapidocr", **kwargs: Any) -> BaseOCR:
         ImportError: If the underlying OCR library is not installed.
     """
     if backend not in _BACKEND_REGISTRY:
-        raise ValueError(
-            f"Unknown OCR backend {backend!r}. Available: {available_backends()}"
-        )
+        raise ValueError(f"Unknown OCR backend {backend!r}. Available: {available_backends()}")
 
     module_path, class_name = _BACKEND_REGISTRY[backend].rsplit(".", 1)
     module = importlib.import_module(module_path)

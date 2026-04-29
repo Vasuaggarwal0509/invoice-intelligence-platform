@@ -26,3 +26,75 @@ markers = [
     "ocr_heavy: slow tests that load real OCR models (~1-2s each); deselect with '-m \"not ocr_heavy\"'",
     "dataset_heavy: tests that download or enumerate real datasets; deselect with '-m \"not dataset_heavy\"'",
 ]
+
+# --- Ruff: lint + format ----------------------------------------------------
+# One tool replaces flake8 + isort + pyupgrade + black. Fast (Rust core).
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [
+    "venv",
+    "venv_*",
+    "data",
+    "extraction_layer/evaluation/inspection",
+    ".pytest_cache",
+]
+
+[tool.ruff.lint]
+# Default rule set is tiny (E + F). Enable the obvious wins without
+# over-policing — this is a college project, not a corporate codebase.
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes (undefined names, unused imports)
+    "W",    # pycodestyle warnings
+    "I",    # isort (import order)
+    "B",    # bugbear (likely bugs: mutable default args, except-pass)
+    "UP",   # pyupgrade (use modern syntax for the target_version)
+    "RUF",  # ruff-specific lints
+]
+ignore = [
+    "E501",  # line-length handled separately; allow long lines in
+             # docstrings / regex literals without bending over backwards
+    "B008",  # FastAPI's Depends() pattern uses default-call args by design
+    # Ambiguous-unicode rules (RUF001/002/003) trigger on intentional
+    # × (multiplication sign) and – (en dash) in math expressions and
+    # inline math notation. These are deliberate stylistic choices, not
+    # bugs. The rules add noise without value.
+    "RUF001", "RUF002", "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests freely use longer asserts + skip docstrings.
+"**/tests/**" = ["E501", "RUF012", "E402"]
+# Migration SQL helpers occasionally need string concat for DDL — no risk.
+"business_layer/db/engine.py" = ["F401"]
+# extraction_layer is the frozen-contract PoC. Don't fight pre-existing
+# style there: keeps CI noise focused on business_layer, where the
+# rules apply to fresh code being written under them.
+"extraction_layer/**" = ["UP007", "UP038", "E402"]
+
+[tool.ruff.format]
+# Match black's default — double quotes, trailing comma in multi-line.
+quote-style = "double"
+
+# --- Mypy: type checking ---------------------------------------------------
+# Strict-ish but tolerant of ML libs that don't ship type stubs.
+[tool.mypy]
+python_version = "3.12"
+strict_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = false       # FastAPI route returns are heavily inferred
+ignore_missing_imports = true # rapidocr/datasets/onnxruntime ship without stubs
+exclude = [
+    "venv",
+    "venv_.*",
+    "extraction_layer/evaluation/inspection",
+    "data",
+]
+
+[[tool.mypy.overrides]]
+# Tests are exercised at runtime — type-checking adds little value, would
+# require a ton of fixture annotations. Skip explicitly.
+module = ["business_layer.tests.*", "extraction_layer.*.tests.*"]
+ignore_errors = true

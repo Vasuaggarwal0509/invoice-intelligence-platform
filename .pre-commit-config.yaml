@@ -1,0 +1,54 @@
+# Pre-commit hooks — runs locally on `git commit` after `pre-commit install`.
+#
+# Setup once, after cloning:
+#   pip install -r requirements-dev.txt
+#   pre-commit install
+#
+# Hooks here are FAST so commits aren't painful. Slower checks (mypy, full
+# pytest) run in CI only.
+
+repos:
+  - repo: local
+    hooks:
+      # --- Ruff lint + format -------------------------------------------
+      # Use the venv's pinned ruff so local + CI behave identically.
+      - id: ruff-check
+        name: ruff check
+        entry: venv/bin/ruff check --fix
+        language: system
+        types: [python]
+        pass_filenames: true
+
+      - id: ruff-format
+        name: ruff format
+        entry: venv/bin/ruff format
+        language: system
+        types: [python]
+        pass_filenames: true
+
+      # --- Layer-rule import-graph test -------------------------------
+      # Catches "routes/ imports repositories/" before push. Already a
+      # pytest test (business_layer/tests/unit/test_import_graph.py) so
+      # we just shell out to it — single test, runs in <1s.
+      - id: layer-import-graph
+        name: layer import graph
+        entry: venv/bin/python -m pytest business_layer/tests/unit/test_import_graph.py -q
+        language: system
+        pass_filenames: false
+        # Only re-run when something in business_layer/ changes.
+        files: ^business_layer/.*\.py$
+
+  # --- Whitespace + end-of-file hygiene -------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=500']      # blocks accidental data/ commits
+
+# Skip running on protected refs by default — `pre-commit run --all-files`
+# locally before pushing is the canonical "did I miss anything" command.
+default_stages: [pre-commit]

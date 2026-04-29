@@ -150,6 +150,4 @@ def update_extracted_fields(
             values[k] = v
     if not values:
         return
-    session.execute(
-        update(invoices).where(invoices.c.id == invoice_id).values(**values)
-    )
+    session.execute(update(invoices).where(invoices.c.id == invoice_id).values(**values))

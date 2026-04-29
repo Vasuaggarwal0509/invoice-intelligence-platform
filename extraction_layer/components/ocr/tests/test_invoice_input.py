@@ -7,7 +7,6 @@ from extraction_layer.components.ocr import InvoiceInput
 from extraction_layer.components.ocr.base import BaseOCR
 from extraction_layer.components.ocr.types import OCRResult, PageSize
 
-
 # ----- stub backend for testing ocr_invoice delegation -----------------------
 
 

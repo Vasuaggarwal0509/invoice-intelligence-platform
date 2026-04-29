@@ -99,8 +99,9 @@ class TestSample04Like:
 
 class TestNoneFields:
     def test_missing_invoice_no_returns_none_field(self, extractor):
-        from ._fixtures import make_line
         from extraction_layer.components.ocr.types import OCRResult, PageSize
+
+        from ._fixtures import make_line
 
         # OCR with no invoice-no pattern anywhere.
         ocr = OCRResult(

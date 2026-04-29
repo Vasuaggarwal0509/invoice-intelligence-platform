@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Intelligence — CA</title>
+    <link rel="stylesheet" href="/static/ca/css/style.css" />
+</head>
+<body>
+    <header id="topbar" hidden>
+        <div class="brand">Clients</div>
+        <nav class="topnav">
+            <a href="#/clients" data-nav="clients">Clients</a>
+        </nav>
+        <button id="logout-btn" type="button" class="link-btn">Log out</button>
+    </header>
+
+    <main id="app-root"></main>
+
+    <template id="view-login">
+        <section class="view">
+            <h1>CA sign in</h1>
+            <p class="muted">Use your email and password.</p>
+            <form id="form-login" novalidate>
+                <label>
+                    <span>Email</span>
+                    <input type="email" name="email" required autocomplete="email" />
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" name="password" required autocomplete="current-password" />
+                </label>
+                <button type="submit" class="primary">Sign in</button>
+                <a href="#/signup" class="link-btn">New here? Create a CA account</a>
+                <p class="error" data-role="error" hidden></p>
+            </form>
+        </section>
+    </template>
+
+    <template id="view-signup">
+        <section class="view">
+            <h1>CA signup</h1>
+            <p class="muted">Your firm's GSTIN is how businesses will link to you.</p>
+            <form id="form-signup" novalidate>
+                <label>
+                    <span>Firm name</span>
+                    <input type="text" name="display_name" required maxlength="120" autocomplete="organization" />
+                </label>
+                <label>
+                    <span>Email</span>
+                    <input type="email" name="email" required autocomplete="email" />
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" name="password" required minlength="12" autocomplete="new-password" />
+                    <span class="hint">At least 12 characters.</span>
+                </label>
+                <label>
+                    <span>Firm GSTIN</span>
+                    <input type="text" name="gstin" required maxlength="15" pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][0-9][A-Z0-9]Z[A-Z0-9]"
+                           placeholder="22AAAAA0000A1Z5" />
+                    <span class="hint">15 characters, as issued by GSTN.</span>
+                </label>
+                <button type="submit" class="primary">Create account</button>
+                <a href="#/login" class="link-btn">Already have an account? Sign in</a>
+                <p class="error" data-role="error" hidden></p>
+            </form>
+        </section>
+    </template>
+
+    <template id="view-clients">
+        <section class="view">
+            <h1>Your clients</h1>
+            <p class="muted small" data-role="empty-hint" hidden>
+                No clients yet. Share your firm's GSTIN with your clients — they add it in
+                their business account to link with you.
+            </p>
+            <ul class="client-list" data-role="client-list"></ul>
+        </section>
+    </template>
+
+    <template id="view-client-invoices">
+        <section class="view">
+            <a href="#/clients" class="link-btn back">← Back to clients</a>
+            <h1 data-role="client-name">Client</h1>
+            <p class="muted small" data-role="client-gstin"></p>
+            <div class="inbox-wrapper">
+                <table class="inbox-table">
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Invoice #</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Flags</th>
+                        </tr>
+                    </thead>
+                    <tbody data-role="invoice-body"></tbody>
+                </table>
+            </div>
+            <p class="muted small" data-role="empty-hint" hidden>This client has no invoices yet.</p>
+        </section>
+    </template>
+
+    <template id="view-invoice">
+        <section class="view">
+            <a class="link-btn back" data-role="back-link">← Back</a>
+            <div class="invoice-grid">
+                <div class="invoice-image-wrap">
+                    <img data-role="invoice-image" alt="Invoice preview" />
+                </div>
+                <div class="invoice-fields">
+                    <h1 data-role="vendor">—</h1>
+                    <dl>
+                        <dt>Invoice number</dt><dd data-role="invoice-no">—</dd>
+                        <dt>Date</dt><dd data-role="invoice-date">—</dd>
+                        <dt>Amount</dt><dd data-role="total">—</dd>
+                        <dt>Seller GSTIN</dt><dd data-role="seller-gstin">—</dd>
+                    </dl>
+                    <div class="findings-all" data-role="findings-wrap" hidden>
+                        <h2>All validation findings</h2>
+                        <ul data-role="findings-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <script src="/static/ca/js/api.js"></script>
+    <script src="/static/ca/js/auth.js"></script>
+    <script src="/static/ca/js/clients.js"></script>
+    <script src="/static/ca/js/invoice.js"></script>
+    <script src="/static/ca/js/app.js"></script>
+</body>
+</html>

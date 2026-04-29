@@ -81,9 +81,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Export N Katanaml invoices + ground truth + RapidOCR output for visual inspection."
     )
-    parser.add_argument("--count", type=int, default=10, help="Number of samples to inspect (default: 10).")
+    parser.add_argument(
+        "--count", type=int, default=10, help="Number of samples to inspect (default: 10)."
+    )
     parser.add_argument("--split", default="test", help="Dataset split (default: test).")
-    parser.add_argument("--start-index", type=int, default=0, help="First sample index in the split (default: 0).")
+    parser.add_argument(
+        "--start-index", type=int, default=0, help="First sample index in the split (default: 0)."
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -156,28 +160,30 @@ def main(argv: list[str] | None = None) -> int:
         header = KatanamlInvoicesDataset.header_of(sample)
         items = KatanamlInvoicesDataset.items_of(sample)
         lines_dumped = [line.model_dump(mode="json") for line in ocr_result.lines]
-        comparison_md = "\n".join([
-            f"# Spot check — sample {n:02d} ({sample.id})",
-            "",
-            f"- **Split**: `{sample.split}`",
-            f"- **Dataset row**: {sample.metadata.get('row_index', '?')}",
-            f"- **Image**: `{img_path.name}` ({w}x{h})",
-            f"- **OCR duration**: {ocr_result.duration_ms:.1f} ms",
-            f"- **Lines detected**: {len(ocr_result.lines)}",
-            f"- **Tokens derived**: {len(ocr_result.tokens)}",
-            "",
-            "## Ground truth",
-            "",
-            "### Header",
-            "",
-            _format_header_md(header),
-            "### Line items",
-            "",
-            _format_items_md(items),
-            "## RapidOCR output",
-            "",
-            _format_ocr_lines_md(lines_dumped),
-        ])
+        comparison_md = "\n".join(
+            [
+                f"# Spot check — sample {n:02d} ({sample.id})",
+                "",
+                f"- **Split**: `{sample.split}`",
+                f"- **Dataset row**: {sample.metadata.get('row_index', '?')}",
+                f"- **Image**: `{img_path.name}` ({w}x{h})",
+                f"- **OCR duration**: {ocr_result.duration_ms:.1f} ms",
+                f"- **Lines detected**: {len(ocr_result.lines)}",
+                f"- **Tokens derived**: {len(ocr_result.tokens)}",
+                "",
+                "## Ground truth",
+                "",
+                "### Header",
+                "",
+                _format_header_md(header),
+                "### Line items",
+                "",
+                _format_items_md(items),
+                "## RapidOCR output",
+                "",
+                _format_ocr_lines_md(lines_dumped),
+            ]
+        )
         (args.output_dir / f"{prefix}_comparison.md").write_text(comparison_md, encoding="utf-8")
 
         summary_rows.append(
@@ -205,7 +211,7 @@ def main(argv: list[str] | None = None) -> int:
         f"- **Dataset**: `{ds.name}`",
         f"- **Split**: `{args.split}`",
         f"- **Samples inspected**: {n_samples} (indices {args.start_index}-{end - 1})",
-        f"- **OCR backend**: `rapidocr` (PP-OCRv5 via ONNX Runtime)",
+        "- **OCR backend**: `rapidocr` (PP-OCRv5 via ONNX Runtime)",
         "",
         "## Per-sample",
         "",

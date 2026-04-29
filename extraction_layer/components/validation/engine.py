@@ -55,12 +55,12 @@ class ValidationEngine:
             )
 
         per_record: list[list[RuleFinding]] = []
-        for extraction, tables in zip(extractions, tables_list):
+        for extraction, tables in zip(extractions, tables_list, strict=False):
             single = self.validate(extraction, tables)
             per_record.append(list(single.findings))
 
         duplicate_findings = duplicates.detect_duplicates(extractions)
         results: list[ValidationResult] = []
-        for base_findings, dup_findings in zip(per_record, duplicate_findings):
+        for base_findings, dup_findings in zip(per_record, duplicate_findings, strict=False):
             results.append(ValidationResult(findings=base_findings + dup_findings))
         return results

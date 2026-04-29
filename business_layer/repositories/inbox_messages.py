@@ -144,9 +144,7 @@ def create(
             created_at=now,
         )
     )
-    row = session.execute(
-        select(inbox_messages).where(inbox_messages.c.id == mid)
-    ).first()
+    row = session.execute(select(inbox_messages).where(inbox_messages.c.id == mid)).first()
     assert row is not None
     return _row_to_dc(row)
 
@@ -162,7 +160,5 @@ def update_status(
     if ignored_reason is not None:
         values["ignored_reason"] = ignored_reason
     session.execute(
-        update(inbox_messages)
-        .where(inbox_messages.c.id == message_id)
-        .values(**values)
+        update(inbox_messages).where(inbox_messages.c.id == message_id).values(**values)
     )

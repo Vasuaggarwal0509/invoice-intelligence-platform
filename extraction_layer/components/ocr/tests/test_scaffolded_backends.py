@@ -14,7 +14,6 @@ from extraction_layer.components.ocr.doctr_backend import DocTRBackend
 from extraction_layer.components.ocr.paddleocr_backend import PaddleOCRBackend
 from extraction_layer.components.ocr.tesseract_backend import TesseractBackend
 
-
 SCAFFOLDED = [
     pytest.param(TesseractBackend, "tesseract", id="tesseract"),
     pytest.param(PaddleOCRBackend, "paddleocr", id="paddleocr"),

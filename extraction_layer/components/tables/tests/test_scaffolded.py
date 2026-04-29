@@ -7,7 +7,6 @@ from extraction_layer.components.tables.base import BaseTableExtractor
 from extraction_layer.components.tables.layoutlm_backend import LayoutLMTableExtractor
 from extraction_layer.components.tables.pp_structure_backend import PPStructureTableExtractor
 
-
 SCAFFOLDED = [
     pytest.param(PPStructureTableExtractor, "pp_structure", id="pp_structure"),
     pytest.param(LayoutLMTableExtractor, "layoutlm", id="layoutlm"),

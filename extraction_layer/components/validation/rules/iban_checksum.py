@@ -21,7 +21,6 @@ from extraction_layer.components.extraction.types import ExtractionResult
 
 from ..types import RuleFinding, RuleOutcome
 
-
 _IBAN_PATTERN = re.compile(r"^[A-Z]{2}\d{2}[A-Z0-9]+$")
 
 

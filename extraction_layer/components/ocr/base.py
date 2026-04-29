@@ -21,7 +21,6 @@ import numpy as np
 
 from .types import InvoiceInput, OCRResult
 
-
 # Every concrete backend must accept at least these input types. Individual
 # backends can coerce them to the format their underlying library wants.
 ImageInput = Union[str, Path, bytes, np.ndarray]

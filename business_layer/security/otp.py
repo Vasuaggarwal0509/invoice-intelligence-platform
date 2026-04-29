@@ -42,7 +42,7 @@ def _generate_digits() -> str:
     :func:`secrets.randbelow` ensures no modulo bias. Leading zeros are
     preserved via :meth:`str.zfill`.
     """
-    value = secrets.randbelow(10 ** _OTP_DIGITS)
+    value = secrets.randbelow(10**_OTP_DIGITS)
     return str(value).zfill(_OTP_DIGITS)
 
 

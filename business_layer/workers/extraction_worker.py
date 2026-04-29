@@ -23,8 +23,7 @@ from __future__ import annotations
 
 import logging
 import threading
-import time
-from typing import Callable
+from collections.abc import Callable
 
 from business_layer.db import get_session
 from business_layer.repositories import jobs as jobs_repo

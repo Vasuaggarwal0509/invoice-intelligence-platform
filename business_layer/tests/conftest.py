@@ -9,7 +9,7 @@ Provides:
 from __future__ import annotations
 
 import os
-from typing import Iterator
+from collections.abc import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
@@ -45,6 +45,7 @@ def test_client() -> Iterator[TestClient]:
     _rate_limiter.reset()
     # Clear the extraction pipeline cache so monkeypatched stubs take effect.
     import business_layer.services.extraction_runner as _er
+
     _er._pipeline_singleton = None
 
     application = app_factory()

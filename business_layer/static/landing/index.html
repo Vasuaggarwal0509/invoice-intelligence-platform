@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Invoice Intelligence</title>
+    <link rel="stylesheet" href="/static/landing/style.css" />
+</head>
+<body>
+    <main>
+        <h1>Invoice Intelligence</h1>
+        <p class="lead">Choose how you sign in.</p>
+        <div class="cards">
+            <a class="persona-card" href="/business">
+                <h2>Business</h2>
+                <p>Upload invoices, see vendor + spend insights. Sign in with phone.</p>
+            </a>
+            <a class="persona-card" href="/ca">
+                <h2>CA firm</h2>
+                <p>Manage your clients' invoices from one dashboard. Sign in with email + password.</p>
+            </a>
+        </div>
+    </main>
+    <script>
+        // If already signed in, skip the chooser and land on the persona shell.
+        (async function () {
+            try {
+                const res = await fetch('/api/auth/me', { credentials: 'include' });
+                if (!res.ok) return;
+                const me = await res.json();
+                const role = me && me.user && me.user.role;
+                if (role === 'business') window.location.replace('/business');
+                else if (role === 'ca') window.location.replace('/ca');
+            } catch (_) { /* not signed in — show chooser */ }
+        })();
+    </script>
+</body>
+</html>

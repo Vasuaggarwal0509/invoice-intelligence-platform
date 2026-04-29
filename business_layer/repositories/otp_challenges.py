@@ -75,9 +75,7 @@ def create(
             created_at=now,
         )
     )
-    row = session.execute(
-        select(otp_challenges).where(otp_challenges.c.id == cid)
-    ).first()
+    row = session.execute(select(otp_challenges).where(otp_challenges.c.id == cid)).first()
     assert row is not None
     return _row_to_dc(row)
 
@@ -121,7 +119,5 @@ def increment_attempts(session: Session, *, challenge_id: str) -> None:
 def mark_used(session: Session, *, challenge_id: str) -> None:
     """Mark a challenge consumed — idempotently safe to call after success."""
     session.execute(
-        update(otp_challenges)
-        .where(otp_challenges.c.id == challenge_id)
-        .values(used_at=now_ms())
+        update(otp_challenges).where(otp_challenges.c.id == challenge_id).values(used_at=now_ms())
     )

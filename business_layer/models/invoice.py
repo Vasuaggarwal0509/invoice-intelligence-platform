@@ -44,8 +44,8 @@ class InvoiceSummary(BaseModel):
     source_kind: str
     received_at: int
     extraction_status: Literal["queued", "extracting", "extracted", "failed", "ignored"]
-    findings_summary: dict[str, int]                 # {pass, fail, not_applicable}
-    image_url: str                                    # /api/invoices/{id}/image — workspace-gated
+    findings_summary: dict[str, int]  # {pass, fail, not_applicable}
+    image_url: str  # /api/invoices/{id}/image — workspace-gated
 
 
 class InvoiceDetailBusiness(BaseModel):
@@ -54,7 +54,7 @@ class InvoiceDetailBusiness(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     invoice: InvoiceSummary
-    flags: list[ValidationFindingPublic]            # failing findings only
+    flags: list[ValidationFindingPublic]  # failing findings only
 
 
 class InvoiceDetailCa(BaseModel):

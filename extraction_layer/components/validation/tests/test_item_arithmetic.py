@@ -1,7 +1,5 @@
 """Tests for per-item arithmetic consistency rules."""
 
-import pytest
-
 from extraction_layer.components.validation.rules.item_arithmetic import (
     validate_all_items,
     validate_item_gross_worth,
@@ -79,7 +77,14 @@ class TestGrossWorthConsistency:
 
 class TestValidateAllItems:
     def test_runs_two_rules_per_item(self):
-        tables = make_tables(items=[make_item(), make_item(qty="3,00", net_price="2,00", net_worth="6,00", vat="10%", gross_worth="6,60")])
+        tables = make_tables(
+            items=[
+                make_item(),
+                make_item(
+                    qty="3,00", net_price="2,00", net_worth="6,00", vat="10%", gross_worth="6,60"
+                ),
+            ]
+        )
         findings = validate_all_items(tables)
         # 2 rules per item × 2 items = 4 findings
         assert len(findings) == 4
@@ -100,8 +105,11 @@ class TestValidateAllItems:
             items=[
                 make_item(qty="2,00", net_price="10,00", net_worth="20,00"),  # both PASS
                 make_item(
-                    qty="2,00", net_price="10,00", net_worth="50,00",
-                    vat="10%", gross_worth="55,00",
+                    qty="2,00",
+                    net_price="10,00",
+                    net_worth="50,00",
+                    vat="10%",
+                    gross_worth="55,00",
                 ),  # net_worth FAIL, gross_worth PASS vs the claimed net_worth
             ]
         )

@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import logging
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
 
 from sqlalchemy import Engine, create_engine, event, text
 from sqlalchemy.orm import Session, sessionmaker
@@ -66,7 +66,7 @@ def _build_engine(settings: Settings) -> Engine:
     url = settings.database_url
 
     if url.startswith("sqlite:///"):
-        db_path_str = url[len("sqlite:///"):]
+        db_path_str = url[len("sqlite:///") :]
         is_memory = db_path_str == ":memory:" or url == "sqlite://"
         if db_path_str and not is_memory:
             db_path = Path(db_path_str)
@@ -140,30 +140,62 @@ def _migrations_dir() -> Path:
     return Path(__file__).resolve().parent / "migrations"
 
 
-def init_db() -> None:
-    """Apply every ``.sql`` file in ``migrations/`` in sorted order.
+_MIGRATIONS_TABLE_DDL = """
+CREATE TABLE IF NOT EXISTS schema_migrations (
+    filename    TEXT PRIMARY KEY,
+    applied_at  INTEGER NOT NULL
+)
+"""
 
-    Idempotent — each migration uses ``CREATE TABLE IF NOT EXISTS`` or
-    guards its own re-runs. No tracking table yet; Sprint 0 schemata
-    are stable and we will switch to Alembic before any destructive
-    change lands.
+
+def init_db() -> None:
+    """Apply each ``.sql`` file in ``migrations/`` in sorted order, once.
+
+    A tracking table (``schema_migrations``) records which files have
+    already been applied, keyed by filename. On reboot we skip files
+    whose name appears in the table.
+
+    The first migration (0001_init.sql) uses ``CREATE TABLE IF NOT
+    EXISTS`` exclusively, so a cold-start (fresh DB → 0001 → tracking
+    table) and a warm-start (existing DB pre-tracking → 0001 re-runs
+    as no-op → tracking table catches up → 0002 applies once) are
+    both safe.
+
+    Non-idempotent statements (``ALTER TABLE ... ADD COLUMN``) are
+    fine from 0002 onwards because the tracker prevents re-run.
     """
     engine = get_engine()
     migrations = sorted(_migrations_dir().glob("*.sql"))
     if not migrations:
-        _log.warning("db.init.no_migrations_found", extra={"migrations_dir": str(_migrations_dir())})
+        _log.warning(
+            "db.init.no_migrations_found", extra={"migrations_dir": str(_migrations_dir())}
+        )
         return
 
     with engine.begin() as conn:
+        dbapi_conn = conn.connection
+        cursor = dbapi_conn.cursor()
+
+        # Always ensure the tracker exists first.
+        cursor.execute(_MIGRATIONS_TABLE_DDL)
+        cursor.execute("SELECT filename FROM schema_migrations")
+        applied: set[str] = {row[0] for row in cursor.fetchall()}
+
+        import time as _time
+
         for path in migrations:
+            if path.name in applied:
+                continue
             sql = path.read_text(encoding="utf-8")
-            # SQLite's executescript requires a raw connection; use it via
-            # connection.connection (the DBAPI object), not SQLAlchemy Core.
-            dbapi_conn = conn.connection
-            cursor = dbapi_conn.cursor()
+            # executescript runs multiple statements; wraps its own commit.
             cursor.executescript(sql)
-            cursor.close()
+            cursor.execute(
+                "INSERT INTO schema_migrations (filename, applied_at) VALUES (?, ?)",
+                (path.name, int(_time.time() * 1000)),
+            )
             _log.info("db.migration.applied", extra={"migration": path.name})
+
+        cursor.close()
 
 
 def _reset_for_tests() -> None:

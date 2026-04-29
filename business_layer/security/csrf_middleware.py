@@ -44,7 +44,7 @@ class CsrfCookieMiddleware(BaseHTTPMiddleware):
             response.set_cookie(
                 _CSRF_COOKIE_NAME,
                 secrets.token_urlsafe(_CSRF_TOKEN_BYTES),
-                httponly=False,    # intentional — JS must read it
+                httponly=False,  # intentional — JS must read it
                 secure=self._cookie_secure,
                 samesite="lax",
                 path="/",

@@ -24,7 +24,6 @@ from extraction_layer.components.tables.types import InvoiceItem, TableExtractio
 from ..parsers import parse_european_decimal, parse_percent
 from ..types import RuleFinding, RuleOutcome
 
-
 _ABS_TOL = Decimal("1.0")
 _REL_TOL = Decimal("0.01")
 

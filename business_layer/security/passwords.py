@@ -19,7 +19,7 @@ plaintext through logs or structured output; callers must pass a
 from __future__ import annotations
 
 from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError, VerificationError, InvalidHash
+from argon2.exceptions import InvalidHash, VerificationError, VerifyMismatchError
 
 # Single shared hasher — argon2-cffi's PasswordHasher is thread-safe.
 # Parameters chosen to complete in ~100-300ms on a modern server;

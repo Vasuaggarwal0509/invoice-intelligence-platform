@@ -47,7 +47,6 @@ from .regex_patterns import (
     TAX_ID_BARE,
 )
 
-
 # Confidence tiers. Anchored regex = high (the label + format both matched).
 # Column-scoped regex = medium-high (format matched in expected location).
 # Bare regex = medium (format matched without anchor — some risk of wrong pick).
@@ -81,12 +80,8 @@ class HeuristicExtractor(BaseExtractor):
             "client_tax_id": self._extract_tax_id_in_column(
                 ocr_result, columns.right_indices, "client_tax_id"
             ),
-            "seller": self._aggregate_address(
-                ocr_result, columns.left_indices, "seller"
-            ),
-            "client": self._aggregate_address(
-                ocr_result, columns.right_indices, "client"
-            ),
+            "seller": self._aggregate_address(ocr_result, columns.left_indices, "seller"),
+            "client": self._aggregate_address(ocr_result, columns.right_indices, "client"),
         }
 
         duration_ms = (time.perf_counter() - start) * 1000.0

@@ -19,6 +19,7 @@ import uuid
 from typing import Any
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from .exceptions import ClientError, PlatformError, RateLimitedError, ServerError
@@ -78,6 +79,37 @@ async def _platform_error_handler(request: Request, exc: PlatformError) -> JSONR
     return JSONResponse(status_code=exc.status_code, content=body, headers=headers)
 
 
+async def _request_validation_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
+    """Normalise FastAPI/Pydantic request-validation errors to our envelope.
+
+    FastAPI's default 422 body is ``{"detail": [<list of field errors>]}``,
+    which breaks the frontend's ``api.js`` contract (``err.detail`` must be
+    a string). We flatten to a single human-readable sentence per invalid
+    field and return the same shape as every other ClientError.
+    """
+    request_id = getattr(request.state, "request_id", None) or _new_request_id()
+
+    parts: list[str] = []
+    for err in exc.errors():
+        loc = ".".join(str(s) for s in err.get("loc", []) if s not in ("body", "query", "path"))
+        msg = err.get("msg", "invalid")
+        parts.append(f"{loc}: {msg}" if loc else msg)
+    detail = "; ".join(parts) or "request body is invalid"
+
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "validation_failed",
+            "code": "validation_failed",
+            "request_id": request_id,
+            "detail": detail,
+        },
+        headers={"X-Request-ID": request_id},
+    )
+
+
 async def _unknown_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Catch-all for exceptions not subclassed from :class:`PlatformError`.
 
@@ -117,4 +149,5 @@ def register_exception_handlers(app: FastAPI) -> None:
     registered handler class, but explicit is cheaper than implicit.
     """
     app.add_exception_handler(PlatformError, _platform_error_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(RequestValidationError, _request_validation_handler)  # type: ignore[arg-type]
     app.add_exception_handler(Exception, _unknown_exception_handler)

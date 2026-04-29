@@ -128,9 +128,7 @@ def increment_failed_login(
     current = find_by_id(session, user_id)
     assert current is not None  # caller just authenticated against it
     new_count = current.failed_login_count + 1
-    locked_until = (
-        now_ms() + lockout_seconds * 1000 if new_count >= lockout_after else None
-    )
+    locked_until = now_ms() + lockout_seconds * 1000 if new_count >= lockout_after else None
     session.execute(
         update(users)
         .where(users.c.id == user_id)
@@ -147,16 +145,12 @@ def increment_failed_login(
 def clear_failed_logins(session: Session, *, user_id: str) -> None:
     """Zero the failure counter and lift the lockout — on successful login."""
     session.execute(
-        update(users)
-        .where(users.c.id == user_id)
-        .values(failed_login_count=0, locked_until=None)
+        update(users).where(users.c.id == user_id).values(failed_login_count=0, locked_until=None)
     )
 
 
 def update_last_login(session: Session, *, user_id: str) -> None:
-    session.execute(
-        update(users).where(users.c.id == user_id).values(last_login_at=now_ms())
-    )
+    session.execute(update(users).where(users.c.id == user_id).values(last_login_at=now_ms()))
 
 
 def is_locked(user: UserRow) -> bool:

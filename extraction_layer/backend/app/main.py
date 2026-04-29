@@ -23,7 +23,6 @@ import io
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -38,13 +37,12 @@ from .cache import PipelineCache
 from .csv_export import invoice_to_csv
 from .pipeline import PipelineRunner
 
-
 # ----- paths + globals -------------------------------------------------------
 
 _HERE = Path(__file__).resolve()
 # _HERE = <repo_root>/extraction_layer/backend/app/main.py
-EXTRACTION_LAYER_ROOT = _HERE.parent.parent.parent        # .../extraction_layer/
-REPO_ROOT = EXTRACTION_LAYER_ROOT.parent                   # .../
+EXTRACTION_LAYER_ROOT = _HERE.parent.parent.parent  # .../extraction_layer/
+REPO_ROOT = EXTRACTION_LAYER_ROOT.parent  # .../
 FRONTEND_DIR = EXTRACTION_LAYER_ROOT / "frontend" / "static"
 # data/ stays at repo root (not under extraction_layer/) to keep HF's
 # path-mangled lock filenames under Windows MAX_PATH=260.
@@ -84,7 +82,9 @@ def _sample_for(invoice_id: str):
     if split not in dataset.splits:
         raise HTTPException(status_code=404, detail=f"Unknown split {split!r}")
     if index < 0 or index >= dataset.count(split):
-        raise HTTPException(status_code=404, detail=f"Index {index} out of range for split {split!r}")
+        raise HTTPException(
+            status_code=404, detail=f"Index {index} out of range for split {split!r}"
+        )
     return dataset.get(split, index)
 
 

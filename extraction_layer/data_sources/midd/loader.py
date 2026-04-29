@@ -22,7 +22,8 @@ To enable:
   4. Remove this notice.
 """
 
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from ..base import BaseDataset
 from ..types import Sample
@@ -54,11 +55,7 @@ class MIDDDataset(BaseDataset):
         )
 
     def get(self, split: str, index: int) -> Sample:
-        raise NotImplementedError(
-            "MIDDDataset is scaffolded but not implemented at PoC time."
-        )
+        raise NotImplementedError("MIDDDataset is scaffolded but not implemented at PoC time.")
 
     def count(self, split: str) -> int:
-        raise NotImplementedError(
-            "MIDDDataset is scaffolded but not implemented at PoC time."
-        )
+        raise NotImplementedError("MIDDDataset is scaffolded but not implemented at PoC time.")

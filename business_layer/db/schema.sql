@@ -47,9 +47,11 @@ CREATE TABLE IF NOT EXISTS workspaces (
     region                   TEXT,
     default_extraction_mode  TEXT NOT NULL DEFAULT 'instant'
                              CHECK (default_extraction_mode IN ('instant','scheduled','manual')),
+    ca_gstin                 TEXT,                    -- CA firm's GSTIN (businesses only; NULL for CA workspaces)
     created_at               INTEGER NOT NULL,
     UNIQUE (owner_user_id)                             -- v1: 1 user = 1 workspace
 );
+CREATE INDEX IF NOT EXISTS ix_workspaces_ca_gstin ON workspaces(ca_gstin);
 
 
 -- ======================================================================

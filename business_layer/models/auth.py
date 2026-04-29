@@ -74,6 +74,7 @@ class WorkspacePublic(BaseModel):
     name: str
     gstin: str | None = None
     default_extraction_mode: Literal["instant", "scheduled", "manual"]
+    ca_gstin: str | None = None  # populated on business workspaces linked to a CA
 
 
 class SessionResponse(BaseModel):

@@ -20,7 +20,6 @@ from contextlib import contextmanager
 
 import pytest
 
-
 PHONE_A = "+919000000001"
 PHONE_B = "+919000000002"
 

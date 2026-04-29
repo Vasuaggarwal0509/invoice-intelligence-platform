@@ -36,7 +36,6 @@ from extraction_layer.components.ocr.types import (
 from extraction_layer.components.tables.types import InvoiceItem, TableExtractionResult
 from extraction_layer.components.validation.types import RuleFinding, RuleOutcome, ValidationResult
 
-
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -228,6 +227,7 @@ def regen_validation() -> list[Path]:
 
     class ValidationInput(BaseModel):
         """Compound input: an ExtractionResult + a TableExtractionResult."""
+
         extraction: ExtractionResult = Field(..., description="Header-field extraction result.")
         tables: TableExtractionResult = Field(..., description="Line-item extraction result.")
 

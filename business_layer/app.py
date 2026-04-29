@@ -33,14 +33,20 @@ from business_layer.config import Settings, get_settings
 from business_layer.db import init_db
 from business_layer.errors import register_exception_handlers
 from business_layer.routes import auth as auth_routes
+from business_layer.routes import business as business_routes
+from business_layer.routes import ca as ca_routes
+from business_layer.routes import ca_auth as ca_auth_routes
 from business_layer.routes import health as health_routes
 from business_layer.routes import inbox as inbox_routes
 from business_layer.routes import invoices as invoice_routes
+from business_layer.routes import oauth as oauth_routes
 from business_layer.routes import sources as source_routes
 from business_layer.routes import upload as upload_routes
 from business_layer.security.csrf_middleware import CsrfCookieMiddleware
 from business_layer.security.headers import SecurityHeadersMiddleware
+from business_layer.services.oauth import google_oauth
 from business_layer.workers.extraction_worker import worker as extraction_worker
+from business_layer.workers.gmail_poller import poller as gmail_poller
 
 _log = logging.getLogger(__name__)
 
@@ -121,10 +127,28 @@ def app_factory() -> FastAPI:
     if _STATIC_DIR.exists():
         fastapi_app.mount("/static", StaticFiles(directory=_STATIC_DIR), name="static")
 
-    # Root → business shell. CAs get their own shell path later (Sprint 2).
+    # Landing page (persona chooser). Authenticated users skip to their
+    # persona shell via the JS in the landing page itself.
     @fastapi_app.get("/", include_in_schema=False)
     def _root_redirect() -> RedirectResponse:
+        return RedirectResponse(url="/static/landing/index.html")
+
+    # Direct shell entry points — handy for bookmarking + for
+    # redirects from OAuth callbacks that know which persona they
+    # belong to.
+    @fastapi_app.get("/business", include_in_schema=False)
+    def _business_redirect() -> RedirectResponse:
         return RedirectResponse(url="/static/business/index.html")
+
+    @fastapi_app.get("/ca", include_in_schema=False)
+    def _ca_redirect() -> RedirectResponse:
+        return RedirectResponse(url="/static/ca/index.html")
+
+    # Browsers auto-request /favicon.ico; no-op 204 keeps the access log clean.
+    # Real favicon arrives whenever branding does — out of scope for Sprint 2.
+    @fastapi_app.get("/favicon.ico", include_in_schema=False)
+    def _favicon() -> Response:
+        return Response(status_code=204)
 
     # Routers.
     fastapi_app.include_router(health_routes.router)
@@ -133,6 +157,10 @@ def app_factory() -> FastAPI:
     fastapi_app.include_router(inbox_routes.router)
     fastapi_app.include_router(invoice_routes.router)
     fastapi_app.include_router(source_routes.router)
+    fastapi_app.include_router(business_routes.router)
+    fastapi_app.include_router(ca_auth_routes.router)
+    fastapi_app.include_router(ca_routes.router)
+    fastapi_app.include_router(oauth_routes.router)
 
     # Migrations — run on startup. Idempotent, so reload-restart is safe.
     # The extraction worker spins up in the same hook so it's ready to
@@ -144,11 +172,30 @@ def app_factory() -> FastAPI:
         # fixture); production and dev use the live thread.
         if settings.env != "test":
             extraction_worker.start()
-        _log.info("app.startup.complete", extra={"env": settings.env})
+            # Only start the gmail poller if a real OAuth client is
+            # configured — otherwise it'd spin uselessly every tick.
+            if google_oauth.is_configured():
+                gmail_poller.start()
+            else:
+                _log.info(
+                    "app.startup.gmail_poller_skipped",
+                    extra={"reason": "oauth_client_not_configured"},
+                )
+        from business_layer.version_info import get_git_sha, get_version
+
+        _log.info(
+            "app.startup.complete",
+            extra={
+                "env": settings.env,
+                "version": get_version(),
+                "git_sha": get_git_sha(),
+            },
+        )
 
     @fastapi_app.on_event("shutdown")
     def _shutdown() -> None:  # pragma: no cover
         extraction_worker.stop()
+        gmail_poller.stop()
 
     return fastapi_app
 

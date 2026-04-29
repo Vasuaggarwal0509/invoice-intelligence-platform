@@ -27,7 +27,7 @@ from typing import Any
 from extraction_layer.components.extraction import make_extractor
 from extraction_layer.components.ocr import make_ocr
 from extraction_layer.components.tables import make_table_extractor
-from extraction_layer.components.validation import RuleOutcome, ValidationEngine
+from extraction_layer.components.validation import ValidationEngine
 from extraction_layer.data_sources import make_dataset
 
 
@@ -107,7 +107,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Aggregate per-rule outcomes
     all_checks_pass_count = 0
-    for record, vr in zip(sample_records, validation_results):
+    for record, vr in zip(sample_records, validation_results, strict=False):
         record["validation_summary"] = vr.summary()
         record["validation_failures"] = [
             {

@@ -64,8 +64,9 @@ def list_inbox(
             t_invoices.c.currency,
         )
         .select_from(
-            t_inbox.outerjoin(t_sources, t_inbox.c.source_id == t_sources.c.id)
-            .outerjoin(t_invoices, t_invoices.c.inbox_message_id == t_inbox.c.id)
+            t_inbox.outerjoin(t_sources, t_inbox.c.source_id == t_sources.c.id).outerjoin(
+                t_invoices, t_invoices.c.inbox_message_id == t_inbox.c.id
+            )
         )
         .where(t_inbox.c.workspace_id == workspace_id)
         .order_by(desc(t_inbox.c.received_at))
@@ -99,9 +100,7 @@ def count_inbox(session: Session, *, workspace_id: str) -> int:
     from sqlalchemy import func
 
     row = session.execute(
-        select(func.count())
-        .select_from(t_inbox)
-        .where(t_inbox.c.workspace_id == workspace_id)
+        select(func.count()).select_from(t_inbox).where(t_inbox.c.workspace_id == workspace_id)
     ).first()
     return int(row[0]) if row else 0
 

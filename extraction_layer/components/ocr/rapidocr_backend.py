@@ -131,7 +131,7 @@ class RapidOCRBackend(BaseOCR):
         txts = getattr(result, "txts", None)
         scores = getattr(result, "scores", None)
         if boxes is not None and txts is not None and scores is not None:
-            return [list(triple) for triple in zip(boxes, txts, scores)]
+            return [list(triple) for triple in zip(boxes, txts, scores, strict=False)]
         return None
 
     @staticmethod

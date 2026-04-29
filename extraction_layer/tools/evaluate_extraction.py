@@ -29,7 +29,6 @@ from extraction_layer.components.ocr import make_ocr
 from extraction_layer.data_sources import make_dataset
 from extraction_layer.data_sources.katanaml_invoices import KatanamlInvoicesDataset
 
-
 FIELDS: list[str] = [
     "invoice_no",
     "invoice_date",
@@ -128,8 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     extractor = make_extractor("heuristic")
 
     per_field_stats: dict[str, dict[str, int]] = {
-        f: {"correct": 0, "wrong": 0, "missed": 0, "spurious": 0, "both_none": 0}
-        for f in FIELDS
+        f: {"correct": 0, "wrong": 0, "missed": 0, "spurious": 0, "both_none": 0} for f in FIELDS
     }
     sample_records: list[dict[str, Any]] = []
 
@@ -156,9 +154,7 @@ def main(argv: list[str] | None = None) -> int:
                 "outcome": outcome,
             }
         sample_records.append(record)
-        correct_n = sum(
-            1 for f in FIELDS if record["fields"][f]["outcome"] == "correct"
-        )
+        correct_n = sum(1 for f in FIELDS if record["fields"][f]["outcome"] == "correct")
         print(
             f"  [{i:02d}] {sample.id}: "
             f"correct {correct_n}/{len(FIELDS)}  "

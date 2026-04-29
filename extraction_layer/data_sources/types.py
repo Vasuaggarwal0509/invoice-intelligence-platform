@@ -28,7 +28,9 @@ class Sample(BaseModel):
     image: np.ndarray = Field(..., description="HxWx3 RGB uint8")
     ground_truth: dict[str, Any] = Field(default_factory=dict)
     split: str = Field(..., min_length=1, description="e.g. 'train' | 'validation' | 'test'")
-    source_dataset: str = Field(..., min_length=1, description="Dataset name, e.g. 'katanaml-invoices-donut-v1'")
+    source_dataset: str = Field(
+        ..., min_length=1, description="Dataset name, e.g. 'katanaml-invoices-donut-v1'"
+    )
     metadata: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("image")
