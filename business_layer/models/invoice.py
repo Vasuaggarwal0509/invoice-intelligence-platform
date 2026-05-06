@@ -23,6 +23,11 @@ class ValidationFindingPublic(BaseModel):
     reason: str | None = None
     expected: str | None = None
     observed: str | None = None
+    # Plain-language fields populated by the business view. Optional so the
+    # CA view (which renders the raw rule_name/reason) ignores them.
+    display_title: str | None = None
+    display_explanation: str | None = None
+    display_suggestion: str | None = None
 
 
 class InvoiceSummary(BaseModel):

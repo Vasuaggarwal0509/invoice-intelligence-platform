@@ -12,24 +12,91 @@
         return symbol + whole;
     }
 
+    /** Populate the no-clients-yet block with the CA's GSTIN + a
+     *  shareable invite link, plus copy-to-clipboard buttons.
+     *
+     *  The invite link points at /business?ca=<GSTIN> — the business
+     *  shell reads that query param on boot and pre-fills the "Link
+     *  your CA" form on the dashboard.
+     */
+    async function renderEmptyInvite(root, inviteBlock) {
+        let me;
+        try { me = await window.api.get('/api/auth/me'); }
+        catch (_) { /* no session — let the router handle it */ return; }
+        const gstin = (me && me.workspace && me.workspace.gstin) || '';
+        const origin = window.location.origin;
+        const inviteUrl = origin + '/static/business/index.html?ca=' + encodeURIComponent(gstin);
+
+        const gstinEl = inviteBlock.querySelector('[data-role="invite-gstin"]');
+        const linkEl = inviteBlock.querySelector('[data-role="invite-link"]');
+        const toast = inviteBlock.querySelector('[data-role="copy-toast"]');
+        const copyGstinBtn = inviteBlock.querySelector('[data-role="copy-gstin"]');
+        const copyLinkBtn = inviteBlock.querySelector('[data-role="copy-link"]');
+
+        gstinEl.textContent = gstin || '(no GSTIN on your workspace)';
+        linkEl.textContent = inviteUrl;
+        inviteBlock.hidden = false;
+
+        function flashCopied() {
+            toast.hidden = false;
+            setTimeout(() => { toast.hidden = true; }, 1800);
+        }
+        async function copyText(text) {
+            try { await navigator.clipboard.writeText(text); flashCopied(); }
+            catch (_) {
+                // Clipboard API requires a secure context (HTTPS or
+                // localhost). Fall back to a select-and-execCommand
+                // for older browsers / mixed contexts.
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); flashCopied(); }
+                catch (_e) { /* give up silently */ }
+                document.body.removeChild(ta);
+            }
+        }
+        copyGstinBtn.addEventListener('click', () => copyText(gstin));
+        copyLinkBtn.addEventListener('click', () => copyText(inviteUrl));
+    }
+
+    function renderRollup(root, items) {
+        const wrap = root.querySelector('[data-role="ca-rollup"]');
+        if (!wrap) return;
+        if (!items || items.length === 0) { wrap.hidden = true; return; }
+        const totals = items.reduce((acc, c) => {
+            acc.invoices += (c.invoice_count || 0);
+            acc.spend += (c.total_spend_minor || 0);
+            acc.flags += (c.open_flags || 0);
+            return acc;
+        }, { invoices: 0, spend: 0, flags: 0 });
+        root.querySelector('[data-role="rollup-clients"]').textContent = String(items.length);
+        root.querySelector('[data-role="rollup-invoices"]').textContent = String(totals.invoices);
+        root.querySelector('[data-role="rollup-spend"]').textContent = fmtAmount(totals.spend, 'INR');
+        root.querySelector('[data-role="rollup-flags"]').textContent = String(totals.flags);
+        wrap.hidden = false;
+    }
+
     async function renderClients(root) {
         const tpl = document.getElementById('view-clients');
         root.replaceChildren(tpl.content.cloneNode(true));
         const list = root.querySelector('[data-role="client-list"]');
-        const empty = root.querySelector('[data-role="empty-hint"]');
+        const inviteBlock = root.querySelector('[data-role="empty-invite"]');
 
         let payload;
         try { payload = await window.api.get('/api/ca/clients'); }
         catch (err) {
-            empty.textContent = err.detail || 'Could not load clients.';
-            empty.hidden = false;
+            inviteBlock.hidden = false;
+            inviteBlock.querySelector('p').textContent =
+                err.detail || 'Could not load clients.';
             return;
         }
         if (!payload.items || payload.items.length === 0) {
-            empty.hidden = false;
+            await renderEmptyInvite(root, inviteBlock);
             return;
         }
-        empty.hidden = true;
+        inviteBlock.hidden = true;
+        renderRollup(root, payload.items);
         for (const c of payload.items) {
             const li = document.createElement('li');
             li.addEventListener('click', () => {

@@ -31,6 +31,18 @@ os.environ.setdefault("PLATFORM_DATABASE_URL", "sqlite:///:memory:")
 os.environ.setdefault("PLATFORM_ENV", "test")
 os.environ.setdefault("PLATFORM_LOG_LEVEL", "WARNING")
 
+# Force-override (NOT setdefault) the OAuth client file + OTP flag so
+# the smoke harness ignores a developer's `.env.local` that may point
+# at a real client / set the demo OTP-log flag. The smoke contract
+# assumes dummy config + prod-default OTP behaviour.
+import pathlib as _pl
+
+_repo_root = _pl.Path(__file__).resolve().parent.parent.parent
+os.environ["PLATFORM_GOOGLE_OAUTH_CLIENT_FILE"] = str(
+    _repo_root / "secrets" / "google_oauth_client_dummy.json"
+)
+os.environ["PLATFORM_LOG_OTP_PLAINTEXT"] = "false"
+
 logging.basicConfig(level=logging.WARNING)
 
 from fastapi.testclient import TestClient

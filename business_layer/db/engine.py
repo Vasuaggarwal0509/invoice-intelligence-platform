@@ -52,6 +52,16 @@ def _apply_sqlite_pragmas(engine: Engine) -> None:
         cursor.execute("PRAGMA journal_mode=WAL")
         # Reasonable safety / throughput trade-off for app-level DBs.
         cursor.execute("PRAGMA synchronous=NORMAL")
+        # Wait up to 30 seconds for a lock instead of failing immediately.
+        # Without this, a long-running writer (e.g. the Gmail poller
+        # ingesting 24 attachments in one transaction) trips the
+        # default 5 s timeout in any other thread that tries to write,
+        # and the second writer raises ``database is locked``. With
+        # WAL mode + busy_timeout=30000, contended writers queue up
+        # cleanly. WSL's slower fs makes this especially important —
+        # lock contention on a Windows-mounted volume can chew through
+        # the 5 s default during ordinary multi-row inserts.
+        cursor.execute("PRAGMA busy_timeout=30000")
         cursor.close()
 
 

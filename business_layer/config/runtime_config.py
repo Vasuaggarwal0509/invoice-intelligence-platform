@@ -149,8 +149,3 @@ def get_runtime_config() -> RuntimeConfig:
     Test helper: ``get_runtime_config.cache_clear()``.
     """
     return _load_from_dict(_read_config_file(_DEFAULT_CONFIG_PATH))
-
-
-def load_from_path(path: Path) -> RuntimeConfig:
-    """Load from an arbitrary path — used by tests that seed their own fixture."""
-    return _load_from_dict(_read_config_file(path))

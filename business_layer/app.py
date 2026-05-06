@@ -76,6 +76,89 @@ class _RequestIDMiddleware(BaseHTTPMiddleware):
         return response
 
 
+def _recover_stuck_extracting_rows() -> None:
+    """Reset inbox rows whose worker died/crashed before they finished.
+
+    Runs once at startup. An inbox row in ``status='extracting'`` is
+    only legitimate while a worker is *actively* processing it. After
+    a process restart no worker is processing anything yet, so any row
+    in that state is the corpse of a previous run that crashed past
+    the ``extracting`` commit but before the final ``extracted`` /
+    ``failed`` flip — historically caused by the ``pipeline_runs``
+    UNIQUE-constraint poisoning the transaction.
+
+    Recovery is two-step:
+
+      1. Flip the inbox status back to ``queued``.
+      2. Insert a fresh ``jobs`` row in state ``queued`` for each one.
+         The previous job is in state ``failed`` and the worker only
+         claims rows in state ``queued``, so without (2) the worker
+         would never re-attempt the row.
+
+    Both happen in a single transaction so a crash mid-recovery leaves
+    the row consistent. Cheap one-shot — touches at most a handful of
+    rows on a healthy system.
+    """
+    from sqlalchemy import select, update
+
+    from business_layer.db import get_session
+    from business_layer.db.tables import inbox_messages as t_inbox
+    from business_layer.db.tables import invoices as t_invoices
+    from business_layer.db.tables import jobs as t_jobs
+    from business_layer.repositories import jobs as jobs_repo
+
+    try:
+        with get_session() as session:
+            # Two cases need recovery:
+            #   * status='extracting' (worker died mid-run)
+            #   * status='queued' but no live job (a prior failed run
+            #     left the row in queued without scheduling a retry)
+            candidates = session.execute(
+                select(t_inbox.c.id, t_inbox.c.workspace_id, t_inbox.c.status).where(
+                    t_inbox.c.status.in_(("extracting", "queued"))
+                )
+            ).all()
+            recovered = 0
+            for row in candidates:
+                live_job = session.execute(
+                    select(t_jobs.c.id)
+                    .where(
+                        t_jobs.c.inbox_message_id == row.id,
+                        t_jobs.c.state.in_(("queued", "running")),
+                    )
+                    .limit(1)
+                ).first()
+                if live_job is not None:
+                    # Already scheduled — nothing to do.
+                    continue
+                inv = session.execute(
+                    select(t_invoices.c.id)
+                    .where(
+                        t_invoices.c.inbox_message_id == row.id,
+                        t_invoices.c.workspace_id == row.workspace_id,
+                    )
+                    .limit(1)
+                ).first()
+                jobs_repo.create(
+                    session,
+                    workspace_id=row.workspace_id,
+                    inbox_message_id=row.id,
+                    invoice_id=inv.id if inv else None,
+                )
+                if row.status == "extracting":
+                    session.execute(
+                        update(t_inbox).where(t_inbox.c.id == row.id).values(status="queued")
+                    )
+                recovered += 1
+            if recovered:
+                _log.info(
+                    "app.startup.recovered_stuck_rows",
+                    extra={"reset_count": recovered},
+                )
+    except Exception:  # pragma: no cover - defensive; recovery never blocks boot
+        _log.exception("app.startup.recovery_failed")
+
+
 def _configure_logging(settings: Settings) -> None:
     """Baseline logging config.
 
@@ -168,6 +251,7 @@ def app_factory() -> FastAPI:
     @fastapi_app.on_event("startup")
     def _startup() -> None:  # pragma: no cover - exercised by integration tests
         init_db()
+        _recover_stuck_extracting_rows()
         # Tests bypass the thread (see conftest "no_background_worker"
         # fixture); production and dev use the live thread.
         if settings.env != "test":

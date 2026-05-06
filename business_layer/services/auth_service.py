@@ -265,6 +265,43 @@ def verify_otp_and_start_session(
     )
 
 
+# ---------- Session issue helper ---------------------------------------
+
+
+def issue_session(
+    session: Session,
+    *,
+    user_id: str,
+    client_ip: str,
+    user_agent: str | None,
+) -> str:
+    """Mint a fresh session token for an existing user; return the plaintext.
+
+    Mirrors the per-flow inline session creation in
+    :func:`verify_otp_and_start_session` and :func:`signup_ca`. Extracted
+    as a shared helper for callers that already know who the user is
+    via some other authentication artefact — e.g. the OAuth callback
+    presenting a valid signed state token whose cookie was lost on the
+    cross-site redirect from Google. The state acts as the proof of
+    identity; this helper restores the session cookie so the user
+    lands on the dashboard authenticated.
+
+    The returned plaintext is what the route layer puts in the
+    ``Set-Cookie`` header. The hashed form is what's persisted.
+    """
+    settings = get_settings()
+    issued = sessions_sec.issue_token()
+    sessions_repo.create(
+        session,
+        user_id=user_id,
+        token_hash=issued.token_hash,
+        ttl_seconds=settings.session_ttl_seconds,
+        user_agent=user_agent,
+        ip_address=client_ip,
+    )
+    return issued.plaintext
+
+
 # ---------- Session resolve / revoke -----------------------------------
 
 

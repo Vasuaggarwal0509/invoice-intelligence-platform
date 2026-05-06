@@ -36,17 +36,22 @@ def build_dashboard(
 ) -> DashboardPayload:
     """Return the full dashboard payload for the caller's workspace.
 
-    ``period`` is currently always ``'this_month'``. Future values
-    (``'last_month'``, ``'this_quarter'``, ``'ytd'``) plug in here —
-    routes accept the parameter but only one value works today.
+    ``period`` accepts ``'this_month'`` or ``'last_month'``. Anything
+    else degrades silently to ``'this_month'`` so a frontend bug
+    can't break the dashboard render.
     """
-    if period != "this_month":
-        # Don't raise — degrade gracefully to 'this_month' so a
-        # frontend bug with a bad period doesn't break the dashboard.
+    if period not in ("this_month", "last_month"):
         period = "this_month"
 
-    month_start, month_end = kpi_queries.current_month_bounds_ms()
     now = dt.datetime.now(dt.UTC)
+    if period == "last_month":
+        # First of this month → minus one day → previous month.
+        last_in_prev = dt.datetime(now.year, now.month, 1, tzinfo=dt.UTC) - dt.timedelta(days=1)
+        period_year, period_month = last_in_prev.year, last_in_prev.month
+        month_start, month_end = kpi_queries.month_bounds_ms(period_year, period_month)
+    else:
+        month_start, month_end = kpi_queries.current_month_bounds_ms()
+        period_year, period_month = now.year, now.month
 
     tiles = kpi_queries.totals_for_month(
         session,
@@ -68,8 +73,8 @@ def build_dashboard(
     )
 
     return DashboardPayload(
-        period_year=now.year,
-        period_month=now.month,
+        period_year=period_year,
+        period_month=period_month,
         currency="INR",  # v1 single-currency; multi-currency is a Sprint 5+ concern
         tiles=tiles,
         top_vendors=top_vendors,

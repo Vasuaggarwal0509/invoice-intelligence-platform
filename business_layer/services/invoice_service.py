@@ -100,11 +100,28 @@ def get_business_detail(
 ) -> InvoiceDetailBusiness:
     """Plain-language view — summary + failing findings only.
 
-    Business owner doesn't care about PASS / NOT_APPLICABLE rows. The
-    ones that matter are the ones the platform wants them to look at.
+    Business owner doesn't care about PASS / NOT_APPLICABLE rows. Each
+    failing finding is enriched with friendly title / explanation /
+    suggestion text from :mod:`findings_messages` so the UI never has
+    to render the raw ``rule_name`` or technical ``reason`` string.
     """
+    from business_layer.services import findings_messages
+
     summary, findings = _summary(session, workspace_id=workspace_id, invoice_id=invoice_id)
-    flags = [f for f in findings if f.outcome == "FAIL"]
+    flags = []
+    for f in findings:
+        if f.outcome != "FAIL":
+            continue
+        msg = findings_messages.for_rule(f.rule_name)
+        flags.append(
+            f.model_copy(
+                update={
+                    "display_title": msg.title,
+                    "display_explanation": msg.explanation,
+                    "display_suggestion": msg.suggestion,
+                }
+            )
+        )
     return InvoiceDetailBusiness(invoice=summary, flags=flags)
 
 

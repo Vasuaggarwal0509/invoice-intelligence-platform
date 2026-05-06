@@ -30,6 +30,8 @@
     }
 
     function renderLogin() {
+        // Force-clear any stale session so the topbar stays hidden.
+        window.api.post('/api/auth/logout', {}).catch(() => {});
         setAuthenticatedUI(false);
         mountTemplate('view-login');
         const form = root.querySelector('#form-login');
@@ -40,6 +42,9 @@
     }
 
     function renderSignup() {
+        // Same: clear any stale session before letting them sign up
+        // as a fresh CA.
+        window.api.post('/api/auth/logout', {}).catch(() => {});
         setAuthenticatedUI(false);
         mountTemplate('view-signup');
         const form = root.querySelector('#form-signup');
@@ -114,15 +119,21 @@
     window.addEventListener('hashchange', handleRoute);
 
     (async function boot() {
+        // Respect explicit login/signup hashes so the topbar stays
+        // hidden when the user lands on those routes — even with a
+        // stale session cookie.
+        const hash = window.location.hash;
+        if (hash === '#/login' || hash === '#/signup') {
+            navigate(hash);
+            return;
+        }
         try {
             const me = await window.api.get('/api/auth/me');
             if (me.user.role !== 'ca') {
                 window.location.replace('/');
                 return;
             }
-            const target = window.location.hash && window.location.hash !== '#/login'
-                ? window.location.hash : '#/clients';
-            navigate(target);
+            navigate(hash || '#/clients');
         } catch (_) {
             navigate('#/login');
         }

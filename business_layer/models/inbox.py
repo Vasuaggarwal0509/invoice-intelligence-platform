@@ -27,6 +27,11 @@ class InboxRow(BaseModel):
     vendor_name: str | None
     total_amount_minor: int | None
     currency: str
+    # Plain-language reason for ``failed`` / ``ignored`` rows. ``None``
+    # for healthy rows. Driven server-side from
+    # :mod:`findings_messages.inbox_failure_message` so the UI never
+    # invents wording.
+    failure_message: str | None = None
 
 
 class InboxListResponse(BaseModel):

@@ -71,10 +71,41 @@
     <template id="view-clients">
         <section class="view">
             <h1>Your clients</h1>
-            <p class="muted small" data-role="empty-hint" hidden>
-                No clients yet. Share your firm's GSTIN with your clients — they add it in
-                their business account to link with you.
-            </p>
+            <div class="ca-rollup" data-role="ca-rollup" hidden>
+                <div class="ca-rollup-tile">
+                    <div class="ca-rollup-label">Clients</div>
+                    <div class="ca-rollup-value" data-role="rollup-clients">—</div>
+                </div>
+                <div class="ca-rollup-tile">
+                    <div class="ca-rollup-label">Total invoices</div>
+                    <div class="ca-rollup-value" data-role="rollup-invoices">—</div>
+                </div>
+                <div class="ca-rollup-tile">
+                    <div class="ca-rollup-label">Total spend</div>
+                    <div class="ca-rollup-value" data-role="rollup-spend">—</div>
+                </div>
+                <div class="ca-rollup-tile">
+                    <div class="ca-rollup-label">Open flags</div>
+                    <div class="ca-rollup-value" data-role="rollup-flags">—</div>
+                </div>
+            </div>
+            <div class="empty-invite" data-role="empty-invite" hidden>
+                <p class="muted">
+                    No clients linked yet. Share either of these with your business clients —
+                    when they sign up, the link auto-fills the "Link your CA" form.
+                </p>
+                <div class="invite-row">
+                    <span class="invite-label">Your firm's GSTIN</span>
+                    <code class="invite-value" data-role="invite-gstin">—</code>
+                    <button type="button" class="link-btn" data-role="copy-gstin">Copy</button>
+                </div>
+                <div class="invite-row">
+                    <span class="invite-label">Invite link</span>
+                    <code class="invite-value" data-role="invite-link">—</code>
+                    <button type="button" class="link-btn" data-role="copy-link">Copy</button>
+                </div>
+                <p class="muted small invite-success" data-role="copy-toast" hidden>Copied!</p>
+            </div>
             <ul class="client-list" data-role="client-list"></ul>
         </section>
     </template>

@@ -38,6 +38,10 @@ header#topbar {
     position: sticky; top: 0; z-index: 10;
 }
 
+/* Belt-and-braces: ensure [hidden] always wins over the display:flex
+   rule above on /login + /signup routes. */
+header#topbar[hidden] { display: none !important; }
+
 header#topbar .brand { font-weight: 700; font-size: 18px; color: var(--primary); }
 header#topbar .topnav { display: flex; gap: 16px; flex: 1; }
 header#topbar .topnav a {
@@ -83,6 +87,80 @@ button.primary:disabled { opacity: 0.6; cursor: default; }
 .link-btn:hover, a.link-btn:hover { text-decoration: underline; }
 
 .error { color: var(--error); font-size: 14px; margin: 0; }
+
+/* --- CA rollup strip (top of clients view) --- */
+
+.ca-rollup {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0 4px;
+}
+.ca-rollup-tile {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+}
+.ca-rollup-label {
+    font-size: 11px;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.ca-rollup-value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+@media (max-width: 720px) {
+    .ca-rollup { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- CA empty-state invite block --- */
+
+.empty-invite {
+    margin-top: 18px;
+    padding: 18px 20px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+}
+
+.empty-invite p {
+    margin: 0 0 14px;
+}
+
+.invite-row {
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.invite-label {
+    color: var(--fg-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.invite-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: var(--bg);
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.invite-success {
+    margin: 6px 0 0;
+    color: var(--success);
+}
 
 /* --- Client list --- */
 

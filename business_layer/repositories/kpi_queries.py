@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from sqlalchemy import case, desc, distinct, exists, func, select
+from sqlalchemy import case, desc, exists, func, select
 from sqlalchemy.orm import Session
 
 from business_layer.db.tables import invoices as t_invoices
@@ -69,18 +69,23 @@ def current_month_bounds_ms(now_ms_fn=None) -> tuple[int, int]:  # type: ignore[
 
 @dataclass(frozen=True)
 class KpiTotals:
-    """The four main tiles on the dashboard.
+    """The four main tiles on the dashboard plus the small status strip.
 
     ``itc_estimate_minor`` is an **estimate** — it assumes an
     18%-inclusive GST rate typical for most Indian B2B invoices.
     Real ITC depends on the tax breakup per line + GSTR-2B match,
     both of which arrive in Sprint 5. The UI must label this "est.".
+
+    ``extracted_count`` / ``pending_count`` drive the "by status"
+    strip just below the tiles — same period scope as the tiles.
     """
 
     invoices_this_month: int
     total_spend_minor: int
     itc_estimate_minor: int
     needs_review_count: int
+    extracted_count: int
+    pending_count: int
 
 
 @dataclass(frozen=True)
@@ -144,6 +149,34 @@ def totals_for_month(
         0,
     )
 
+    # Status-strip buckets. Mapped from invoices.status:
+    #   * extracted_count  := approved + under_review + flagged
+    #                         (the pipeline finished — user has fields
+    #                         to look at, regardless of whether
+    #                         validation flagged anything).
+    #   * pending_count    := pending + rejected (extraction hasn't
+    #                         produced fields yet, OR the user said
+    #                         no). The dashboard's separate "needs
+    #                         review" tile counts FAIL findings.
+    extracted_expr = func.coalesce(
+        func.sum(
+            case(
+                (t_invoices.c.status.in_(("approved", "under_review", "flagged")), 1),
+                else_=0,
+            )
+        ),
+        0,
+    )
+    pending_expr = func.coalesce(
+        func.sum(
+            case(
+                (t_invoices.c.status.in_(("pending", "rejected")), 1),
+                else_=0,
+            )
+        ),
+        0,
+    )
+
     stmt = select(
         func.count().label("invoice_count"),
         func.coalesce(func.sum(t_invoices.c.total_amount_minor), 0).label("total_spend"),
@@ -152,6 +185,8 @@ def totals_for_month(
             func.sum(case((has_fail_subq, 1), else_=0)),
             0,
         ).label("needs_review_count"),
+        extracted_expr.label("extracted_count"),
+        pending_expr.label("pending_count"),
     ).where(
         t_invoices.c.workspace_id == workspace_id,
         t_invoices.c.created_at >= month_start_ms,
@@ -159,7 +194,7 @@ def totals_for_month(
     )
     row = session.execute(stmt).first()
     if row is None:  # pragma: no cover - aggregate always returns one row
-        return KpiTotals(0, 0, 0, 0)
+        return KpiTotals(0, 0, 0, 0, 0, 0)
 
     invoice_count = int(row.invoice_count or 0)
     total_spend = int(row.total_spend or 0)
@@ -171,6 +206,8 @@ def totals_for_month(
         total_spend_minor=total_spend,
         itc_estimate_minor=itc_estimate,
         needs_review_count=int(row.needs_review_count or 0),
+        extracted_count=int(row.extracted_count or 0),
+        pending_count=int(row.pending_count or 0),
     )
 
 
@@ -268,14 +305,3 @@ def needs_review(
         )
         for r in rows
     ]
-
-
-def unique_vendor_count(session: Session, *, workspace_id: str) -> int:
-    """Distinct vendors the workspace has ever had — for flavour text."""
-    row = session.execute(
-        select(func.count(distinct(t_invoices.c.vendor_name))).where(
-            t_invoices.c.workspace_id == workspace_id,
-            t_invoices.c.vendor_name.is_not(None),
-        )
-    ).first()
-    return int(row[0]) if row and row[0] else 0

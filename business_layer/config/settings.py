@@ -117,6 +117,18 @@ class Settings(BaseSettings):
     # --- Logging ---------------------------------------------------------
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = Field(default="INFO")
 
+    # --- OTP delivery toggle ---------------------------------------------
+    # DEMO-ONLY escape hatch. When True, the plaintext OTP is logged on
+    # every /api/auth/otp/request call EVEN IN PROD. Lets a demo
+    # operator read the OTP from Render's Logs tab without paying for
+    # an SMS provider.
+    #
+    # WARNING: never enable on an instance with real users. Anyone with
+    # log access can sign in as anyone. Set this only on demo / staging
+    # instances. Real SMS comes from a provider (Twilio / MSG91) wired
+    # in a later sprint via services/otp_delivery/.
+    log_otp_plaintext: bool = Field(default=False)
+
     # --- Gmail connector -------------------------------------------------
     # Path to the OAuth 2.0 Web Application client JSON downloaded from
     # Google Cloud Console → APIs & Services → Credentials.

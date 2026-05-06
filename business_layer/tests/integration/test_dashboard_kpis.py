@@ -152,6 +152,8 @@ class TestDashboardKpis:
             "total_spend_minor": 0,
             "itc_estimate_minor": 0,
             "needs_review_count": 0,
+            "extracted_count": 0,
+            "pending_count": 0,
         }
         assert body["top_vendors"] == []
         assert body["needs_review"] == []
