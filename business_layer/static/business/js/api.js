@@ -65,9 +65,37 @@
         return payload;
     }
 
+    // POST a multipart/form-data body (file uploads). Browsers refuse
+    // to set Content-Type with a boundary for us when we hand-roll
+    // headers, so we let fetch() do it AND only attach the CSRF
+    // header. Same error envelope as request().
+    async function postFormData(path, formData) {
+        const csrf = readCookie('bl_csrf');
+        const response = await fetch(path, {
+            method: 'POST',
+            credentials: 'include',
+            headers: csrf ? { 'X-CSRF-Token': csrf } : {},
+            body: formData,
+        });
+        const text = await response.text();
+        let payload = null;
+        if (text) {
+            try { payload = JSON.parse(text); } catch (_) { /* ignore */ }
+        }
+        if (!response.ok) {
+            const err = new Error((payload && payload.detail) || response.statusText);
+            err.status = response.status;
+            err.code = payload && payload.code;
+            err.detail = payload && payload.detail;
+            throw err;
+        }
+        return payload;
+    }
+
     global.api = {
         get: (path) => request(path, { method: 'GET' }),
         post: (path, body) => request(path, { method: 'POST', body }),
         del: (path) => request(path, { method: 'DELETE' }),
+        postFormData,
     };
 })(window);

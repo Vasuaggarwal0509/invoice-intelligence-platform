@@ -59,6 +59,7 @@ def pull_new_attachments(
     *,
     source: SourceRow,
     user_id: str,
+    force_full_window: bool = False,
 ) -> PullStats:
     """One poll cycle for one connected Gmail source.
 
@@ -68,6 +69,24 @@ def pull_new_attachments(
     All DB writes use the caller-provided ``session``. Transaction
     scope is the caller's — the worker commits after a successful
     return and rolls back on exception.
+
+    Args:
+        force_full_window: When True, ignore the source's
+            ``last_polled_at`` cursor and search the full backfill
+            window (config: ``email_ingestion.backfill_days``). The
+            user-facing "Fetch now" button uses this — users press
+            it expecting "find anything that matches NOW", not "find
+            things since my last incremental poll." Also skips
+            updating ``last_polled_at``, so the background poller's
+            cursor stays correct.
+
+            False (default) is the background-poller behaviour:
+            incremental ``after:<cursor>`` query, advance the cursor
+            on success.
+
+            Dedupe via the upload service's SHA-256 check is the
+            same in both modes — a re-scanned attachment that's
+            already in the DB is silently skipped.
     """
     cfg = get_runtime_config().email_ingestion
 
@@ -97,16 +116,33 @@ def pull_new_attachments(
         raise DependencyError("gmail service build failed") from exc
 
     # ----- 3. construct search query -----------------------------------
+    # Background poller (force_full_window=False):
+    #   * incremental: after:<cursor> if cursor set, else newer_than:Nd
+    #   * advances cursor on success
+    # Fetch-now button (force_full_window=True):
+    #   * NO date filter — scan whole inbox matching keywords/attachment
+    #   * Why: Gmail's newer_than: filters by the email's Date: header,
+    #     NOT received date. Forwarded old emails or messages from a
+    #     clock-skewed sender have stale Date headers and get excluded
+    #     by newer_than: even when they were received just now.
+    #     SHA-256 dedup in upload_service makes re-scans safe; users
+    #     pressing Fetch-now expect "find anything that matches now",
+    #     not a time-window subset.
+    cursor = None if force_full_window else source.last_polled_at
     query = _build_search_query(
         cfg=cfg,
-        since_ms=source.last_polled_at,
+        since_ms=cursor,
+        unbounded=force_full_window,
     )
     _log.info(
-        "gmail.pull.start",
+        "gmail.pull.start force_full=%s query=%s",
+        force_full_window,
+        query,
         extra={
             "source_id": source.id,
             "workspace_id": source.workspace_id,
             "query": query,
+            "force_full_window": force_full_window,
         },
     )
 
@@ -159,19 +195,56 @@ def pull_new_attachments(
         _mark_disconnected(session, source_id=source.id)
         return PullStats(scanned, ingested, skipped, True)
     except Exception as exc:
+        # Detect Google's "Gmail API not enabled" / failedPrecondition
+        # so the user gets a useful error in the UI instead of "gmail
+        # message list failed". This is the #1 first-time setup bug.
+        msg = "gmail message list failed"
+        try:
+            from googleapiclient.errors import HttpError
+
+            if isinstance(exc, HttpError):
+                # exc.error_details is a list of {message, domain, reason}
+                # dicts when Google returns structured errors.
+                details = getattr(exc, "error_details", None) or []
+                reasons = [str(d.get("reason", "")) for d in details]
+                if "failedPrecondition" in reasons or "SERVICE_DISABLED" in reasons:
+                    msg = (
+                        "Gmail API isn't enabled for this Google Cloud project. "
+                        "Enable it at https://console.cloud.google.com/apis/library/gmail.googleapis.com "
+                        "(make sure the project matches your OAuth client), wait ~1 min, retry."
+                    )
+                elif exc.resp.status == 403:
+                    msg = (
+                        "Gmail rejected the request (403). Most likely the user's account "
+                        "has restricted Gmail API access (Google Workspace policy)."
+                    )
+                elif exc.resp.status == 429:
+                    msg = "Gmail rate-limited us. Try again in a minute."
+        except Exception:
+            pass  # never let error-classification itself raise
         _log.exception("gmail.pull.list_failed", extra={"source_id": source.id})
-        raise DependencyError("gmail message list failed") from exc
+        raise DependencyError(msg) from exc
 
     # ----- 5. stamp last_polled_at -------------------------------------
-    _mark_last_polled(session, source_id=source.id)
+    # Skip the cursor-advance when we deliberately scanned the full
+    # window. The background poller's incremental cursor must stay
+    # honest — a Fetch-now click shouldn't make the next scheduled
+    # tick miss messages between the old cursor and now.
+    if not force_full_window:
+        _mark_last_polled(session, source_id=source.id)
 
     _log.info(
-        "gmail.pull.done",
+        "gmail.pull.done scanned=%d ingested=%d skipped=%d cursor_advanced=%s",
+        scanned,
+        ingested,
+        skipped,
+        not force_full_window,
         extra={
             "source_id": source.id,
             "scanned": scanned,
             "ingested": ingested,
             "skipped": skipped,
+            "cursor_advanced": not force_full_window,
         },
     )
     return PullStats(scanned, ingested, skipped, False)
@@ -287,28 +360,70 @@ def _flatten_parts(part: dict) -> list[dict]:
     return out
 
 
-def _build_search_query(*, cfg, since_ms: int | None) -> str:  # type: ignore[no-untyped-def]
+def _build_search_query(  # type: ignore[no-untyped-def]
+    *,
+    cfg,
+    since_ms: int | None,
+    unbounded: bool = False,
+) -> str:
     """Compose a Gmail search query from config + cursor.
+
+    Args:
+        since_ms: Unix-millisecond cursor. When set, query uses
+            ``after:<unix_seconds>``. Used by the background poller
+            for incremental scans.
+        unbounded: When True, OMIT the date filter entirely (no
+            ``after:``, no ``newer_than:``). Used by the Fetch-now
+            button.
+
+            Why we need an "unbounded" mode: Gmail's ``newer_than:``
+            operator filters by the email's ``Date:`` header (sender's
+            claimed send time), NOT by the received timestamp. Emails
+            sent from a clock-skewed device, or forwards that preserve
+            an old original Date, get excluded by ``newer_than:30d``
+            even when they arrived in the inbox today. The user
+            pressing Fetch-now wants any matching email; SHA-256
+            dedup in upload_service prevents re-ingestion of already-
+            seen attachments.
 
     Examples::
 
+        # Background poller, first run (no cursor):
         has:attachment subject:(invoice OR bill) newer_than:30d -in:spam -in:trash
-        has:attachment subject:(...) after:1710000000
+
+        # Background poller, incremental:
+        has:attachment subject:(...) after:1710000000 -in:spam -in:trash
+
+        # Fetch-now button (unbounded):
+        has:attachment subject:(invoice OR bill) -in:spam -in:trash
     """
     parts: list[str] = ["has:attachment"]
 
     if cfg.has_keyword_filter():
-        # Gmail subject: operator accepts parens + OR.
-        keywords = " OR ".join(kw.replace('"', "") for kw in cfg.subject_keywords)
-        parts.append(f"subject:({keywords})")
+        # Gmail subject: operator accepts parens + OR. Multi-word
+        # keywords MUST be double-quoted so Gmail treats them as
+        # phrases — without quoting, "tax invoice" parses as
+        # (tax AND invoice) and the surrounding OR-list can match
+        # unexpectedly few emails. Single-word keywords are wrapped
+        # too for uniformity (no harm; Gmail accepts "invoice" same
+        # as invoice). Internal double-quotes are stripped to keep
+        # the query syntax valid.
+        def _quote(kw: str) -> str:
+            cleaned = kw.replace('"', "").strip()
+            return f'"{cleaned}"' if cleaned else ""
 
-    # Cursor: prefer incremental (after:) if we have one; else use the
-    # config backfill_days as a bounded first-run window.
+        terms = [_quote(kw) for kw in cfg.subject_keywords if kw.strip()]
+        if terms:
+            parts.append(f"subject:({' OR '.join(terms)})")
+
     if since_ms:
-        # Gmail's `after:` takes a unix timestamp (seconds).
+        # Cursor wins over backfill window — Gmail's `after:` takes a
+        # unix timestamp (seconds).
         parts.append(f"after:{int(since_ms // 1000)}")
-    else:
+    elif not unbounded:
+        # First-run / no cursor + bounded mode → bounded backfill.
         parts.append(f"newer_than:{cfg.backfill_days}d")
+    # else: unbounded — no date filter at all.
 
     parts.append("-in:spam")
     parts.append("-in:trash")

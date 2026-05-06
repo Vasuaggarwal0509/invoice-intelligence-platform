@@ -117,18 +117,3 @@ def set_ca_gstin(
     session.execute(
         update(workspaces).where(workspaces.c.id == workspace_id).values(ca_gstin=ca_gstin)
     )
-
-
-def list_businesses_linked_to_ca(
-    session: Session,
-    *,
-    ca_gstin: str,
-) -> list[WorkspaceRow]:
-    """Return all business workspaces that nominated ``ca_gstin`` as their CA.
-
-    Ordered by name for a stable client list in the UI.
-    """
-    rows = session.execute(
-        select(workspaces).where(workspaces.c.ca_gstin == ca_gstin).order_by(workspaces.c.name)
-    ).all()
-    return [_row_to_dc(r) for r in rows]

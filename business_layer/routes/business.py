@@ -54,6 +54,8 @@ def get_dashboard(
             total_spend_minor=payload.tiles.total_spend_minor,
             itc_estimate_minor=payload.tiles.itc_estimate_minor,
             needs_review_count=payload.tiles.needs_review_count,
+            extracted_count=payload.tiles.extracted_count,
+            pending_count=payload.tiles.pending_count,
         ),
         top_vendors=[
             VendorTotalPublic(

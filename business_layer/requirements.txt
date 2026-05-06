@@ -23,6 +23,12 @@ python-multipart>=0.0.9      # required by FastAPI for UploadFile/Form
 # --- Observability -------------------------------------------------------
 structlog>=24.1              # structured JSON logs + PII redaction processor
 
+# --- PDF rendering (for OCR ingestion) ----------------------------------
+# pure-Python Chromium PDFium binding — no system poppler/poppler-utils
+# dependency. Used in extraction_runner._render_pdf_first_page to turn
+# uploaded PDFs into the numpy image the OCR pipeline expects.
+pypdfium2>=4.30
+
 # --- Email ingestion (Gmail connector) ----------------------------------
 google-auth>=2.29            # credential models + refresh flow
 google-auth-oauthlib>=1.2    # server-side OAuth 2.0 Flow (web client)

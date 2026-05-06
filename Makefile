@@ -23,7 +23,7 @@ UVICORN := venv/bin/uvicorn
 VERSION := $(shell grep -E '^version' pyproject.toml | head -1 | cut -d'"' -f2)
 
 .PHONY: install install-runtime test test-fast test-business test-extraction \
-        lint format run smoke ci build-image clean version help
+        lint format run smoke seed clean-blobs ci build-image clean version help
 
 help:
 	@echo "Common targets:"
@@ -79,6 +79,17 @@ run:
 
 smoke:
 	$(PYTHON) tests/smoke/biz_layer_smoke.py
+
+# Populate local SQLite with 1 CA + 4 businesses + ~25 invoices for demo /
+# dashboard visualisation. Idempotent: re-running wipes the prior seed.
+seed:
+	$(PYTHON) -m scripts.seed_demo
+
+# Delete blob files in data/blobs/ that no inbox_messages row references.
+# Pure cruft cleanup — safe (won't touch anything the app still serves).
+# Pass DRY_RUN=1 to report without deleting.
+clean-blobs:
+	$(PYTHON) -m scripts.cleanup_blobs $(if $(DRY_RUN),--dry-run,)
 
 # Exactly the CI sequence — useful for debugging a CI failure locally.
 ci: lint test smoke

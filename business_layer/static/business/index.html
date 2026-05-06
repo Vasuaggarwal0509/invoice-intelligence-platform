@@ -62,7 +62,13 @@
     <template id="view-dashboard">
         <section class="view view-dashboard">
             <h1 data-role="greeting">Welcome back</h1>
-            <p class="muted small" data-role="period">This month</p>
+            <div class="period-row">
+                <p class="muted small" data-role="period">This month</p>
+                <div class="period-switch" role="tablist" aria-label="Period">
+                    <button type="button" class="period-btn is-active" data-role="period-this">This month</button>
+                    <button type="button" class="period-btn" data-role="period-last">Last month</button>
+                </div>
+            </div>
             <div class="kpi-row">
                 <div class="kpi-tile">
                     <div class="kpi-label">Invoices this month</div>
@@ -80,6 +86,20 @@
                     <div class="kpi-label">Needs review</div>
                     <div class="kpi-value" data-role="kpi-review">—</div>
                 </div>
+            </div>
+            <div class="status-strip" data-role="status-strip" hidden>
+                <span class="status-pill is-extracted">
+                    <span class="status-dot"></span>
+                    <strong data-role="status-extracted">0</strong>&nbsp;extracted
+                </span>
+                <span class="status-pill is-pending">
+                    <span class="status-dot"></span>
+                    <strong data-role="status-pending">0</strong>&nbsp;pending
+                </span>
+                <span class="status-pill is-review">
+                    <span class="status-dot"></span>
+                    <strong data-role="status-review">0</strong>&nbsp;needs review
+                </span>
             </div>
 
             <div class="upload-card">
@@ -112,12 +132,29 @@
                         keywords (editable in <code>config/config.json</code>).
                     </p>
                     <a id="btn-connect-email" class="primary btn-connect"
-                       href="/api/oauth/google/start">Connect Email</a>
-                    <p class="muted small" data-role="gmail-connected-hint" hidden>
-                        Gmail connected. New invoices arrive every
-                        <span data-role="poll-interval">15</span> minutes.
-                        <button type="button" class="link-btn" data-role="gmail-disconnect">Disconnect</button>
-                    </p>
+                       href="/api/oauth/google/start">
+                        <span class="spinner" data-role="connect-spinner" hidden></span>
+                        <span data-role="connect-label">Connect Email</span>
+                    </a>
+                    <div data-role="gmail-connected-hint" hidden>
+                        <p class="connected-line">
+                            <span class="status-dot status-ok" aria-hidden="true"></span>
+                            <span>Connected: <strong data-role="gmail-account-label">Gmail</strong></span>
+                        </p>
+                        <p class="muted small">
+                            New invoices arrive every
+                            <span data-role="poll-interval">15</span> minutes,
+                            or fetch them right now.
+                        </p>
+                        <div class="gmail-actions">
+                            <button type="button" class="primary btn-fetch-now" data-role="gmail-fetch-now">
+                                <span class="spinner" data-role="gmail-fetch-spinner" hidden></span>
+                                <span data-role="gmail-fetch-label">Fetch now</span>
+                            </button>
+                            <button type="button" class="link-btn" data-role="gmail-disconnect">Disconnect</button>
+                        </div>
+                        <p class="fetch-status" data-role="gmail-fetch-status" hidden></p>
+                    </div>
                 </div>
             </section>
 
@@ -152,11 +189,18 @@
     <template id="view-inbox">
         <section class="view view-inbox">
             <h1>Inbox</h1>
+            <div class="inbox-actionbar" data-role="inbox-actionbar" hidden>
+                <span class="muted small" data-role="selection-count">0 selected</span>
+                <button type="button" class="link-btn" data-role="extract-selected" disabled>Extract selected</button>
+                <button type="button" class="primary" data-role="extract-all">Extract all pending</button>
+                <span class="extract-status" data-role="extract-status" hidden></span>
+            </div>
             <p class="muted small" data-role="empty-hint" hidden>No uploads yet. Start on the home page.</p>
             <div class="inbox-wrapper">
                 <table class="inbox-table">
                     <thead>
                         <tr>
+                            <th class="col-check"><input type="checkbox" data-role="check-all" aria-label="Select all" /></th>
                             <th>Source</th>
                             <th>From / File</th>
                             <th>Vendor</th>

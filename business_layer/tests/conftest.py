@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -23,6 +24,21 @@ os.environ.setdefault(
 os.environ.setdefault("PLATFORM_ENV", "test")
 os.environ.setdefault("PLATFORM_SESSION_COOKIE_SECURE", "false")
 os.environ.setdefault("PLATFORM_DATABASE_URL", "sqlite:///:memory:")
+
+# Force the dummy OAuth client in tests, even if a developer's
+# .env.local points at a real client file. pydantic-settings precedence
+# is os.environ > .env file, so an explicit assignment here always
+# wins. Without this, tests that assert "is_configured() == False"
+# break in any clone where someone has wired the real OAuth file
+# locally for manual testing.
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+os.environ["PLATFORM_GOOGLE_OAUTH_CLIENT_FILE"] = str(
+    _REPO_ROOT / "secrets" / "google_oauth_client_dummy.json"
+)
+# Same defence for the OTP-plaintext flag — tests assume the prod
+# default (off). A developer experimenting with PLATFORM_LOG_OTP_PLAINTEXT=true
+# in .env.local would otherwise flip the test contract.
+os.environ["PLATFORM_LOG_OTP_PLAINTEXT"] = "false"
 
 
 @pytest.fixture

@@ -31,6 +31,23 @@ SPRINT 0–1 — internal secrets (no third party)
   Length: at least 32 characters. Generator above gives 64.
   Location: .env.local at repo root.
 
+[ENV] PLATFORM_LOG_OTP_PLAINTEXT  (DEMO-ONLY ESCAPE HATCH)
+  Why: re-enables the DEV_OTP_ISSUED log line even when PLATFORM_ENV=prod.
+       Lets a demo operator read OTPs from Render's Logs tab without
+       paying for an SMS provider (Twilio / MSG91).
+  Default: false (real prod behavior — OTP is generated, hashed, stored,
+           never logged).
+  Demo value: true (set on Render dashboard for the public demo instance).
+  ⚠ NEVER ENABLE ON A REAL-USER INSTANCE.
+       Anyone with log-read access can sign in as anyone. Acceptable
+       only for a single-developer / instructor-only demo where the
+       alternative is paying for SMS. Real SMS lands in a later sprint
+       via business_layer/services/otp_delivery/ (factory + provider
+       interface mirroring services/oauth/google_oauth.py).
+  Where read: business_layer/config/settings.py:log_otp_plaintext
+  Where used: business_layer/routes/auth.py:post_otp_request — extends
+              the `if settings.env != "prod"` log condition.
+
 ---------------------------------------------------------------------
 SPRINT 4 — CA persona (NO external credentials)
 ---------------------------------------------------------------------
@@ -50,6 +67,14 @@ EMAIL INGESTION SPRINT — Gmail via OAuth 2.0
   Where to get it:
     1. console.cloud.google.com → create (or pick) a project
     2. APIs & Services → Library → search "Gmail API" → Enable
+       ⚠ COMMON FAILURE: if you skip step 2 the OAuth flow completes
+         (Google issues tokens) but every Gmail API call returns:
+             HTTP 400 "Precondition check failed" / failedPrecondition
+         The fix is enabling the Gmail API at:
+         https://console.cloud.google.com/apis/library/gmail.googleapis.com
+         and waiting ~30–60 s for propagation. The connector now
+         detects this case and surfaces a clear error in the UI
+         instead of just "gmail message list failed".
     3. APIs & Services → OAuth consent screen
        - User type: External
        - App name, support email, developer contact

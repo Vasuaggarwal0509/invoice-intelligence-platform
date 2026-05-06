@@ -26,6 +26,7 @@ import threading
 from collections.abc import Callable
 
 from business_layer.db import get_session
+from business_layer.errors import DependencyError
 from business_layer.repositories import jobs as jobs_repo
 from business_layer.services.extraction_runner import run_job
 
@@ -112,7 +113,21 @@ class ExtractionWorker:
                 },
             )
         except Exception as exc:  # pragma: no cover - exercised by manual smoke
-            _log.exception("worker.job_failed", extra={"job_id": job.id})
+            # ``DependencyError`` is the *expected* signal for known
+            # bad inputs (password-protected PDFs, unsupported file
+            # types, decode failures). The inbox row has already been
+            # flipped to ``status='failed'`` with a plain-language
+            # ``ignored_reason`` by ``_fail`` — logging a full
+            # traceback at ERROR makes correct behaviour look like a
+            # crash. Log a single-line WARNING for those; reserve
+            # ERROR + traceback for genuinely unexpected exceptions.
+            if isinstance(exc, DependencyError):
+                _log.warning(
+                    "worker.job_failed_known",
+                    extra={"job_id": job.id, "reason": str(exc)},
+                )
+            else:
+                _log.exception("worker.job_failed", extra={"job_id": job.id})
             try:
                 with get_session() as session:
                     jobs_repo.mark_failed(session, job_id=job.id, error=str(exc))

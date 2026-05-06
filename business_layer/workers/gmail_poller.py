@@ -116,8 +116,3 @@ class GmailPoller:
 
 # Module-level handle — FastAPI owns the instance's lifecycle.
 poller = GmailPoller()
-
-
-def tick_now() -> None:
-    """Test helper — run one tick synchronously without a thread."""
-    poller._tick()

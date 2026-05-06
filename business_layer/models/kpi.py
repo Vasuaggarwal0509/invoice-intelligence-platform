@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class KpiTilesPublic(BaseModel):
-    """The four headline tiles."""
+    """The four headline tiles + the small status strip below them."""
 
     model_config = ConfigDict(frozen=True)
 
@@ -19,6 +19,8 @@ class KpiTilesPublic(BaseModel):
     total_spend_minor: int
     itc_estimate_minor: int
     needs_review_count: int
+    extracted_count: int
+    pending_count: int
 
 
 class VendorTotalPublic(BaseModel):

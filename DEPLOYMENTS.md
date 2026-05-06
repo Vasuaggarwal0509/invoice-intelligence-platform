@@ -4,9 +4,9 @@ Append-only log. Add a row every time a Render rebuild completes
 successfully. Roll back? Add a row noting the rollback rather than
 deleting the bad entry — history of incidents is the point.
 
-| Date (UTC)         | Version | Git SHA  | URL | Note |
-|--------------------|---------|----------|-----|------|
-| _yyyy-mm-dd hh:mm_ | _0.0.1_ | _abc1234_ | _https://invoice-intelligence.onrender.com_ | _example row — replace with the first real deploy_ |
+| Date (UTC)       | Version | Git SHA  | URL                                            | Note    |
+|------------------|---------|----------|------------------------------------------------|---------|
+| 2026-04-29 18:34 | 0.0.1   | 5a7f934  | https://invoice-intelligence-vdk7.onrender.com |_example row — replace with the first real deploy_ |
 
 ## How to update this file
 

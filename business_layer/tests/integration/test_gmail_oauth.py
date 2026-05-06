@@ -120,6 +120,55 @@ class TestOauthStateSigning:
         )
         assert r.status_code == 403
 
+    def test_callback_completes_without_session_cookie(
+        self, test_client, caplog: pytest.LogCaptureFixture, monkeypatch
+    ) -> None:  # type: ignore[no-untyped-def]
+        """The callback should accept a valid signed state alone, even when
+        the browser dropped the session cookie on the cross-site redirect
+        from Google. The state is HMAC-signed + time-limited, so it's
+        sufficient authentication on its own.
+        """
+        from business_layer.services.oauth import google_oauth as go
+
+        # User signs up locally — they get a workspace + session cookie.
+        biz = _signup_business(test_client, "+919000003020", "NoCookie Co", caplog)
+        user_id = biz["user"]["id"]
+        workspace_id = biz["workspace"]["id"]
+
+        # Mint a state token as if /api/oauth/google/start ran for them.
+        state = go._encode_state(
+            user_id=user_id,
+            workspace_id=workspace_id,
+            code_verifier="verifier-stub",
+        )
+
+        # Simulate the cross-site redirect-back where the browser dropped
+        # the cookie: clear test_client cookies before hitting /callback.
+        test_client.cookies.clear()
+
+        # Stub Google's token exchange so we don't make a network call.
+        from business_layer.services.oauth.google_oauth import ExchangeResult
+
+        def fake_exchange(*, code: str, code_verifier: str) -> ExchangeResult:
+            assert code == "fake-google-code"
+            assert code_verifier == "verifier-stub"
+            return ExchangeResult(
+                refresh_token="fake-refresh-token",
+                access_token="fake-access",
+                scopes=[go.GMAIL_READONLY_SCOPE],
+            )
+
+        monkeypatch.setattr(go, "exchange_code", fake_exchange)
+
+        # Hit the callback with no cookie. Should redirect (302) to the
+        # success page, NOT 401.
+        r = test_client.get(
+            f"/api/oauth/google/callback?code=fake-google-code&state={state}",
+            follow_redirects=False,
+        )
+        assert r.status_code == 302, r.text
+        assert "gmail=connected" in r.headers["location"]
+
 
 # ---------- Connector tests (mocked Gmail API) -------------------------
 
@@ -302,7 +351,10 @@ class TestRuntimeConfigQueryBuilder:
         cfg = get_runtime_config().email_ingestion
         q = _build_search_query(cfg=cfg, since_ms=None)
         assert "has:attachment" in q
-        assert "invoice" in q.lower()
+        # Keywords are now quoted as phrases; check for the quoted form.
+        assert '"invoice"' in q.lower(), q
+        # Multi-word keyword must be a single phrase, not split by AND.
+        assert '"tax invoice"' in q.lower(), q
         assert "-in:spam" in q
         assert "-in:trash" in q
         assert f"newer_than:{cfg.backfill_days}d" in q
@@ -315,3 +367,129 @@ class TestRuntimeConfigQueryBuilder:
         q = _build_search_query(cfg=cfg, since_ms=1_700_000_000_000)
         assert "after:1700000000" in q
         assert "newer_than" not in q
+
+    def test_query_unbounded_drops_all_date_filters(self) -> None:
+        """unbounded=True omits both `after:` and `newer_than:` so emails
+        with stale Date: headers (clock-skewed sender, forwarded mail)
+        still match."""
+        from business_layer.config import get_runtime_config
+        from business_layer.services.connectors.gmail_connector import _build_search_query
+
+        cfg = get_runtime_config().email_ingestion
+        q = _build_search_query(cfg=cfg, since_ms=None, unbounded=True)
+        assert "has:attachment" in q
+        assert "-in:spam" in q
+        assert "-in:trash" in q
+        assert "newer_than" not in q, q
+        assert "after:" not in q, q
+
+    def test_query_unbounded_overrides_cursor(self) -> None:
+        """When unbounded=True, even a stale cursor is ignored — but our
+        connector only passes since_ms=None alongside unbounded=True
+        anyway. This locks in that contract."""
+        from business_layer.config import get_runtime_config
+        from business_layer.services.connectors.gmail_connector import _build_search_query
+
+        cfg = get_runtime_config().email_ingestion
+        # Even if a since_ms snuck through, it would still apply.
+        # The right caller-side discipline is to pass since_ms=None when
+        # unbounded=True; this test documents that the function gives
+        # `after:` priority if both are set.
+        q = _build_search_query(cfg=cfg, since_ms=1_700_000_000_000, unbounded=True)
+        # The function's contract: since_ms wins if non-None.
+        assert "after:1700000000" in q
+
+
+class TestForceFullWindowFetch:
+    """Fetch-now button (force_full_window=True) ignores the cursor and
+    leaves last_polled_at untouched.
+
+    Catches the original bug: a successful background poll stamps the
+    cursor forward; a user's existing test email sent before that
+    timestamp becomes invisible to subsequent incremental polls. The
+    Fetch-now button must search the full backfill window so the user
+    can find any matching email regardless of cursor.
+    """
+
+    def test_fetch_now_uses_full_window_and_does_not_advance_cursor(
+        self, test_client, caplog: pytest.LogCaptureFixture, monkeypatch
+    ) -> None:  # type: ignore[no-untyped-def]
+        # Sign up + seed a Gmail source whose cursor is RECENT (would
+        # exclude our hypothetical test email if we used incremental).
+        biz = _signup_business(test_client, "+919000003200", "FetchNow", caplog)
+        ws_id = biz["workspace"]["id"]
+
+        from sqlalchemy import update
+
+        from business_layer.db import get_session
+        from business_layer.db.tables import sources as t_sources
+        from business_layer.repositories import sources as sources_repo
+        from business_layer.services.oauth import google_oauth
+
+        cursor_before = 1_777_845_094_000  # arbitrary recent ms
+        with get_session() as s:
+            src = sources_repo.create(
+                s,
+                workspace_id=ws_id,
+                kind="gmail",
+                label="Gmail · test@example.com",
+                status="connected",
+                default_extraction_mode="instant",
+            )
+            blob = google_oauth.encrypt_refresh_token(refresh_token="fake", workspace_id=ws_id)
+            s.execute(
+                update(t_sources)
+                .where(t_sources.c.id == src.id)
+                .values(credentials_encrypted=blob, last_polled_at=cursor_before)
+            )
+
+        # Capture the Gmail query so we can assert it uses newer_than:, not after:.
+        captured_queries: list[str] = []
+
+        class _Capturing:
+            def users(_self):
+                return _self
+
+            def messages(_self):
+                return _self
+
+            def list(_self, *, userId, q, maxResults, pageToken):
+                captured_queries.append(q)
+
+                class _R:
+                    def execute(_inner):
+                        return {"messages": [], "nextPageToken": None}
+
+                return _R()
+
+        monkeypatch.setattr(
+            "business_layer.services.connectors.gmail_connector._build_gmail_service",
+            lambda creds: _Capturing(),
+        )
+        monkeypatch.setattr(
+            "business_layer.services.oauth.google_oauth.build_credentials_from_refresh_token",
+            lambda refresh_token: object(),
+        )
+
+        # Click Fetch-now (the button posts here).
+        r = test_client.post("/api/oauth/google/fetch-now", json={})
+        assert r.status_code == 200, r.text
+
+        # The query Gmail saw must NOT have any date filter — Fetch-now
+        # is unbounded so it finds emails with stale Date: headers too.
+        assert captured_queries, "expected at least one gmail.users.messages.list call"
+        q = captured_queries[-1]
+        assert "after:" not in q, f"Fetch-now must ignore cursor, got: {q}"
+        assert "newer_than" not in q, f"Fetch-now must drop date filter, got: {q}"
+        # Sanity: keyword + attachment filter should still be there.
+        assert "has:attachment" in q
+        assert "subject:" in q
+
+        # The source's last_polled_at must NOT have moved (background
+        # poller's cursor stays correct so the next scheduled tick
+        # doesn't miss messages between cursor_before and now).
+        with get_session() as s:
+            row = s.execute(t_sources.select().where(t_sources.c.id == src.id)).first()
+        assert (
+            row.last_polled_at == cursor_before
+        ), f"Fetch-now must not advance cursor; was {cursor_before}, now {row.last_polled_at}"

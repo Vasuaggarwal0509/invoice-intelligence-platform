@@ -129,12 +129,19 @@ def update_extracted_fields(
     invoice_no: str | None = None,
     invoice_date: str | None = None,
     total_amount_minor: int | None = None,
+    status: str | None = None,
 ) -> None:
     """Write post-extraction fields back to the invoice row.
 
     Only non-None args are applied — so re-running extraction with a
     partial result doesn't clobber previously-good fields. The
     extraction runner composes these values from ExtractionResult.
+
+    ``status`` lets the runner promote the row out of ``pending`` once
+    the pipeline has produced fields. The dashboard's "pending" tile
+    counts ``invoices.status='pending'``, so leaving it untouched is
+    why real Gmail-ingested invoices showed as pending forever even
+    after extraction completed.
     """
     values: dict[str, Any] = {}
     for k, v in [
@@ -145,6 +152,7 @@ def update_extracted_fields(
         ("invoice_no", invoice_no),
         ("invoice_date", invoice_date),
         ("total_amount_minor", total_amount_minor),
+        ("status", status),
     ]:
         if v is not None:
             values[k] = v

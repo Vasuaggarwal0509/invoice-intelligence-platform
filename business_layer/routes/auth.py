@@ -74,11 +74,18 @@ def post_otp_request(
     prod, an SMS provider is called (TODO Sprint 4). Either way, the
     body always returns the same generic "status=sent" — the response
     never reveals whether the phone is new or known.
+
+    Demo-only escape hatch: ``PLATFORM_LOG_OTP_PLAINTEXT=true`` re-enables
+    the plaintext log line even in prod. Used on the Render demo
+    instance so operators can read the OTP from the Logs tab without
+    paying for SMS. Documented loudly in dummy.txt — never set this on
+    a real-user instance.
     """
     result = request_otp(session, phone=body.phone, client_ip=client_ip)
 
-    # Dev-only OTP display. Never log plaintext in prod.
-    if settings.env != "prod":
+    # Plaintext log: always in dev/test. In prod, only when the
+    # explicit demo flag is on.
+    if settings.env != "prod" or settings.log_otp_plaintext:
         _log.info(
             "DEV_OTP_ISSUED phone=%s code=%s (existing_user=%s)",
             body.phone,

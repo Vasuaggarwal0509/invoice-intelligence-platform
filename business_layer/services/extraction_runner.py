@@ -103,8 +103,14 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     try:
         raw = storage.read_blob(inbox.file_storage_key)
         image = _bytes_to_ndarray(raw, inbox.content_type)
+    except _PdfPasswordProtected as exc:
+        _fail(session, inbox_id=inbox.id, reason="pdf_password_protected")
+        raise DependencyError(
+            "PDF is password-protected",
+            context={"job_id": job.id, "content_type": inbox.content_type},
+        ) from exc
     except Exception as exc:  # pragma: no cover - exercised via integration
-        _fail(session, inbox_id=inbox.id)
+        _fail(session, inbox_id=inbox.id, reason="unsupported_file")
         raise DependencyError(
             "failed to decode uploaded bytes as an image",
             context={"job_id": job.id, "content_type": inbox.content_type},
@@ -115,7 +121,7 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     try:
         ocr_result, extraction_result, tables_result, validation_result = _get_pipeline().run(image)
     except Exception as exc:
-        _fail(session, inbox_id=inbox.id)
+        _fail(session, inbox_id=inbox.id, reason="extraction_timeout")
         raise DependencyError(
             "extraction pipeline crashed",
             context={"job_id": job.id, "stage": "pipeline"},
@@ -128,22 +134,34 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
     tables_json = tables_result.model_dump_json()
     validation_json = validation_result.model_dump_json() if validation_result is not None else None
 
-    # (5) persist pipeline_runs.
-    pipeline_runs_repo.create(
-        session,
-        workspace_id=job.workspace_id,
-        invoice_id=job.invoice_id,
-        pipeline_version=PIPELINE_VERSION,
-        ocr_result_json=ocr_json,
-        extraction_result_json=extraction_json,
-        tables_result_json=tables_json,
-        validation_result_json=validation_json,
-        ocr_ms=float(getattr(ocr_result, "duration_ms", 0.0)) or None,
-        extract_ms=None,  # extraction stage doesn't yet emit timings per-stage
-        tables_ms=None,
-        validate_ms=None,
-        total_ms=total_ms,
-    )
+    # (5)–(8) persist pipeline_runs + findings + invoice fields + status.
+    # All four are wrapped together so a DB error (e.g. a UNIQUE clash
+    # on a re-extract before pipeline_runs was made overwrite-safe)
+    # still ends with the row marked ``failed`` instead of orphaned
+    # at ``extracting``.
+    try:
+        # (5) persist pipeline_runs.
+        pipeline_runs_repo.create(
+            session,
+            workspace_id=job.workspace_id,
+            invoice_id=job.invoice_id,
+            pipeline_version=PIPELINE_VERSION,
+            ocr_result_json=ocr_json,
+            extraction_result_json=extraction_json,
+            tables_result_json=tables_json,
+            validation_result_json=validation_json,
+            ocr_ms=float(getattr(ocr_result, "duration_ms", 0.0)) or None,
+            extract_ms=None,  # extraction stage doesn't yet emit timings per-stage
+            tables_ms=None,
+            validate_ms=None,
+            total_ms=total_ms,
+        )
+    except Exception as exc:
+        _fail(session, inbox_id=inbox.id, reason="extraction_timeout")
+        raise DependencyError(
+            "failed to persist pipeline run",
+            context={"job_id": job.id, "stage": "pipeline_runs"},
+        ) from exc
 
     # (6) denormalise validation_findings for filterable dashboards.
     #
@@ -175,28 +193,43 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
                 pass_count += 1
             elif outcome_upper == "FAIL":
                 fail_count += 1
-    findings_repo.replace_for_invoice(
-        session,
-        invoice_id=job.invoice_id,
-        workspace_id=job.workspace_id,
-        findings=finding_rows,
-    )
+    try:
+        findings_repo.replace_for_invoice(
+            session,
+            invoice_id=job.invoice_id,
+            workspace_id=job.workspace_id,
+            findings=finding_rows,
+        )
 
-    # (7) project extracted fields + computed totals into the invoice row.
-    extracted = _extract_projectable_fields(extraction_result)
-    total_minor = _sum_items_to_minor(tables_result)
-    if total_minor is not None:
-        extracted["total_amount_minor"] = total_minor  # type: ignore[assignment]
-    invoices_repo.update_extracted_fields(
-        session,
-        invoice_id=job.invoice_id,
-        **extracted,
-    )
+        # (7) project extracted fields + computed totals into the invoice row.
+        extracted = _extract_projectable_fields(extraction_result)
+        total_minor = _sum_items_to_minor(tables_result)
+        if total_minor is not None:
+            extracted["total_amount_minor"] = total_minor  # type: ignore[assignment]
+        # Promote out of 'pending'. Use 'flagged' if validation found
+        # at least one FAIL (so the row sits in the "needs review"
+        # bucket on the dashboard), otherwise 'under_review' — the
+        # platform extracted fields, the user just hasn't approved
+        # yet. Auto-approval is a deliberate non-goal: we never bypass
+        # the human checkpoint.
+        extracted["status"] = "flagged" if fail_count > 0 else "under_review"  # type: ignore[assignment]
+        invoices_repo.update_extracted_fields(
+            session,
+            invoice_id=job.invoice_id,
+            **extracted,
+        )
 
-    # (8) flip inbox status.
-    inbox_repo.update_status(session, message_id=inbox.id, status="extracted")
+        # (8) flip inbox status.
+        inbox_repo.update_status(session, message_id=inbox.id, status="extracted")
 
-    session.commit()
+        session.commit()
+    except Exception as exc:
+        _fail(session, inbox_id=inbox.id, reason="extraction_timeout")
+        raise DependencyError(
+            "failed to persist extraction result",
+            context={"job_id": job.id, "stage": "post_pipeline"},
+        ) from exc
+
     return ExtractionSummary(
         invoice_id=job.invoice_id,
         total_ms=total_ms,
@@ -211,19 +244,52 @@ def run_job(session: Session, *, job: JobRow) -> ExtractionSummary:
 def _bytes_to_ndarray(data: bytes, content_type: str) -> np.ndarray:
     """Decode stored bytes to a H×W×3 uint8 numpy array.
 
-    RapidOCR accepts several input types, but the existing pipeline
-    runner (``extraction_layer.backend.app.pipeline.PipelineRunner.run``)
-    expects ``numpy.ndarray``. PDFs are not yet supported by the
-    pipeline — we reject them earlier at upload? No — we allow them
-    and fail here with a clear error. Sprint 5+ adds PDF rendering.
+    The pipeline runner expects a single rendered page as numpy. For
+    images that's a one-shot ``PIL.Image.open``. For PDFs we render
+    the FIRST page at 200 DPI via ``pypdfium2`` (pure-Python Chromium
+    PDFium binding — no system dependency on poppler). Multi-page
+    invoices: only the first page goes through OCR for v1; line-item
+    extraction across pages is Sprint 5+ work.
     """
     if content_type == "application/pdf":
-        raise ValueError(
-            "PDF extraction is not wired up yet — upload image formats (PNG/JPG/TIFF/WebP) for now"
-        )
+        return _render_pdf_first_page(data)
     img = Image.open(io.BytesIO(data))
     img = img.convert("RGB")
     return np.asarray(img, dtype=np.uint8)
+
+
+class _PdfPasswordProtected(Exception):
+    """Marker exception so the caller can flag the row with the right
+    plain-language reason (``pdf_password_protected``) instead of the
+    generic ``unsupported_file``.
+    """
+
+
+def _render_pdf_first_page(data: bytes, *, dpi: int = 200) -> np.ndarray:
+    """Render the first page of a PDF to an RGB ndarray.
+
+    200 DPI is the OCR sweet-spot for Indian GST invoices — high
+    enough that 8-pt text on a 96-dpi-printed PDF reads cleanly,
+    low enough that rendering a full A4 page stays under ~3 MB of
+    pixel data. Password-protected PDFs (ICICI / HDFC / SBI bank
+    statements) raise :class:`_PdfPasswordProtected` so the caller
+    surfaces a clear "remove the password and re-upload" message.
+    """
+    import pypdfium2 as pdfium
+
+    try:
+        pdf = pdfium.PdfDocument(data)
+    except pdfium.PdfiumError as exc:
+        msg = str(exc).lower()
+        if "password" in msg:
+            raise _PdfPasswordProtected(str(exc)) from exc
+        raise
+    if len(pdf) == 0:
+        raise ValueError("PDF has no pages")
+    page = pdf[0]
+    # PDFium's render() takes a *scale* (1.0 = 72 dpi) — convert.
+    pil_img = page.render(scale=dpi / 72.0).to_pil().convert("RGB")
+    return np.asarray(pil_img, dtype=np.uint8)
 
 
 def _extract_projectable_fields(extraction_result) -> dict:  # type: ignore[no-untyped-def]
@@ -339,10 +405,36 @@ def _stringify(v) -> str | None:  # type: ignore[no-untyped-def]
         return str(v)
 
 
-def _fail(session: Session, *, inbox_id: str) -> None:
-    """Best-effort: mark inbox as failed + commit so status is visible."""
+def _fail(session: Session, *, inbox_id: str, reason: str | None = None) -> None:
+    """Mark an inbox row as ``failed``, surviving a poisoned transaction.
+
+    By the time we get here the calling transaction may already be
+    invalid (e.g. an ``IntegrityError`` from a duplicate ``pipeline_runs``
+    insert poisons the connection until rolled back). So we ALWAYS
+    rollback first to clear the failed-transaction state, THEN write
+    the status update on a fresh transaction.
+
+    Without the upfront rollback every subsequent ``execute`` raises
+    ``InvalidRequestError: This Session's transaction has been rolled
+    back due to a previous exception during flush.`` and the row stays
+    visibly stuck at ``status='extracting'`` even though the worker
+    knows the job failed.
+    """
     try:
-        inbox_repo.update_status(session, message_id=inbox_id, status="failed")
+        session.rollback()
+    except Exception:  # pragma: no cover - defensive; rollback is normally fine
+        _log.exception("extract.fail.rollback_error", extra={"inbox_id": inbox_id})
+    try:
+        inbox_repo.update_status(
+            session,
+            message_id=inbox_id,
+            status="failed",
+            ignored_reason=reason,
+        )
         session.commit()
     except Exception:
-        session.rollback()
+        _log.exception("extract.fail.status_update_error", extra={"inbox_id": inbox_id})
+        try:
+            session.rollback()
+        except Exception:  # pragma: no cover
+            pass

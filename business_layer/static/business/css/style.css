@@ -45,6 +45,12 @@ header#topbar {
     z-index: 10;
 }
 
+/* Belt-and-braces: the JS toggles [hidden] but a custom display rule
+   above can outweigh the browser's UA stylesheet `[hidden] { display:
+   none }` because of specificity. This explicit override guarantees
+   the topbar is invisible on /login + /otp regardless. */
+header#topbar[hidden] { display: none !important; }
+
 header#topbar .brand {
     font-weight: 700;
     font-size: 18px;
@@ -171,12 +177,70 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
     margin: 0;
 }
 
+.view-dashboard .period-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.view-dashboard .period-row p { margin: 0; }
+
+.period-switch {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.period-btn {
+    background: transparent;
+    border: 0;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--fg-muted);
+    cursor: pointer;
+}
+.period-btn.is-active {
+    background: var(--bg-elevated);
+    color: var(--fg);
+    font-weight: 600;
+}
+.period-btn + .period-btn { border-left: 1px solid var(--border); }
+
 .view-dashboard .kpi-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin: 20px 0;
+    margin: 20px 0 12px;
 }
+
+.status-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    background: var(--bg-elevated);
+}
+.status-pill .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.status-pill.is-extracted .status-dot { background: #2f9e44; }
+.status-pill.is-pending   .status-dot { background: #f59f00; }
+.status-pill.is-review    .status-dot { background: #e03131; }
+
 
 .kpi-tile {
     background: var(--bg-elevated);
@@ -230,6 +294,30 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
 
 /* --- Inbox table --- */
 
+.inbox-actionbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0 12px;
+    flex-wrap: wrap;
+}
+.inbox-actionbar .extract-status {
+    font-size: 13px;
+    color: var(--fg-muted);
+}
+.inbox-actionbar .extract-status.success { color: var(--success); }
+.inbox-actionbar .extract-status.error   { color: var(--error); }
+.inbox-actionbar .extract-status.empty   { color: var(--fg-muted); }
+.inbox-actionbar .extract-status.busy    { color: var(--amber); }
+
+.inbox-table th.col-check,
+.inbox-table td.col-check {
+    width: 32px;
+    padding-right: 0;
+    text-align: center;
+}
+.row-check { cursor: pointer; }
+
 .inbox-wrapper {
     margin-top: 16px;
     overflow-x: auto;
@@ -280,6 +368,14 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
 .status-chip.failed   { background: #fee2e2; color: var(--error); }
 .status-chip.ignored  { background: #f1f5f9; color: var(--fg-muted); }
 .status-chip.flagged  { background: #fef3c7; color: var(--amber); }
+
+.status-failure-msg {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--fg-muted);
+    line-height: 1.4;
+    max-width: 280px;
+}
 
 /* --- Invoice detail --- */
 
@@ -336,8 +432,37 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
 }
 
 .flags h2 { margin-top: 0; font-size: 16px; color: var(--amber); }
-.flags ul { margin: 6px 0 0; padding-left: 18px; }
-.flags li { margin: 4px 0; font-size: 14px; }
+.flags ul { margin: 6px 0 0; padding: 0; list-style: none; }
+.flags li.flag-card {
+    margin: 8px 0;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid #fde68a;
+    border-left: 3px solid var(--amber);
+    border-radius: 6px;
+}
+.flags .flag-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #78350f;
+}
+.flags .flag-explanation {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--fg);
+    line-height: 1.45;
+}
+.flags .flag-suggestion {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--fg-muted);
+    line-height: 1.45;
+}
+.flags .flag-suggestion::before {
+    content: "→ ";
+    color: var(--amber);
+    font-weight: 700;
+}
 
 /* --- Top vendors + needs-review cards --- */
 
@@ -416,6 +541,116 @@ a.link-btn:hover, a.back:hover { text-decoration: underline; }
 }
 
 .sources-card a.btn-connect:hover { background: var(--primary-hover); }
+
+.sources-card .gmail-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.sources-card button.btn-fetch-now {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: var(--radius);
+    background: var(--primary);
+    color: white;
+    border: 0;
+    font-weight: 600;
+}
+
+.sources-card button.btn-fetch-now:hover:not(:disabled) {
+    background: var(--primary-hover);
+}
+
+.sources-card button.btn-fetch-now:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.sources-card .fetch-status {
+    margin-top: 8px;
+}
+
+.sources-card .fetch-status {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    line-height: 1.4;
+}
+.sources-card .fetch-status.success {
+    background: #dcfce7;
+    color: var(--success);
+    border: 1px solid #bbf7d0;
+}
+.sources-card .fetch-status.empty {
+    background: var(--bg-elevated);
+    color: var(--fg-muted);
+    border: 1px solid var(--border);
+}
+.sources-card .fetch-status.error {
+    background: #fee2e2;
+    color: var(--error);
+    border: 1px solid #fecaca;
+}
+
+/* --- Connected-account line + status dot --- */
+
+.sources-card .connected-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    font-size: 14px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fg-muted);
+    flex-shrink: 0;
+}
+
+.status-dot.status-ok {
+    background: var(--success);
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+}
+
+/* --- Spinner (used inline in buttons + connect link) --- */
+
+.spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    vertical-align: -1px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-rotate 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+.spinner[hidden] { display: none; }
+
+@keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+}
+
+.sources-card button.btn-fetch-now {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sources-card a.btn-connect {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
 
 .sources-card code {
     background: #e2e8f0;

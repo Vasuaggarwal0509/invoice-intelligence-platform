@@ -245,11 +245,31 @@ def exchange_code(*, code: str, code_verifier: str) -> ExchangeResult:
             "google did not return a refresh_token — "
             "ensure the Google app has prompt=consent + access_type=offline"
         )
+
+    # Fetch the connected email address via Gmail's getProfile so the UI
+    # can show "Gmail · vasu001@example.com". Best-effort: if Gmail API
+    # isn't enabled yet (failedPrecondition) we still complete the
+    # connection — the user sees a generic label and the bigger error
+    # surfaces on their first Fetch-Now.
+    email_address: str | None = None
+    try:
+        from googleapiclient.discovery import build
+
+        service = build("gmail", "v1", credentials=creds, cache_discovery=False)
+        profile = service.users().getProfile(userId="me").execute()
+        email_address = profile.get("emailAddress")
+    except Exception as exc:
+        # Don't fail the OAuth flow over a missing email label.
+        _log.info(
+            "gmail.oauth.profile_lookup_failed",
+            extra={"err_type": type(exc).__name__},
+        )
+
     return ExchangeResult(
         refresh_token=creds.refresh_token,
         access_token=creds.token,
         scopes=list(creds.scopes or []),
-        email_address=None,
+        email_address=email_address,
     )
 
 

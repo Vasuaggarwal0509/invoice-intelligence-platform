@@ -22,7 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from sqlalchemy import desc, insert, select
+from sqlalchemy import delete, desc, insert, select
 from sqlalchemy.orm import Session
 
 from business_layer.db.tables import pipeline_runs
@@ -83,6 +83,18 @@ def create(
     validate_ms: float | None,
     total_ms: float | None,
 ) -> PipelineRunRow:
+    # UNIQUE(invoice_id, pipeline_version) — re-running the same
+    # pipeline version on the same invoice (e.g. user clicks "Extract"
+    # again on a row) must overwrite, not collide. Delete any prior row
+    # for this pair before inserting the new one. The schema deliberately
+    # keeps only the latest run per (invoice × pipeline_version); old
+    # versions stay because the version string changes.
+    session.execute(
+        delete(pipeline_runs).where(
+            pipeline_runs.c.invoice_id == invoice_id,
+            pipeline_runs.c.pipeline_version == pipeline_version,
+        )
+    )
     pid = new_id()
     session.execute(
         insert(pipeline_runs).values(

@@ -11,6 +11,20 @@
     'use strict';
 
     const state = { phone: '', session: null };
+
+    // CA-invite link handling: if the user lands on `/business?ca=<gstin>`,
+    // stash the gstin so the dashboard can pre-fill the "Link your CA"
+    // form. We read it once on boot (before signup) so it survives the
+    // full OTP signup flow.
+    (function readInviteParam() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const ca = params.get('ca');
+            if (ca && /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]Z[A-Z0-9]$/.test(ca)) {
+                window.localStorage.setItem('pending_ca_invite', ca);
+            }
+        } catch (_) { /* localStorage / URL parsing failures are non-fatal */ }
+    })();
     const root = document.getElementById('app-root');
     const topbar = document.getElementById('topbar');
     const logoutBtn = document.getElementById('logout-btn');
@@ -34,6 +48,12 @@
     }
 
     function renderLogin() {
+        // Force-clear any stale session so the topbar stays hidden and a
+        // refresh doesn't auto-bounce the user to /dashboard.
+        state.session = null;
+        state.phone = '';
+        // Best-effort logout — ignored if there's no cookie.
+        window.api.post('/api/auth/logout', {}).catch(() => {});
         setAuthenticatedUI(false);
         mountTemplate('view-login');
         const form = root.querySelector('#form-phone');
@@ -65,9 +85,22 @@
     }
 
     async function ensureSession() {
-        if (state.session) return state.session;
+        if (state.session) {
+            // Cross-persona gate: a CA session sitting in the business
+            // shell should be redirected to its own shell instead of
+            // 403'ing every API call below.
+            if (state.session.user && state.session.user.role !== 'business') {
+                window.location.replace('/ca');
+                return null;
+            }
+            return state.session;
+        }
         try {
             const session = await window.api.get('/api/auth/me');
+            if (session.user && session.user.role !== 'business') {
+                window.location.replace('/ca');
+                return null;
+            }
             state.session = session;
             return session;
         } catch (_) {
@@ -134,12 +167,26 @@
     window.addEventListener('hashchange', handleRoute);
 
     (async function boot() {
+        // Respect the URL hash. If the user explicitly typed `#/login`,
+        // show the login form even if a session cookie is still alive
+        // — renderLogin clears it. Previously we overrode `#/login` to
+        // `#/dashboard` here, which leaked the topbar onto the login
+        // page when a stale session was present.
+        const hash = window.location.hash;
+        if (hash === '#/login' || hash === '#/otp') {
+            navigate(hash);
+            return;
+        }
         try {
             const session = await window.api.get('/api/auth/me');
+            // Cross-persona: don't try to render a CA session on the
+            // business shell; redirect to /ca synchronously.
+            if (session.user && session.user.role !== 'business') {
+                window.location.replace('/ca');
+                return;
+            }
             state.session = session;
-            const initial = window.location.hash && window.location.hash !== '#/login'
-                ? window.location.hash : '#/dashboard';
-            navigate(initial);
+            navigate(hash || '#/dashboard');
         } catch (_) {
             navigate('#/login');
         }
